@@ -1234,7 +1234,7 @@ function _parseDMY(s){var p=s.split('/');return new Date('20'+p[2]+'-'+p[1]+'-'+
 var _etDates = etapas.map(function(e){return[_parseDMY(e.inicio),_parseDMY(e.fim)];}).reduce(function(a,b){return a.concat(b);});
 const projStart = new Date(Math.min.apply(null,_etDates));
 const projEnd   = new Date(Math.max.apply(null,_etDates));
-const dataReferencia = new Date("2026-04-07"); // ← atualizado automaticamente
+const dataReferencia = new Date("2026-04-08"); // ← atualizado automaticamente
 // Variáveis derivadas de dataReferencia — NÃO editar manualmente:
 // Datas derivadas de dataReferencia — sem conversão UTC para evitar offset de fuso horário
 // Parseia os componentes diretamente da string ISO para garantir a data correta em qualquer fuso
@@ -2200,7 +2200,7 @@ var entregaveis = [
   { disc:"INT", nome:"Interiores", fase:"AP", itens:16, entregues:6, parciais:6 },
   { disc:"INT", nome:"Interiores", fase:"PE", itens:8, entregues:0, parciais:0 },
   { disc:"INT", nome:"Interiores", fase:"EX", itens:5, entregues:0, parciais:0 },
-  { disc:"GAR", nome:"Garagem", fase:"EP", itens:5, entregues:5, parciais:0 },
+  { disc:"GAR", nome:"Garagem", fase:"EP", itens:5, entregues:0, parciais:0 },
   { disc:"GAR", nome:"Garagem", fase:"AP", itens:9, entregues:0, parciais:1 },
   { disc:"GAR", nome:"Garagem", fase:"PE", itens:6, entregues:0, parciais:0 },
   { disc:"GAR", nome:"Garagem", fase:"EX", itens:11, entregues:0, parciais:0 },
@@ -2932,11 +2932,11 @@ var entItens = {
     { item:"Pacote Entregue (PDF/ DWG): Materiais descritos acima", status:"nao", obs:"" },
   ],
   "GAR-EP": [
-    { item:"Avaliação dos pontos críticos da garagem", status:"sim", obs:"" },
-    { item:"Análise das circulações e rampas", status:"sim", obs:"" },
-    { item:"Avaliação dos fluxos e da dinâmica de estacionamento", status:"sim", obs:"" },
-    { item:"Análise dos acessos", status:"sim", obs:"" },
-    { item:"Pacote Entregue (PDF): Documentos", status:"sim", obs:"" },
+    { item:"Avaliação dos pontos críticos da garagem", status:"nao", obs:"" },
+    { item:"Análise das circulações e rampas", status:"nao", obs:"" },
+    { item:"Avaliação dos fluxos e da dinâmica de estacionamento", status:"nao", obs:"" },
+    { item:"Análise dos acessos", status:"nao", obs:"" },
+    { item:"Pacote Entregue (PDF): Documentos", status:"nao", obs:"" },
   ],
   "GAR-AP": [
     { item:"Proposta de Layout e Simulações - Elaboração de proposta de layout das vagas de garagem", status:"nao", obs:"" },
