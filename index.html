@@ -1235,6 +1235,10 @@ var _etDates = etapas.map(function(e){return[_parseDMY(e.inicio),_parseDMY(e.fim
 const projStart = new Date(Math.min.apply(null,_etDates));
 const projEnd   = new Date(Math.max.apply(null,_etDates));
 const dataReferencia = new Date("2026-04-07"); // ← atualizado automaticamente
+// Variáveis derivadas de dataReferencia — NÃO editar manualmente:
+const _dataRefISO = dataReferencia.toISOString().slice(0,10); // "YYYY-MM-DD"
+const _fim90 = new Date(dataReferencia.getTime() + 90 * 24 * 60 * 60 * 1000); // dataRef + 90 dias
+const _fim90ISO = _fim90.toISOString().slice(0,10);
 const hoje           = dataReferencia;
 // percGeral from Project file (EP=20%, AP=3%, PE=0%, EX=0%, weighted by duration)
 const percGeral = 3;
@@ -1275,8 +1279,8 @@ function goTab(i) {
       renderAcoesUnified();
       var fromEl = document.getElementById('acoes-date-from');
       var toEl   = document.getElementById('acoes-date-to');
-      if (fromEl && !fromEl.value) fromEl.value = '2026-03-27';
-      if (toEl   && !toEl.value)   toEl.value   = '2026-06-18';
+      if (fromEl && !fromEl.value) fromEl.value = _dataRefISO; // dataReferencia
+      if (toEl   && !toEl.value)   toEl.value   = _fim90ISO; // dataReferencia + 90 dias
       renderAcoesUnified();
     }
   }, 30); }
@@ -1352,7 +1356,7 @@ function goToEntregaveis(disc) {
 // ── KPI ───────────────────────────────────────────────────────────────────────
 (function renderKPI() {
   var hoje_kpi = dataReferencia;
-  var fim90    = new Date('2026-06-18');
+  var fim90    = _fim90; // dataReferencia + 90 dias
 
   // All counts use 90-day window + computeAcaoStatus for consistency
   var acoes90 = acoes.filter(function(p) {
@@ -1595,7 +1599,7 @@ function renderDiscStatus() {
 
   // Count individual actions by computed status — same 90-day window as aba Ações
   var DATE_FROM = dataReferencia;
-  var DATE_TO   = new Date('2026-06-18');
+  var DATE_TO   = _fim90; // dataReferencia + 90 dias
   var bkts = { andamento:0, futuro:0, pendente:0, atraso:0, concluido:0 };
   acoes.forEach(function(a) {
     var prazoDate = parsePrazoAcao(a.prazo);
@@ -1869,7 +1873,7 @@ function filtrarConcluidos90() {
     var from = document.getElementById('acoes-date-from');
     var to   = document.getElementById('acoes-date-to');
     if (from) from.value = d90.toISOString().slice(0,10);
-    if (to)   to.value   = '2026-03-27';
+    if (to)   to.value   = _dataRefISO; // dataReferencia
     if (btn) { btn.style.borderColor='#3BD23D'; btn.style.color='#3BD23D'; btn.classList.add('active'); }
   } else {
     document.querySelectorAll('[data-ms-group="acao-std"]').forEach(function(b) { b.classList.remove('active'); });
@@ -1957,7 +1961,7 @@ function goToAcoesUrgentes() {
     var sc  = statusCor[_cs] || statusCor[_stat] || statusCor["Nao iniciado"];
     var pc  = prioCorBadge[_crio] || prioCorBadge["Media"];
     var bdr = prioCorBorder[_crio] || '#5B80D6';
-    var concluido = (_cs === 'Concluido' || _cs === 'Concluido com atraso');
+    var concluido = (_cs === 'Concluido'); // 'Concluido com atraso' não é verde — é atraso
     var opac  = '';
     var struck = '';
     var sl = statusLabel[_cs] || statusLabel[a.status] || _cs;
@@ -3282,7 +3286,7 @@ function renderAcoesUnified() {
     var sc  = statusCor[_cs] || statusCor[_stat] || statusCor["Nao iniciado"];
     var pc  = prioCorBadge[_crio] || prioCorBadge["Media"];
     var bdr = prioCorBorder[_crio] || '#5B80D6';
-    var concluido = (_cs === 'Concluido' || _cs === 'Concluido com atraso');
+    var concluido = (_cs === 'Concluido'); // 'Concluido com atraso' não é verde — é atraso
     var opac  = '';
     var struck = '';
     var sl = statusLabel[_cs] || statusLabel[a.status] || _cs;
