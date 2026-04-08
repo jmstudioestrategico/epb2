@@ -1236,21 +1236,32 @@ const projStart = new Date(Math.min.apply(null,_etDates));
 const projEnd   = new Date(Math.max.apply(null,_etDates));
 const dataReferencia = new Date("2026-04-07"); // ← atualizado automaticamente
 // Variáveis derivadas de dataReferencia — NÃO editar manualmente:
-const _dataRefISO = dataReferencia.toISOString().slice(0,10); // "YYYY-MM-DD"
-const _fim90 = new Date(dataReferencia.getTime() + 90 * 24 * 60 * 60 * 1000); // dataRef + 90 dias
-const _fim90ISO = _fim90.toISOString().slice(0,10);
-// Formata dataReferencia como DD/MM/YYYY para exibição
-(function() {
-  var d = dataReferencia;
-  var dd = String(d.getDate()).padStart(2,"0");
-  var mm = String(d.getMonth()+1).padStart(2,"0");
-  var yyyy = d.getFullYear();
-  var fmt = dd + "/" + mm + "/" + yyyy;
+// Datas derivadas de dataReferencia — sem conversão UTC para evitar offset de fuso horário
+// Parseia os componentes diretamente da string ISO para garantir a data correta em qualquer fuso
+const _dataRefISO = (function() {
+  // Extrai ano/mês/dia diretamente da string "YYYY-MM-DD" — sem Date object, sem fuso
+  var s = dataReferencia.toISOString().slice(0,10); // UTC date string = data do CROR
+  var p = s.split("-");
+  var y = parseInt(p[0]), m = parseInt(p[1]), d = parseInt(p[2]);
+  // _dataRefISO: "YYYY-MM-DD" para inputs type=date
+  var iso = p[0] + "-" + (m<10?"0":"")+m + "-" + (d<10?"0":"")+d;
+  // _fim90ISO: adiciona 90 dias sem risco de UTC offset
+  var dt90 = new Date(y, m-1, d + 90); // new Date(y,m,d) = local midnight sem UTC offset
+  var y90 = dt90.getFullYear();
+  var m90 = dt90.getMonth()+1;
+  var d90 = dt90.getDate();
+  window._fim90ISO = y90 + "-" + (m90<10?"0":"")+m90 + "-" + (d90<10?"0":"")+d90;
+  window._fim90    = dt90;
+  // Atualiza "Atualizado em" no header e footer com DD/MM/YYYY
+  var fmt = (d<10?"0":"")+d + "/" + (m<10?"0":"")+m + "/" + y;
   var h = document.getElementById("header-data-atualizacao");
   var f = document.getElementById("footer-data-atualizacao");
   if (h) h.textContent = fmt;
   if (f) f.textContent = fmt;
+  return iso;
 })();
+const _fim90ISO = window._fim90ISO;
+const _fim90    = window._fim90;
 const hoje           = dataReferencia;
 // percGeral from Project file (EP=20%, AP=3%, PE=0%, EX=0%, weighted by duration)
 const percGeral = 3;
