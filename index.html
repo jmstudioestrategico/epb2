@@ -1823,12 +1823,13 @@ function renderDiscStatus() {
   if (!el) return;
 
   // Count individual actions by computed status — same 90-day window as aba Ações
-  var DATE_FROM = dataReferencia;
-  var DATE_TO   = _fim90; // dataReferencia + 90 dias
+  // Janela: sem limite inferior (inclui pendentes/atrasados do passado)
+  // Limite superior: hoje + 90 dias (exclui tarefas muito distantes no futuro)
+  var DATE_TO = _fim90; // dataReferencia + 90 dias
   var bkts = { andamento:0, futuro:0, pendente:0, atraso:0, concluido:0 };
   acoes.forEach(function(a) {
     var prazoDate = parsePrazoAcao(a.prazo);
-    if (prazoDate && (prazoDate < DATE_FROM || prazoDate > DATE_TO)) return;
+    if (prazoDate && prazoDate > DATE_TO) return; // exclui apenas futuro distante
     var cs = computeAcaoStatus(a);
     if      (cs === 'Em andamento')         bkts.andamento++;
     else if (cs === 'Futuro')               bkts.futuro++;
