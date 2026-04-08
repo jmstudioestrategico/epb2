@@ -4354,25 +4354,72 @@ renderProximasEntregas();
 </footer>
 <script>
 (function() {
+  // Mede a altura real do conteúdo visível:
+  // header fixo + painel ativo + footer
+  function getContentHeight() {
+    // Painel ativo
+    var panel = document.querySelector('.panel.active');
+    var panelH = panel ? panel.getBoundingClientRect().height : 0;
+
+    // Header/nav
+    var nav = document.querySelector('.nav-tabs') || document.querySelector('nav');
+    var navH = nav ? nav.getBoundingClientRect().height : 60;
+
+    // Hero (só visível na aba 0)
+    var hero = document.getElementById('hero-block');
+    var heroH = (hero && hero.style.display !== 'none') ? hero.getBoundingClientRect().height : 0;
+
+    // KPI bar
+    var kpi = document.getElementById('kpi-bar');
+    var kpiH = (kpi && kpi.style.display !== 'none') ? kpi.getBoundingClientRect().height : 0;
+
+    // Footer
+    var footer = document.querySelector('footer');
+    var footerH = footer ? footer.getBoundingClientRect().height : 0;
+
+    // Alerta de atenção (se visível)
+    var alerta = document.querySelector('.alerta-bloco') || document.querySelector('[id*="alerta"]');
+    var alertaH = (alerta && alerta.offsetParent !== null) ? alerta.getBoundingClientRect().height : 0;
+
+    var total = navH + heroH + kpiH + alertaH + panelH + footerH + 48;
+    return Math.max(total, 600);
+  }
+
   function sendHeight() {
-    var h = document.documentElement.scrollHeight || document.body.scrollHeight;
+    var h = getContentHeight();
     window.parent.postMessage({ type: 'epb2-height', height: h }, '*');
   }
 
-  // Dispara na carga inicial
-  sendHeight();
+  // Delay maior para garantir renderização completa
+  function sendHeightDelayed(ms) {
+    setTimeout(sendHeight, ms || 200);
+  }
 
-  // Dispara em cada clique de aba do dashboard
+  // Carga inicial — aguarda tudo renderizar
+  window.addEventListener('load', function() { sendHeightDelayed(300); });
+  sendHeightDelayed(500);
+
+  // Troca de aba — delays progressivos para abas com renderização pesada
   document.querySelectorAll('.tab').forEach(function(tab) {
     tab.addEventListener('click', function() {
-      setTimeout(sendHeight, 80);
+      // Dispara em 3 momentos: imediato, após render básico, após render completo
+      sendHeightDelayed(100);
+      sendHeightDelayed(350);
+      sendHeightDelayed(700);
     });
   });
 
-  // ResizeObserver: captura variações automáticas de altura
+  // ResizeObserver no painel ativo em vez do body inteiro
   if (window.ResizeObserver) {
-    new ResizeObserver(sendHeight).observe(document.body);
+    var ro = new ResizeObserver(function() { sendHeightDelayed(150); });
+    // Observa cada painel
+    document.querySelectorAll('.panel').forEach(function(p) { ro.observe(p); });
   }
+
+  // Fallback: verifica periodicamente por 3s após qualquer clique
+  document.addEventListener('click', function() {
+    [200, 500, 1000, 2000, 3000].forEach(function(ms) { sendHeightDelayed(ms); });
+  });
 })();
 </script>
 </body>
