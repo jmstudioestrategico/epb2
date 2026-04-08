@@ -1694,12 +1694,20 @@ function renderGantt(id) {
   var nowPct = Math.min(100, Math.round(((hoje - gStart) / (gEnd - gStart)) * 100));
   var labels = [];
   var y0 = gStart.getFullYear(), y1 = gEnd.getFullYear();
+  // Jan de cada ano + Jul de anos intermediários (exceto o último)
   for (var yi = y0; yi <= y1; yi++) {
-    labels.push({ text:'Jan/'+String(yi).slice(2), d:new Date(yi+'-01-01') });
-    if (yi < y1) labels.push({ text:'Jul/'+String(yi).slice(2), d:new Date(yi+'-07-01') });
+    labels.push({ text:'Jan/'+String(yi).slice(2), d:new Date(yi, 0, 1) });
+    if (yi < y1) labels.push({ text:'Jul/'+String(yi).slice(2), d:new Date(yi, 6, 1) });
   }
-  var html = '<div style="display:flex;justify-content:space-between;font-size:9px;color:var(--muted);padding:0 0 8px 140px;">';
-  labels.forEach(function(l) { html += '<span>' + l.text + '</span>'; });
+  var totalMs = gEnd - gStart;
+  // Labels posicionados absolutamente no % correto (mesmo cálculo das barras)
+  var html = '<div style="position:relative;height:16px;margin-bottom:4px;margin-left:140px;">';
+  labels.forEach(function(l) {
+    if (l.d < gStart || l.d > gEnd) return; // fora do range
+    var pct = Math.round(((l.d - gStart) / totalMs) * 1000) / 10;
+    html += '<span style="position:absolute;left:' + pct + '%;transform:translateX(-50%);'
+      + 'font-size:9px;color:var(--muted);white-space:nowrap;">' + l.text + '</span>';
+  });
   html += '</div>';
   html += '<div style="position:relative;height:6px;background:var(--off);border-radius:2px;margin-bottom:22px;margin-left:140px;">';
   html += '<div style="position:absolute;left:' + nowPct + '%;top:-8px;bottom:-8px;width:2px;background:#E24B4A;"></div>';
