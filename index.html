@@ -382,62 +382,48 @@ body {
      Invisível ao usuário. Abra o console (F12) para conferência.
      Acesse também: window._epb2Report
      ═══════════════════════════════════════════════════════════════════════ */
-  window._epb2Report = {
-    fonte_cror: "EPB2-DOC-EX-0000-CROR.xlsx",
-    cror: {
-      linhas_id_pos: 579,
-      sumarios:      75,
-      reunioes:      33,
-      acoes:         471
-    },
-    dashboard: {
-      acoes_semanal: 26,
-      acoes_cror:    471,
-      total:         497
-    },
-    acoes_sem_disciplina: [
-    "CONTRATAÇÃO PAISAGISMO",
-    "CONTRATAÇÃO SONDAGEM COMPLEMENTAR",
-    "CONTRATAÇÃO PISCINA",
-    "CONTRATAÇÃO IMPERMEABILIZAÇÃO",
-    "CONTRATAÇÃO ACÚSTICA",
-    "CONTRATAÇÃO CONSULTORIA ESQUADRIAS",
-    "CONTRATAÇÃO CONSULTORIA ELEVADORES",
-    "CONTRATAÇÃO CONSULTOR ACESSIBILIDADE",
-    "CONTRATAÇÃO IRRIGAÇÃO",
-    "CONTRATAÇÃO AUTOMAÇÃO",
-    "CONTRATAÇÃO LUMINOTÉCNICO FACHADA",
-    "CONTRATAÇÃO ANCORAGENS",
-    "REINGRESSO ARQUITETURA PREFEITURA",
-    "APROVAÇÃO CELESC",
-    "APROVAÇÃO BOMBEIROS",
-    "APROVAÇÃO HIDROSSANITÁRIO",
-    "EMISSÃO MATERIAL FEDERADO OBRA",
-    "QUANTITATIVO FINAL ARQUITETURA",
-    "EMISSÃO DAS DISCIPLINAS COM CARIMBO LO"
-],
-    disciplinas: ["ACESSIBILIDADE", "ACÚSTICA", "ANCORAGEM", "AQUECIMENTO CENTRAL", "ARQUITETURA", "AUTOMAÇÃO", "CLIMATIZAÇÃO E EXAUSTÃO", "CONSTRUTORA", "CONSULTORIA COZINHA INDUSTRIAL", "COORDENAÇÃO COMPATIBILIZAÇÃO", "ELEVADORES", "ELÉTRICO E TELECOMUNICAÇÕES", "ESQUADRIAS", "ESTRUTURAL", "FACHADA", "FUNDAÇÕES E CONTENÇÕES", "GARAGEM", "HIDRÁULICO", "IMPERMEABILIZAÇÃO", "INTERIORES", "IRRIGAÇÃO", "PAISAGISMO", "PISCINA", "PREVENTIVO E SPRINKLER", "SEGURANÇA PATRIMONIAL", "SONDAGEM"]
-  };
-  var r = window._epb2Report;
-  var semDisc = r.acoes_sem_disciplina.length;
-  console.group('%cEPB2 — Relatório de Atualização', 'font-weight:700;color:#3BD23D;font-size:11px');
-  console.log('%cCROR (MS Project)', 'font-weight:600;color:#aaa');
-  console.log('  Linhas de tarefa (ID > 0) : ' + r.cror.linhas_id_pos);
-  console.log('  — Sumários                : ' + r.cror.sumarios);
-  console.log('  — Reuniões                : ' + r.cror.reunioes);
-  console.log('  — Ações de projeto        : ' + r.cror.acoes);
-  console.log('%cDashboard', 'font-weight:600;color:#aaa');
-  console.log('  Ações Controle de Ações   : ' + r.dashboard.acoes_semanal);
-  console.log('  Ações CROR                : ' + r.dashboard.acoes_cror);
-  console.log('  TOTAL no dashboard        : ' + r.dashboard.total);
-  if (semDisc > 0) {
-    console.warn('%c' + semDisc + ' tarefa(s) sem prefixo de disciplina (aparecem em "Todas"):', 'color:#F59E0B');
-    r.acoes_sem_disciplina.forEach(function(t) { console.warn('  · ' + t); });
-  } else {
-    console.log('%c✓ Todas as tarefas têm disciplina mapeada', 'color:#3BD23D');
-  }
-  console.log('%cDisciplinas (' + r.disciplinas.length + '): ' + r.disciplinas.join(' · '), 'font-size:10px;color:#888');
-  console.groupEnd();
+  try {
+    window._epb2Report = {
+      fonte_cror: "EPB2-DOC-EX-0000-CROR.xlsx",
+      cror: {
+        linhas_id_pos: 579,
+        sumarios:      75,
+        reunioes:      33,
+        acoes:         471
+      },
+      dashboard: {
+        acoes_semanal: 26,
+        acoes_cror:    471,
+        total:         497
+      },
+      acoes_sem_disciplina: ["CONTRATAÇÃO PAISAGISMO", "CONTRATAÇÃO SONDAGEM COMPLEMENTAR", "CONTRATAÇÃO PISCINA", "CONTRATAÇÃO IMPERMEABILIZAÇÃO", "CONTRATAÇÃO ACÚSTICA", "CONTRATAÇÃO CONSULTORIA ESQUADRIAS", "CONTRATAÇÃO CONSULTORIA ELEVADORES", "CONTRATAÇÃO CONSULTOR ACESSIBILIDADE", "CONTRATAÇÃO IRRIGAÇÃO", "CONTRATAÇÃO AUTOMAÇÃO", "CONTRATAÇÃO LUMINOTÉCNICO FACHADA", "CONTRATAÇÃO ANCORAGENS", "REINGRESSO ARQUITETURA PREFEITURA", "APROVAÇÃO CELESC", "APROVAÇÃO BOMBEIROS", "APROVAÇÃO HIDROSSANITÁRIO", "EMISSÃO MATERIAL FEDERADO OBRA", "QUANTITATIVO FINAL ARQUITETURA", "EMISSÃO DAS DISCIPLINAS COM CARIMBO LO"],
+      disciplinas: ["ACESSIBILIDADE", "ACÚSTICA", "ANCORAGEM", "AQUECIMENTO CENTRAL", "ARQUITETURA", "AUTOMAÇÃO", "CLIMATIZAÇÃO E EXAUSTÃO", "CONSTRUTORA", "CONSULTORIA COZINHA INDUSTRIAL", "COORDENAÇÃO COMPATIBILIZAÇÃO", "ELEVADORES", "ELÉTRICO E TELECOMUNICAÇÕES", "ESQUADRIAS", "ESTRUTURAL", "FACHADA", "FUNDAÇÕES E CONTENÇÕES", "GARAGEM", "HIDRÁULICO", "IMPERMEABILIZAÇÃO", "INTERIORES", "IRRIGAÇÃO", "PAISAGISMO", "PISCINA", "PREVENTIVO E SPRINKLER", "SEGURANÇA PATRIMONIAL", "SONDAGEM"]
+    };
+    var r = window._epb2Report;
+    var sep = "─────────────────────────────────────────────";
+    if (typeof console !== "undefined" && console.log) {
+      console.log("[EPB2] " + sep);
+      console.log("[EPB2] RELATÓRIO DE ATUALIZAÇÃO — Dashboard EPB2");
+      console.log("[EPB2] " + sep);
+      console.log("[EPB2] CROR (MS Project):");
+      console.log("[EPB2]   Linhas de tarefa (ID > 0) : " + r.cror.linhas_id_pos);
+      console.log("[EPB2]   — Sumários                : " + r.cror.sumarios);
+      console.log("[EPB2]   — Reuniões                : " + r.cror.reunioes);
+      console.log("[EPB2]   — Ações de projeto        : " + r.cror.acoes);
+      console.log("[EPB2] Dashboard:");
+      console.log("[EPB2]   Ações Controle de Ações   : " + r.dashboard.acoes_semanal);
+      console.log("[EPB2]   Ações CROR                : " + r.dashboard.acoes_cror);
+      console.log("[EPB2]   TOTAL no dashboard        : " + r.dashboard.total);
+      if (r.acoes_sem_disciplina.length > 0) {
+        console.log("[EPB2] AVISO: " + r.acoes_sem_disciplina.length + " tarefa(s) sem prefixo de disciplina (aparecem em Todas):");
+        r.acoes_sem_disciplina.forEach(function(t) { console.log("[EPB2]   · " + t); });
+      } else {
+        console.log("[EPB2]   OK: Todas as tarefas têm disciplina mapeada");
+      }
+      console.log("[EPB2] Disciplinas (" + r.disciplinas.length + "): " + r.disciplinas.join(" | "));
+      console.log("[EPB2] " + sep);
+    }
+  } catch(e) {}
 })();
 </script>
 </head>
