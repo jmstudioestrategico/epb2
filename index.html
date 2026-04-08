@@ -1234,13 +1234,23 @@ function _parseDMY(s){var p=s.split('/');return new Date('20'+p[2]+'-'+p[1]+'-'+
 var _etDates = etapas.map(function(e){return[_parseDMY(e.inicio),_parseDMY(e.fim)];}).reduce(function(a,b){return a.concat(b);});
 const projStart = new Date(Math.min.apply(null,_etDates));
 const projEnd   = new Date(Math.max.apply(null,_etDates));
-const dataReferencia = new Date("2026-04-08"); // ← atualizado automaticamente
+// ── DATA DE REFERÊNCIA DO CROR ─────────────────────────────────────────────
+// AUTOMAÇÃO: substituir APENAS o valor da string abaixo (formato YYYY-MM-DD)
+// com a data de atualização dos dados do CROR (campo max "Criado" do xlsx).
+// NÃO usar new Date() sem argumento — isso pega a data de hoje, não do CROR.
+const _CROR_DATA_REF = "2026-04-06"; // ← AUTOMAÇÃO SUBSTITUI APENAS ESTE VALOR
+// Deriva o objeto Date a partir da string — sem timezone issues:
+const dataReferencia = (function(s) {
+  var p = s.split("-");
+  return new Date(+p[0], +p[1]-1, +p[2]); // local midnight, sem UTC offset
+})(_CROR_DATA_REF);
+// ─────────────────────────────────────────────────────────────────────────────
 // Variáveis derivadas de dataReferencia — NÃO editar manualmente:
 // Datas derivadas de dataReferencia — sem conversão UTC para evitar offset de fuso horário
 // Parseia os componentes diretamente da string ISO para garantir a data correta em qualquer fuso
 const _dataRefISO = (function() {
-  // Extrai ano/mês/dia diretamente da string "YYYY-MM-DD" — sem Date object, sem fuso
-  var s = dataReferencia.toISOString().slice(0,10); // UTC date string = data do CROR
+  // Usa _CROR_DATA_REF diretamente — string pura, sem conversão de timezone
+  var s = _CROR_DATA_REF; // "YYYY-MM-DD" — fonte: campo max "Criado" do CROR xlsx
   var p = s.split("-");
   var y = parseInt(p[0]), m = parseInt(p[1]), d = parseInt(p[2]);
   // _dataRefISO: "YYYY-MM-DD" para inputs type=date
