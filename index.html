@@ -821,10 +821,10 @@ var respDisplayName = {
 // ── DATA ──────────────────────────────────────────────────────────────────────
 const etapas = [
   { id:"EP", label:"Estudo Preliminar (EP)", inicio:"06/01/26", fim:"25/08/26", progresso:21, cor:"#1D9E75" },
-  { id:"AP", label:"Anteprojeto (AP)", inicio:"10/03/26", fim:"26/05/27", progresso:0, cor:"#378ADD" },
-  { id:"PE", label:"Pré-Executivo (PE)", inicio:"16/04/27", fim:"11/04/28", progresso:0, cor:"#7F77DD" },
-  { id:"EX", label:"Executivo (EX)", inicio:"09/11/27", fim:"16/08/28", progresso:0, cor:"#BA7517" },
-  { id:"LO", label:"Liberado Obra (LO)", inicio:"17/08/28", fim:"27/09/28", progresso:0, cor:"#2C9E5A" },
+  { id:"AP", label:"Anteprojeto (AP)",       inicio:"10/03/26", fim:"26/05/27", progresso:0,  cor:"#378ADD" },
+  { id:"PE", label:"Pré-Executivo (PE)",     inicio:"16/04/27", fim:"11/04/28", progresso:0,  cor:"#7F77DD" },
+  { id:"EX", label:"Executivo (EX)",         inicio:"09/11/27", fim:"16/08/28", progresso:0,  cor:"#BA7517" },
+  { id:"LO", label:"Liberado Obra (LO)",     inicio:"17/08/28", fim:"27/09/28", progresso:0,  cor:"#2C9E5A" },
 ];
 
 
@@ -1467,7 +1467,7 @@ const projEnd   = new Date(Math.max.apply(null,_etDates));
 // AUTOMAÇÃO: substituir APENAS o valor da string abaixo (formato YYYY-MM-DD)
 // com a data de atualização dos dados do CROR (campo max "Criado" do xlsx).
 // NÃO usar new Date() sem argumento — isso pega a data de hoje, não do CROR.
-const _CROR_DATA_REF  = "2026-04-15"; // ← GAS substitui: data do CROR (campo max Criado)
+const _CROR_DATA_REF = "2026-04-06"; // ← AUTOMAÇÃO SUBSTITUI APENAS ESTE VALOR
 // Deriva o objeto Date a partir da string — sem timezone issues:
 const dataReferencia = (function(s) {
   var p = s.split("-");
