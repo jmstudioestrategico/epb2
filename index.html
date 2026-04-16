@@ -1972,7 +1972,7 @@ renderDiscStatus();
 
   var SCORE_TABLE = {
     'Crítica': { 'Concluido com atraso': 1, 'Pendente': 2, 'Em andamento': 3, 'Futuro': 4 },
-    'Alta':    { 'Concluido com atraso': 5, 'Pendente': 6 },
+    'Alta':    { 'Concluido com atraso': 5, 'Pendente': 6, 'Em andamento': 7 },
   };
 
   function alertScore(a) {
@@ -2112,7 +2112,7 @@ function goToAcoesUrgentes() {
   var _D15 = new Date(dataReferencia.getTime() + 15 * 24 * 60 * 60 * 1000);
   var _ST  = {
     'Crítica': { 'Concluido com atraso': 1, 'Pendente': 2, 'Em andamento': 3, 'Futuro': 4 },
-    'Alta':    { 'Concluido com atraso': 5, 'Pendente': 6 }
+    'Alta':    { 'Concluido com atraso': 5, 'Pendente': 6, 'Em andamento': 7 }
   };
   function _sf(a) {
     var cs   = computeAcaoStatus(a);
@@ -2688,7 +2688,7 @@ var entItens = {
     { item:"Definições - Subistemas de Segurança: Controle de Acesso, CFTV, Sensores e Alarmes, Interfonia, Iluminação de Segurança e Gestão de Informações", status:"nao", obs:"" },
     { item:"Indicar os Ambientes para operacionalização da segurança humana, ténica e entregas", status:"nao", obs:"" },
     { item:"Recomendação dos Recursos Humanos, Técnicos e Organizacionais", status:"nao", obs:"" },
-    { item:"Apresentar a estimativa de Investimento (Capex e Opex)", status:"nao", obs:"Tue Apr 14 2026 04:00:00 GMT-0300 (Horário Padrão de Brasília)" },
+    { item:"Apresentar a estimativa de Investimento (Capex e Opex)", status:"nao", obs:"2026-04-14 00:00:00" },
     { item:"Elaboração do Plano de Ação", status:"nao", obs:"" },
     { item:"Pacote Entregue (PDF): Documentos (Plano Diretor de Segurança - Riscos e Ameaças; Dados da Segurança pública da região), Detalhamento dos Recursos, Estimativa de Investimentos, Plano de Ação", status:"nao", obs:"" },
     { item:"Plantas baixas - Alocação de Pontos e comentários", status:"nao", obs:"" },
@@ -3167,7 +3167,7 @@ var entItens = {
     { item:"Caderno de Vagas - Desenvolvimento de plantas ilustrativas", status:"nao", obs:"" },
     { item:"Pacote Entregue (PDF/DWG): Plantas Baixas / Cortes / Detalhes / Documentos", status:"nao", obs:"" },
   ],
-};
+}
 
 var entOpenKey = null; // currently expanded disc-fase key
 
