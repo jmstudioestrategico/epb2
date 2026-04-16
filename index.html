@@ -820,17 +820,17 @@ var respDisplayName = {
 
 // ── DATA ──────────────────────────────────────────────────────────────────────
 const etapas = [
-  { id:"EP", label:"Estudo Preliminar (EP)", inicio:"06/01/26", fim:"16/09/26", progresso:18, cor:"#1D9E75" },
-  { id:"AP", label:"Anteprojeto (AP)", inicio:"10/07/26", fim:"29/11/27", progresso:0, cor:"#378ADD" },
-  { id:"PE", label:"Pré-Executivo (PE)", inicio:"23/08/27", fim:"14/08/28", progresso:0, cor:"#7F77DD" },
-  { id:"EX", label:"Executivo (EX)", inicio:"16/05/28", fim:"30/01/29", progresso:0, cor:"#BA7517" },
+  { id:"EP", label:"Estudo Preliminar (EP)", inicio:"06/01/26", fim:"09/10/26", progresso:24, cor:"#1D9E75" },
+  { id:"AP", label:"Anteprojeto (AP)", inicio:"15/07/26", fim:"13/03/28", progresso:0, cor:"#378ADD" },
+  { id:"PE", label:"Pré-Executivo (PE)", inicio:"26/11/27", fim:"13/11/28", progresso:0, cor:"#7F77DD" },
+  { id:"EX", label:"Executivo (EX)", inicio:"15/08/28", fim:"01/05/29", progresso:0, cor:"#BA7517" },
 ];
 
 
 const ciclosAP = [
-  { id:"C1", label:"Ciclo 01", sub:"Torres A-G + Embasamento", inicio:"10/07/26", fim:"08/01/27", progresso:0 },
-  { id:"C2", label:"Ciclo 02", sub:"Torres A-D, Embasamento, E-G", inicio:"19/11/26", fim:"25/05/27", progresso:0 },
-  { id:"C3", label:"Ciclo 03", sub:"Embasamento + Torres A-G", inicio:"26/04/27", fim:"29/11/27", progresso:0 },
+  { id:"C1", label:"Ciclo 01", sub:"Torres A-G + Embasamento", inicio:"15/07/26", fim:"11/03/27", progresso:0 },
+  { id:"C2", label:"Ciclo 02", sub:"Torres A-D, Embasamento, E-G", inicio:"12/03/27", fim:"25/08/27", progresso:0 },
+  { id:"C3", label:"Ciclo 03", sub:"Embasamento + Torres A-G", inicio:"27/07/27", fim:"13/03/28", progresso:0 },
 ];
 const disciplinas = [
   { nome:"Bernardes",          tipo:"Arquitetura",         status:"", perc:0, proxEntrega:"--", obs:"" },
@@ -1463,7 +1463,7 @@ const _fim90ISO = window._fim90ISO;
 const _fim90    = window._fim90;
 const hoje           = dataReferencia;
 // percGeral from Project file (EP=20%, AP=3%, PE=0%, EX=0%, weighted by duration)
-const percGeral = 2;
+const percGeral = 3;
 const prioLabel = { critica:"Critica", alta:"Alta", media:"Media" };
 const stdLabel  = { andamento:"Em andamento", futuro:"Futuro", resolvido:"Concluido" };
 const discLabel = { ok:"Em dia", atencao:"Atenção", pendente:"Pendente" };
