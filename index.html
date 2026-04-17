@@ -816,19 +816,6 @@ var respDisplayName = {
   "Elevadores":      "A definir (Elevadores)",
   "Churrasqueira":   "A definir (Churrasqueiras)",
   "Acessibilidade":  "A definir (Acessibilidade)"
-  // ── Recursos do MS Project (nomes do CROR, case-insensitive via lookup) ──────
-  "Axia":               "Axia Vectra (Construtora)",
-  "Mannz":              "MANNZ Arquitetos",
-  "Bernardes":          "Bernardes Arquitetura",
-  "Thorus":             "Thórus Engenharia",
-  "Thórus":             "Thórus Engenharia",
-  "Value":              "Value Engenharia",
-  "Eduardo Penteado":   "Eduardo Penteado Projetos",
-  "Ancoragens":         "A definir (Ancoragens)",
-  "Automação":          "A definir (Automação)",
-  "Esquadrias":         "A definir (Esquadrias)",
-  "Irrigação":          "A definir (Irrigação)",
-  "Iluminação Fachada": "A definir (Iluminação Fachada)",
 };
 
 // ── DATA ──────────────────────────────────────────────────────────────────────
@@ -2216,7 +2203,7 @@ function goToAcoesUrgentes() {
       + '<div style="display:flex;align-items:baseline;gap:0;font-size:13px;font-weight:' + (concluido ? '400' : '400') + ';margin-bottom:' + (a.desc ? '2px' : '3px') + '">' + checkIcon + '<span>' + a.item + '</span>' + (concluido ? '&nbsp;' + conclusaoTag : '') + '</div>'
       + (a.desc ? '<div style="font-size:11px;color:var(--muted);font-weight:300;margin-bottom:4px;line-height:1.45;font-style:italic;">' + a.desc + '</div>' : '')
       + '<div style="font-size:11px;color:var(--muted);font-weight:300;">'
-      + '<span style="margin-right:16px;">Resp.: ' + (function(k){if(!k)return"";for(var _k in respDisplayName){if(_k.toLowerCase()===k.toLowerCase())return respDisplayName[_k];}return k;})(a.resp) + '</span>'
+      + '<span style="margin-right:16px;">Resp.: ' + (respDisplayName[a.resp] || a.resp) + '</span>'
       + (function() {
           var discs = a.disc ? [a.disc] : ((typeof respToDiscFilter !== 'undefined' && respToDiscFilter[a.resp]) || []);
           if (!discs.length) return '';
@@ -3550,7 +3537,7 @@ function renderAcoesUnified() {
       + '<div style="display:flex;align-items:baseline;gap:0;font-size:13px;font-weight:' + (concluido ? '400' : '400') + ';margin-bottom:' + (a.desc ? '2px' : '3px') + '">' + checkIcon + '<span>' + a.item + '</span>' + (concluido ? '&nbsp;' + conclusaoTag : '') + '</div>'
       + (a.desc ? '<div style="font-size:11px;color:var(--muted);font-weight:300;margin-bottom:4px;line-height:1.45;font-style:italic;">' + a.desc + '</div>' : '')
       + '<div style="font-size:11px;color:var(--muted);font-weight:300;">'
-      + '<span style="margin-right:16px;">Resp.: ' + (function(k){if(!k)return"";for(var _k in respDisplayName){if(_k.toLowerCase()===k.toLowerCase())return respDisplayName[_k];}return k;})(a.resp) + '</span>'
+      + '<span style="margin-right:16px;">Resp.: ' + (respDisplayName[a.resp] || a.resp) + '</span>'
       + (function() {
           var discs = a.disc ? [a.disc] : ((typeof respToDiscFilter !== 'undefined' && respToDiscFilter[a.resp]) || []);
           if (!discs.length) return '';
