@@ -820,17 +820,17 @@ var respDisplayName = {
 
 // ── DATA ──────────────────────────────────────────────────────────────────────
 const etapas = [
-  { id:"EP", label:"Estudo Preliminar (EP)", inicio:"06/01/26", fim:"09/10/26", progresso:24, cor:"#1D9E75" },
-  { id:"AP", label:"Anteprojeto (AP)", inicio:"15/07/26", fim:"13/03/28", progresso:0, cor:"#378ADD" },
-  { id:"PE", label:"Pré-Executivo (PE)", inicio:"26/11/27", fim:"13/11/28", progresso:0, cor:"#7F77DD" },
-  { id:"EX", label:"Executivo (EX)", inicio:"15/08/28", fim:"01/05/29", progresso:0, cor:"#BA7517" },
+  { id:"EP", label:"Estudo Preliminar (EP)", inicio:"06/01/26", fim:"13/10/26", progresso:23, cor:"#1D9E75" },
+  { id:"AP", label:"Anteprojeto (AP)", inicio:"16/07/26", fim:"14/03/28", progresso:0, cor:"#378ADD" },
+  { id:"PE", label:"Pré-Executivo (PE)", inicio:"29/11/27", fim:"14/11/28", progresso:0, cor:"#7F77DD" },
+  { id:"EX", label:"Executivo (EX)", inicio:"16/08/28", fim:"02/05/29", progresso:0, cor:"#BA7517" },
 ];
 
 
 const ciclosAP = [
-  { id:"C1", label:"Ciclo 01", sub:"Torres A-G + Embasamento", inicio:"15/07/26", fim:"11/03/27", progresso:0 },
-  { id:"C2", label:"Ciclo 02", sub:"Torres A-D, Embasamento, E-G", inicio:"12/03/27", fim:"25/08/27", progresso:0 },
-  { id:"C3", label:"Ciclo 03", sub:"Embasamento + Torres A-G", inicio:"27/07/27", fim:"13/03/28", progresso:0 },
+  { id:"C1", label:"Ciclo 01", sub:"Torres A-G + Embasamento", inicio:"16/07/26", fim:"12/03/27", progresso:0 },
+  { id:"C2", label:"Ciclo 02", sub:"Torres A-D, Embasamento, E-G", inicio:"15/03/27", fim:"26/08/27", progresso:0 },
+  { id:"C3", label:"Ciclo 03", sub:"Embasamento + Torres A-G", inicio:"28/07/27", fim:"14/03/28", progresso:0 },
 ];
 const disciplinas = [
   { nome:"Bernardes",          tipo:"Arquitetura",         status:"", perc:0, proxEntrega:"--", obs:"" },
@@ -1388,6 +1388,7 @@ const reunioes = [
   // ── Realizadas ─────────────────────────────────────────────────────────────────
   { data:"25/02/26", dataISO:"2026-02-25", tipo:"Alinhamento", situacao:"realizada", assunto:"REUNIÃO ALINHAMENTO CRONOGRAMA (AXIA, MANNZ, BERNARDES, THORUS)", decisoes:"" },
   { data:"31/03/26", dataISO:"2026-03-31", tipo:"Apresentação", situacao:"realizada", assunto:"REUNIÃO APRESENTAÇÃO - LANÇAMENTO TORRES THORUS (AXIA, MANNZ, THORUS, BERNARDES)", decisoes:"" },
+  { data:"13/04/26", dataISO:"2026-04-13", tipo:"Kick-off", situacao:"realizada", assunto:"REUNIÃO START CLIMATIZAÇÃO/EXAUSTÃO (AXIA, MANNZ, VALUE)", decisoes:"" },
   // ── Previstas ───────────────────────────────────────────────────────────────────
   { data:"06/01/26", dataISO:"2026-01-06", tipo:"Kick-off", situacao:"prevista",  assunto:"REUNIÃO START COZINHA INDUSTRIAL (AXIA, MANNZ, BERNARDES, ERLISE)", decisoes:"" },
   { data:"20/03/26", dataISO:"2026-03-20", tipo:"Kick-off", situacao:"prevista",  assunto:"REUNIÃO START PISCINA (AXIA, MANNZ, BERNARDES, PISCINA)", decisoes:"" },
@@ -1399,28 +1400,27 @@ const reunioes = [
   { data:"31/03/26", dataISO:"2026-03-31", tipo:"Kick-off", situacao:"prevista",  assunto:"REUNIÃO START AUTOMAÇÃO (AXIA, MANNZ, BERNARDES, AUTOMAÇÃO)", decisoes:"" },
   { data:"31/03/26", dataISO:"2026-03-31", tipo:"Kick-off", situacao:"prevista",  assunto:"REUNIÃO START LUMINOTÉCNICO FACHADA (AXIA, MANNZ, BERNARDES, FACHADA)", decisoes:"" },
   { data:"31/03/26", dataISO:"2026-03-31", tipo:"Kick-off", situacao:"prevista",  assunto:"REUNIÃO START ANCORAGENS (AXIA, MANNZ, BERNARDES, ANCORAGENS)", decisoes:"" },
-  { data:"13/04/26", dataISO:"2026-04-13", tipo:"Kick-off", situacao:"prevista",  assunto:"REUNIÃO START CLIMATIZAÇÃO/EXAUSTÃO (AXIA, MANNZ, VALUE)", decisoes:"" },
-  { data:"20/04/26", dataISO:"2026-04-20", tipo:"Kick-off", situacao:"prevista",  assunto:"REUNIÃO START AQUECIMENTO CENTRAL (AXIA, MANNZ, TECSET)", decisoes:"" },
+  { data:"22/04/26", dataISO:"2026-04-22", tipo:"Kick-off", situacao:"prevista",  assunto:"REUNIÃO START AQUECIMENTO CENTRAL (AXIA, MANNZ, TECSET)", decisoes:"" },
   { data:"30/04/26", dataISO:"2026-04-30", tipo:"Apresentação", situacao:"prevista",  assunto:"REUNIÃO APRESENTAÇÃO - LANÇAMENTO TORRES CLIMATIZAÇÃO/EXAUSTÃO (AXIA, MANNZ, BERNARDES, VALUE)", decisoes:"" },
-  { data:"04/05/26", dataISO:"2026-05-04", tipo:"Apresentação", situacao:"prevista",  assunto:"REUNIÃO APRESENTAÇÃO - LANÇAMENTO AQC (AXIA, MANNZ, BERNARDES, TECSET)", decisoes:"" },
-  { data:"16/06/26", dataISO:"2026-06-16", tipo:"Kick-off", situacao:"prevista",  assunto:"REUNIÃO START PAISAGISMO (AXIA, MANNZ, BERNARDES, HANAZAKI)", decisoes:"" },
-  { data:"13/07/26", dataISO:"2026-07-13", tipo:"Compatibilização", situacao:"prevista",  assunto:"REUNIÃO MULTIDISCIPLINAR COMPATIBILIZAÇÃO TORRES (AXIA, MANNZ, EDUARDO PENTEADO, BERNARDES, THORUS, VALUE, TECSET, PIS)", decisoes:"" },
-  { data:"10/09/26", dataISO:"2026-09-10", tipo:"Compatibilização", situacao:"prevista",  assunto:"REUNIÃO MULTIDISCIPLINAR COMPATIBILIZAÇÃO TORRES (AXIA, MANNZ, EDUARDO PENTEADO, BERNARDES, THORUS, VALUE, PIS)", decisoes:"" },
-  { data:"23/11/26", dataISO:"2026-11-23", tipo:"Compatibilização", situacao:"prevista",  assunto:"REUNIÃO MULTIDISCIPLINAR COMPATIBILIZAÇÃO TORRES (AXIA, MANNZ, EDUARDO PENTEADO, BERNARDES, THORUS, VALUE, TECSET)", decisoes:"" },
-  { data:"26/01/27", dataISO:"2027-01-26", tipo:"Compatibilização", situacao:"prevista",  assunto:"REUNIÃO MULTIDISCIPLINAR COMPATIBILIZAÇÃO EMBASAMENTO (AXIA, MANNZ, EDUARDO PENTEADO, BERNARDES, THORUS, VALUE, PIS, IRR)", decisoes:"" },
-  { data:"11/03/27", dataISO:"2027-03-11", tipo:"Compatibilização", situacao:"prevista",  assunto:"REUNIÃO MULTIDISCIPLINAR COMPATIBILIZAÇÃO TORRES (AXIA, MANNZ, EDUARDO PENTEADO, BERNARDES, THORUS, VALUE, TECSET)", decisoes:"" },
-  { data:"24/06/27", dataISO:"2027-06-24", tipo:"Compatibilização", situacao:"prevista",  assunto:"REUNIÃO MULTIDISCIPLINAR COMPATIBILIZAÇÃO TORRES A, B, C, D (AXIA, MANNZ, EDUARDO PENTEADO, BERNARDES, THORUS, VALUE, TECSET, PIS, IRR)", decisoes:"" },
-  { data:"26/07/27", dataISO:"2027-07-26", tipo:"Compatibilização", situacao:"prevista",  assunto:"REUNIÃO MULTIDISCIPLINAR COMPATIBILIZAÇÃO EMBASAMENTO (AXIA, MANNZ, EDUARDO PENTEADO, BERNARDES, THORUS, VALUE, PIS, IRR)", decisoes:"" },
-  { data:"25/08/27", dataISO:"2027-08-25", tipo:"Compatibilização", situacao:"prevista",  assunto:"REUNIÃO MULTIDISCIPLINAR COMPATIBILIZAÇÃO TORRES E, F, G (AXIA, MANNZ, EDUARDO PENTEADO, BERNARDES, THORUS, VALUE, TECSET, PIS, IRR)", decisoes:"" },
-  { data:"26/11/27", dataISO:"2027-11-26", tipo:"Compatibilização", situacao:"prevista",  assunto:"REUNIÃO MULTIDISCIPLINAR COMPATIBILIZAÇÃO EMBASAMENTO (AXIA, MANNZ, EDUARDO PENTEADO, BERNARDES, THORUS, VALUE, PIS, IRR)", decisoes:"" },
-  { data:"27/01/28", dataISO:"2028-01-27", tipo:"Compatibilização", situacao:"prevista",  assunto:"REUNIÃO MULTIDISCIPLINAR COMPATIBILIZAÇÃO TORRES A, B, C, D (AXIA, MANNZ, EDUARDO PENTEADO, BERNARDES, THORUS, VALUE, TECSET, PIS, IRR)", decisoes:"" },
-  { data:"13/03/28", dataISO:"2028-03-13", tipo:"Compatibilização", situacao:"prevista",  assunto:"REUNIÃO MULTIDISCIPLINAR COMPATIBILIZAÇÃO TORRES E, F, G (AXIA, MANNZ, EDUARDO PENTEADO, BERNARDES, THORUS, VALUE, TECSET, PIS, FUR)", decisoes:"" },
-  { data:"19/04/28", dataISO:"2028-04-19", tipo:"Compatibilização", situacao:"prevista",  assunto:"REUNIÃO MULTIDISCIPLINAR COMPATIBILIZAÇÃO EMBASAMENTO (AXIA, MANNZ, EDUARDO PENTEADO, BERNARDES, THORUS, VALUE, PIS, IRR)", decisoes:"" },
-  { data:"08/06/28", dataISO:"2028-06-08", tipo:"Compatibilização", situacao:"prevista",  assunto:"REUNIÃO MULTIDISCIPLINAR COMPATIBILIZAÇÃO TORRES A, B, C, D (AXIA, MANNZ, EDUARDO PENTEADO, BERNARDES, THORUS, VALUE, TECSET, PIS, IRR)", decisoes:"" },
-  { data:"24/07/28", dataISO:"2028-07-24", tipo:"Compatibilização", situacao:"prevista",  assunto:"REUNIÃO MULTIDISCIPLINAR COMPATIBILIZAÇÃO TORRES E, F, G (AXIA, MANNZ, EDUARDO PENTEADO, BERNARDES, THORUS, VALUE, TECSET, PIS, IRR)", decisoes:"" },
-  { data:"16/08/28", dataISO:"2028-08-16", tipo:"Compatibilização", situacao:"prevista",  assunto:"REUNIÃO MULTIDISCIPLINAR FECHAMENTO EMBASAMENTO (AXIA, MANNZ, EDUARDO PENTEADO, BERNARDES, THORUS, VALUE, PIS, IRR)", decisoes:"" },
-  { data:"08/09/28", dataISO:"2028-09-08", tipo:"Compatibilização", situacao:"prevista",  assunto:"REUNIÃO MULTIDISCIPLINAR COMPATIBILIZAÇÃO TORRES E, F, G (AXIA, MANNZ, EDUARDO PENTEADO, BERNARDES, THORUS, VALUE, TECSET, PIS, IRR)", decisoes:"" },
-  { data:"13/11/28", dataISO:"2028-11-13", tipo:"Compatibilização", situacao:"prevista",  assunto:"REUNIÃO MULTIDISCIPLINAR COMPATIBILIZAÇÃO TORRES E, F, G (AXIA, MANNZ, EDUARDO PENTEADO, BERNARDES, THORUS, VALUE, TECSET, PIS, IRR)", decisoes:"" },
+  { data:"05/05/26", dataISO:"2026-05-05", tipo:"Apresentação", situacao:"prevista",  assunto:"REUNIÃO APRESENTAÇÃO - LANÇAMENTO AQC (AXIA, MANNZ, BERNARDES, TECSET)", decisoes:"" },
+  { data:"17/06/26", dataISO:"2026-06-17", tipo:"Kick-off", situacao:"prevista",  assunto:"REUNIÃO START PAISAGISMO (AXIA, MANNZ, BERNARDES, HANAZAKI)", decisoes:"" },
+  { data:"14/07/26", dataISO:"2026-07-14", tipo:"Compatibilização", situacao:"prevista",  assunto:"REUNIÃO MULTIDISCIPLINAR COMPATIBILIZAÇÃO TORRES (AXIA, MANNZ, EDUARDO PENTEADO, BERNARDES, THORUS, VALUE, TECSET, PIS)", decisoes:"" },
+  { data:"11/09/26", dataISO:"2026-09-11", tipo:"Compatibilização", situacao:"prevista",  assunto:"REUNIÃO MULTIDISCIPLINAR COMPATIBILIZAÇÃO TORRES (AXIA, MANNZ, EDUARDO PENTEADO, BERNARDES, THORUS, VALUE, PIS)", decisoes:"" },
+  { data:"24/11/26", dataISO:"2026-11-24", tipo:"Compatibilização", situacao:"prevista",  assunto:"REUNIÃO MULTIDISCIPLINAR COMPATIBILIZAÇÃO TORRES (AXIA, MANNZ, EDUARDO PENTEADO, BERNARDES, THORUS, VALUE, TECSET)", decisoes:"" },
+  { data:"27/01/27", dataISO:"2027-01-27", tipo:"Compatibilização", situacao:"prevista",  assunto:"REUNIÃO MULTIDISCIPLINAR COMPATIBILIZAÇÃO EMBASAMENTO (AXIA, MANNZ, EDUARDO PENTEADO, BERNARDES, THORUS, VALUE, PIS, IRR)", decisoes:"" },
+  { data:"12/03/27", dataISO:"2027-03-12", tipo:"Compatibilização", situacao:"prevista",  assunto:"REUNIÃO MULTIDISCIPLINAR COMPATIBILIZAÇÃO TORRES (AXIA, MANNZ, EDUARDO PENTEADO, BERNARDES, THORUS, VALUE, TECSET)", decisoes:"" },
+  { data:"25/06/27", dataISO:"2027-06-25", tipo:"Compatibilização", situacao:"prevista",  assunto:"REUNIÃO MULTIDISCIPLINAR COMPATIBILIZAÇÃO TORRES A, B, C, D (AXIA, MANNZ, EDUARDO PENTEADO, BERNARDES, THORUS, VALUE, TECSET, PIS, IRR)", decisoes:"" },
+  { data:"27/07/27", dataISO:"2027-07-27", tipo:"Compatibilização", situacao:"prevista",  assunto:"REUNIÃO MULTIDISCIPLINAR COMPATIBILIZAÇÃO EMBASAMENTO (AXIA, MANNZ, EDUARDO PENTEADO, BERNARDES, THORUS, VALUE, PIS, IRR)", decisoes:"" },
+  { data:"26/08/27", dataISO:"2027-08-26", tipo:"Compatibilização", situacao:"prevista",  assunto:"REUNIÃO MULTIDISCIPLINAR COMPATIBILIZAÇÃO TORRES E, F, G (AXIA, MANNZ, EDUARDO PENTEADO, BERNARDES, THORUS, VALUE, TECSET, PIS, IRR)", decisoes:"" },
+  { data:"29/11/27", dataISO:"2027-11-29", tipo:"Compatibilização", situacao:"prevista",  assunto:"REUNIÃO MULTIDISCIPLINAR COMPATIBILIZAÇÃO EMBASAMENTO (AXIA, MANNZ, EDUARDO PENTEADO, BERNARDES, THORUS, VALUE, PIS, IRR)", decisoes:"" },
+  { data:"28/01/28", dataISO:"2028-01-28", tipo:"Compatibilização", situacao:"prevista",  assunto:"REUNIÃO MULTIDISCIPLINAR COMPATIBILIZAÇÃO TORRES A, B, C, D (AXIA, MANNZ, EDUARDO PENTEADO, BERNARDES, THORUS, VALUE, TECSET, PIS, IRR)", decisoes:"" },
+  { data:"14/03/28", dataISO:"2028-03-14", tipo:"Compatibilização", situacao:"prevista",  assunto:"REUNIÃO MULTIDISCIPLINAR COMPATIBILIZAÇÃO TORRES E, F, G (AXIA, MANNZ, EDUARDO PENTEADO, BERNARDES, THORUS, VALUE, TECSET, PIS, FUR)", decisoes:"" },
+  { data:"20/04/28", dataISO:"2028-04-20", tipo:"Compatibilização", situacao:"prevista",  assunto:"REUNIÃO MULTIDISCIPLINAR COMPATIBILIZAÇÃO EMBASAMENTO (AXIA, MANNZ, EDUARDO PENTEADO, BERNARDES, THORUS, VALUE, PIS, IRR)", decisoes:"" },
+  { data:"09/06/28", dataISO:"2028-06-09", tipo:"Compatibilização", situacao:"prevista",  assunto:"REUNIÃO MULTIDISCIPLINAR COMPATIBILIZAÇÃO TORRES A, B, C, D (AXIA, MANNZ, EDUARDO PENTEADO, BERNARDES, THORUS, VALUE, TECSET, PIS, IRR)", decisoes:"" },
+  { data:"25/07/28", dataISO:"2028-07-25", tipo:"Compatibilização", situacao:"prevista",  assunto:"REUNIÃO MULTIDISCIPLINAR COMPATIBILIZAÇÃO TORRES E, F, G (AXIA, MANNZ, EDUARDO PENTEADO, BERNARDES, THORUS, VALUE, TECSET, PIS, IRR)", decisoes:"" },
+  { data:"17/08/28", dataISO:"2028-08-17", tipo:"Compatibilização", situacao:"prevista",  assunto:"REUNIÃO MULTIDISCIPLINAR FECHAMENTO EMBASAMENTO (AXIA, MANNZ, EDUARDO PENTEADO, BERNARDES, THORUS, VALUE, PIS, IRR)", decisoes:"" },
+  { data:"11/09/28", dataISO:"2028-09-11", tipo:"Compatibilização", situacao:"prevista",  assunto:"REUNIÃO MULTIDISCIPLINAR COMPATIBILIZAÇÃO TORRES E, F, G (AXIA, MANNZ, EDUARDO PENTEADO, BERNARDES, THORUS, VALUE, TECSET, PIS, IRR)", decisoes:"" },
+  { data:"14/11/28", dataISO:"2028-11-14", tipo:"Compatibilização", situacao:"prevista",  assunto:"REUNIÃO MULTIDISCIPLINAR COMPATIBILIZAÇÃO TORRES E, F, G (AXIA, MANNZ, EDUARDO PENTEADO, BERNARDES, THORUS, VALUE, TECSET, PIS, IRR)", decisoes:"" },
 ];
 
 // ── UTILS ─────────────────────────────────────────────────────────────────────
