@@ -4031,11 +4031,7 @@ function drawTrendChart() {
 
   // Todos os meses do projeto: Jan/2026 → Fev/2028 = 26 meses
   var meses = [
-    'Jan/26','Fev/26','Mar/26','Abr/26','Mai/26','Jun/26',
-    'Jul/26','Ago/26','Set/26','Out/26','Nov/26','Dez/26',
-    'Jan/27','Fev/27','Mar/27','Abr/27','Mai/27','Jun/27',
-    'Jul/27','Ago/27','Set/27','Out/27','Nov/27','Dez/27',
-    'Jan/28','Fev/28'
+    'Jan/26','Fev/26','Mar/26','Abr/26','Mai/26','Jun/26','Jul/26','Ago/26','Set/26','Out/26','Nov/26','Dez/26','Jan/27','Fev/27','Mar/27','Abr/27','Mai/27','Jun/27','Jul/27','Ago/27','Set/27','Out/27','Nov/27','Dez/27','Jan/28','Fev/28','Mar/28','Abr/28','Mai/28','Jun/28','Jul/28','Ago/28','Set/28','Out/28','Nov/28','Dez/28','Jan/29','Fev/29','Mar/29','Abr/29','Mai/29','Jun/29'
   ];
   var n = meses.length; // 26
   var DPR = window.devicePixelRatio || 1;
@@ -4048,10 +4044,10 @@ function drawTrendChart() {
 // Realizado = % atual de cada fase * peso (horas) / total
 // Planejado = progresso linear planejado por fase acumulado
 // Projeção  = curva planejada reescalada a partir do ponto atual
-  var realData = [2.9, 2.9, 2.9, 3, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null];
+  var realData = [2.9, 2.9, 2.9, 3.0, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null];
   // Linha planejada (cronograma original — estimativa)
-  var planejado = [1.1, 2.6, 6.5, 10.4, 14.3, 18.2, 21.9, 24.5, 28.0, 32.5, 36.8, 41.2, 45.7, 49.7, 54.2, 58.5, 62.0, 64.1, 70.6, 75.4, 79.9, 84.5, 89.0, 93.7, 98.3, 100.0];
-  var projecao = [null, null, 2.9, 7.0, 11.0, 15.1, 18.9, 21.6, 25.2, 29.9, 34.4, 38.9, 43.6, 47.8, 52.4, 56.9, 60.5, 62.7, 69.5, 74.5, 79.1, 83.9, 88.6, 93.5, 98.2, 100.0];
+  var planejado = [1.1, 2.0, 3.5, 5.8, 8.2, 10.6, 13.0, 15.3, 17.7, 20.0, 22.2, 23.7, 25.6, 27.7, 30.4, 33.1, 35.8, 38.4, 41.1, 43.8, 46.5, 48.9, 51.6, 54.3, 56.9, 59.4, 61.5, 63.0, 64.6, 68.5, 72.0, 74.9, 77.7, 80.5, 83.3, 86.0, 88.8, 91.6, 94.5, 97.2, 98.9, 100.0];
+  var projecao = [null, null, null, 3.0, 5.6, 8.1, 10.7, 13.2, 15.8, 18.3, 20.9, 23.4, 26.0, 28.5, 31.1, 33.6, 36.2, 38.7, 41.3, 43.8, 46.4, 48.9, 51.5, 54.1, 56.6, 59.2, 61.7, 64.3, 66.8, 69.4, 71.9, 74.5, 77.0, 79.6, 82.1, 84.7, 87.2, 89.8, 92.3, 94.9, 97.4, 100.0];
   var W = (canvas.parentElement && canvas.parentElement.clientWidth > 50) ? canvas.parentElement.clientWidth : (canvas.parentElement && canvas.parentElement.offsetWidth > 50 ? canvas.parentElement.offsetWidth : 1280);
   var H = 220;
   canvas.width  = W * DPR;
@@ -4433,11 +4429,7 @@ renderProximasEntregas();
 
   // Todos os meses do projeto: Jan/2026 → Fev/2028 = 26 meses
   var meses = [
-    'Jan/26','Fev/26','Mar/26','Abr/26','Mai/26','Jun/26',
-    'Jul/26','Ago/26','Set/26','Out/26','Nov/26','Dez/26',
-    'Jan/27','Fev/27','Mar/27','Abr/27','Mai/27','Jun/27',
-    'Jul/27','Ago/27','Set/27','Out/27','Nov/27','Dez/27',
-    'Jan/28','Fev/28'
+    'Jan/26','Fev/26','Mar/26','Abr/26','Mai/26','Jun/26','Jul/26','Ago/26','Set/26','Out/26','Nov/26','Dez/26','Jan/27','Fev/27','Mar/27','Abr/27','Mai/27','Jun/27','Jul/27','Ago/27','Set/27','Out/27','Nov/27','Dez/27','Jan/28','Fev/28','Mar/28','Abr/28','Mai/28','Jun/28','Jul/28','Ago/28','Set/28','Out/28','Nov/28','Dez/28','Jan/29','Fev/29','Mar/29','Abr/29','Mai/29','Jun/29'
   ];
   var n = meses.length; // 26
   var DPR = window.devicePixelRatio || 1;
@@ -4447,10 +4439,10 @@ renderProximasEntregas();
 // Realizado = % atual de cada fase * peso (horas) / total
 // Planejado = progresso linear planejado por fase acumulado
 // Projeção  = curva planejada reescalada a partir do ponto atual
-  var realData = [1, 2, 4, 3, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null];
+  var realData = [2.9, 2.9, 2.9, 3.0, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null];
   // Linha planejada (cronograma original — estimativa)
-  var planejado = [1,3,6,9,13,18,24,31,40,49,57,63,68,73,78,83,88,91,94,96,97,98,99,100,100,100];
-  var projecao = [null,null,4,6,9,12,16,21,28,36,44,51,57,63,68,74,79,84,88,91,94,96,97,98,99,100];
+  var planejado = [1.1, 2.0, 3.5, 5.8, 8.2, 10.6, 13.0, 15.3, 17.7, 20.0, 22.2, 23.7, 25.6, 27.7, 30.4, 33.1, 35.8, 38.4, 41.1, 43.8, 46.5, 48.9, 51.6, 54.3, 56.9, 59.4, 61.5, 63.0, 64.6, 68.5, 72.0, 74.9, 77.7, 80.5, 83.3, 86.0, 88.8, 91.6, 94.5, 97.2, 98.9, 100.0];
+  var projecao = [null, null, null, 3.0, 5.6, 8.1, 10.7, 13.2, 15.8, 18.3, 20.9, 23.4, 26.0, 28.5, 31.1, 33.6, 36.2, 38.7, 41.3, 43.8, 46.4, 48.9, 51.5, 54.1, 56.6, 59.2, 61.7, 64.3, 66.8, 69.4, 71.9, 74.5, 77.0, 79.6, 82.1, 84.7, 87.2, 89.8, 92.3, 94.9, 97.4, 100.0];
   var W = canvas.parentElement ? (canvas.parentElement.offsetWidth || 800) : 800;
   var H = 220;
   canvas.width  = W * DPR;
