@@ -2052,7 +2052,7 @@ renderDiscStatus();
       + '<div style="font-size:12px;font-weight:400;line-height:1.4;margin-bottom:6px;color:var(--black);">'
       +   a.item + '</div>'
       + '<div style="font-size:10px;color:var(--muted);font-weight:300;">Resp.: '
-      +   a.resp + ' · Prazo: ' + a.prazo + '</div>'
+      +   (function(r,d){if(r){for(var _k in respDisplayName){if(_k.toLowerCase()===r.toLowerCase())return respDisplayName[_k];}return r;}return discRespMap&&discRespMap[d]?discRespMap[d]:'';})(a.resp,a.disc) + ' · Prazo: ' + a.prazo + '</div>'
       + '<div class="card-link-hint">&#8594; Ver Ações por Disciplina</div>'
       + '</div>';
   }).join('');
@@ -4036,11 +4036,8 @@ function drawTrendChart() {
   var n = meses.length; // 26
   var DPR = window.devicePixelRatio || 1;
   // Hoje = calculado dinamicamente a partir de _CROR_DATA_REF
-  var _hojeRef = (typeof _dataRefISO !== 'undefined') ? _dataRefISO : new Date();
-  var _hojeY = _hojeRef.getFullYear();
-  var _hojeM = _hojeRef.getMonth(); // 0-indexed
-  var _mesBase = { y: 2026, m: 0 }; // Jan/2026 = índice 0
-  var HOJE_IDX = (_hojeY - _mesBase.y) * 12 + (_hojeM - _mesBase.m);
+  var _hp = (typeof _CROR_DATA_REF !== 'undefined' ? _CROR_DATA_REF : '2026-04-01').split('-');
+  var HOJE_IDX = (parseInt(_hp[0]) - 2026) * 12 + (parseInt(_hp[1]) - 1);
   HOJE_IDX = Math.max(0, Math.min(HOJE_IDX, n - 1));
 
   // Curvas calculadas automaticamente a partir das fases do Project
@@ -4064,10 +4061,8 @@ function drawTrendChart() {
   var PAD = { top:22, right:16, bottom:46, left:44 };
   var chartW = W - PAD.left - PAD.right;
   var chartH = H - PAD.top  - PAD.bottom;
-  var _hojeRef2 = (typeof _dataRefISO !== 'undefined') ? _dataRefISO : new Date();
-  var _hojeY2 = _hojeRef2.getFullYear();
-  var _hojeM2 = _hojeRef2.getMonth();
-  var HOJE_IDX = (_hojeY2 - 2026) * 12 + _hojeM2;
+  var _hp = (typeof _CROR_DATA_REF !== 'undefined' ? _CROR_DATA_REF : '2026-04-01').split('-');
+  var HOJE_IDX = (parseInt(_hp[0]) - 2026) * 12 + (parseInt(_hp[1]) - 1);
   HOJE_IDX = Math.max(0, Math.min(HOJE_IDX, n - 1));
 
   function xPos(i) { return PAD.left + (i / (n-1)) * chartW; }
@@ -4464,10 +4459,8 @@ renderProximasEntregas();
   var PAD = { top:22, right:16, bottom:46, left:44 };
   var chartW = W - PAD.left - PAD.right;
   var chartH = H - PAD.top  - PAD.bottom;
-  var _hojeRef2 = (typeof _dataRefISO !== 'undefined') ? _dataRefISO : new Date();
-  var _hojeY2 = _hojeRef2.getFullYear();
-  var _hojeM2 = _hojeRef2.getMonth();
-  var HOJE_IDX = (_hojeY2 - 2026) * 12 + _hojeM2;
+  var _hp = (typeof _CROR_DATA_REF !== 'undefined' ? _CROR_DATA_REF : '2026-04-01').split('-');
+  var HOJE_IDX = (parseInt(_hp[0]) - 2026) * 12 + (parseInt(_hp[1]) - 1);
   HOJE_IDX = Math.max(0, Math.min(HOJE_IDX, n - 1));
 
   function xPos(i) { return PAD.left + (i / (n-1)) * chartW; }
