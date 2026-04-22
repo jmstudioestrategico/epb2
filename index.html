@@ -1964,7 +1964,14 @@ function normalizeCriticidade(s) {
   return m[s.toLowerCase()] || s;
 }
 
-var HOJE_ACOES = dataReferencia;
+var HOJE_ACOES = (function() {
+  // Usa data da execução do script (quando disponível) para calcular status
+  if (typeof _EXEC_DATA !== 'undefined' && _EXEC_DATA) {
+    var p = _EXEC_DATA.split('-');
+    return new Date(parseInt(p[0]), parseInt(p[1])-1, parseInt(p[2]));
+  }
+  return dataReferencia;
+})();
 function computeAcaoStatus(a) {
   // Normalize status and criticidade to handle variants from different sources
   a = Object.assign({}, a, {
@@ -1976,8 +1983,9 @@ function computeAcaoStatus(a) {
   var prazoDate = parsePrazoAcao(a.prazo);
   if (!prazoDate) return a.status;
   if (prazoDate > HOJE_ACOES && a.status === 'Nao iniciado') return 'Futuro';
-  if (prazoDate <= HOJE_ACOES && a.status === 'Nao iniciado') return 'Pendente';
-  if (prazoDate < HOJE_ACOES && a.status === 'Em andamento') return 'Concluido com atraso';
+  if (prazoDate < HOJE_ACOES && a.status === 'Nao iniciado') return 'Com atraso';
+  if (prazoDate.getTime() === HOJE_ACOES.getTime() && a.status === 'Nao iniciado') return 'Pendente';
+  if (prazoDate < HOJE_ACOES && a.status === 'Em andamento') return 'Com atraso';
   return a.status;
 }
 
