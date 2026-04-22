@@ -1762,7 +1762,10 @@ function renderGantt(id) {
   html += '</div>';
   document.getElementById(id).innerHTML = html;
 }
-renderGantt('gantt-main');
+// Gantt inicial: atrasa para garantir que o container tenha largura correta no iframe
+setTimeout(function() { renderGantt('gantt-main'); }, 200);
+window.addEventListener('load', function() { setTimeout(function() { renderGantt('gantt-main'); }, 300); });
+window.addEventListener('resize', function() { renderGantt('gantt-main'); });
 
 // ── ETAPAS DETAIL ─────────────────────────────────────────────────────────────
 var _ed = document.getElementById('etapas-detail'); if (_ed) _ed.innerHTML = etapas.map(function(e) {
