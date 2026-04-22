@@ -1524,8 +1524,10 @@ function goTab(i) {
       renderAcoesUnified();
       var fromEl = document.getElementById('acoes-date-from');
       var toEl   = document.getElementById('acoes-date-to');
-      if (fromEl && !fromEl.value) fromEl.value = _dataRefISO; // dataReferencia
-      if (toEl   && !toEl.value)   toEl.value   = _fim90ISO; // dataReferencia + 90 dias
+      if (!window._fromStatusCard) {
+        if (fromEl && !fromEl.value) fromEl.value = _dataRefISO;
+        if (toEl   && !toEl.value)   toEl.value   = _fim90ISO;
+      } // dataReferencia + 90 dias
       renderAcoesUnified();
     }
   }, 30); }
@@ -1833,6 +1835,7 @@ var _discStatusMap = {};
 
 function goDiscStatusFilter(key) {
   var stdValMap = { andamento:'Em andamento', futuro:'Futuro', pendente:'Nao iniciado', atraso:'atraso', concluido:'Concluido', todos:'todos' };
+  window._fromStatusCard = true;
   goTab(3);
   setTimeout(function() {
     // Limpar filtro de data "DE" para não excluir concluídos/atrasados do passado
@@ -1849,6 +1852,7 @@ function goDiscStatusFilter(key) {
     document.querySelectorAll('[data-ms-group="acao-std"]').forEach(function(b) {
       b.classList.toggle('active', b.getAttribute('data-ms-val') === targetStdVal);
     });
+    window._fromStatusCard = false;
     renderAcoesUnified();
   }, 80);
 }
