@@ -1857,7 +1857,7 @@ function renderDiscStatus() {
     if      (cs === 'Em andamento')         bkts.andamento++;
     else if (cs === 'Futuro')               bkts.futuro++;
     else if (cs === 'Pendente')             bkts.pendente++;
-    else if (cs === 'Concluido com atraso') bkts.atraso++;
+    else if (cs === 'Concluido com atraso' || cs === 'Com atraso') bkts.atraso++;
     else if (cs === 'Concluido')            bkts.concluido++;
   });
 
@@ -1948,7 +1948,8 @@ function normalizeStatus(s) {
   var m = { 'concluído':'Concluido','concluido':'Concluido',
             'concluído com atraso':'Concluido com atraso',
             'concluido com atraso':'Concluido com atraso',
-            'atrasado':'Concluido com atraso',   // automação pode gerar esse valor
+            'atrasado':'Com atraso',   // prazo vencido, ação NÃO concluída
+            'com atraso':'Com atraso',   // prazo vencido, ação NÃO concluída
             'em andamento':'Em andamento','em Andamento':'Em andamento',
             'pendente':'Pendente','nao iniciado':'Nao iniciado',
             'nao Iniciado':'Nao iniciado','não iniciado':'Nao iniciado',
@@ -1970,7 +1971,7 @@ function computeAcaoStatus(a) {
     status: normalizeStatus(a.status),
     criticidade: normalizeCriticidade(a.criticidade)
   });
-  if (a.status === 'Concluido' || a.status === 'Concluido com atraso') return a.status;
+  if (a.status === 'Concluido' || a.status === 'Concluido com atraso' || a.status === 'Com atraso') return a.status;
   if (a.status === 'Pendente') return 'Pendente'; // status editorial explícito da planilha
   var prazoDate = parsePrazoAcao(a.prazo);
   if (!prazoDate) return a.status;
@@ -2005,8 +2006,8 @@ renderDiscStatus();
   var D15  = new Date(dataReferencia.getTime() + 15 * 24 * 60 * 60 * 1000);
 
   var SCORE_TABLE = {
-    'Crítica': { 'Concluido com atraso': 1, 'Pendente': 2, 'Em andamento': 3, 'Futuro': 4 },
-    'Alta':    { 'Concluido com atraso': 5, 'Pendente': 6, 'Em andamento': 7 },
+    'Crítica': { 'Concluido com atraso': 1, 'Com atraso': 1, 'Pendente': 2, 'Em andamento': 3, 'Futuro': 4 },
+    'Alta':    { 'Concluido com atraso': 5, 'Com atraso': 5, 'Pendente': 6, 'Em andamento': 7 },
   };
 
   function alertScore(a) {
@@ -2018,7 +2019,7 @@ renderDiscStatus();
     var score = critMap[cs];
     if (score == null) return 999;
     // "Em atraso" entra sempre (prazo já passou por definição)
-    if (cs !== 'Concluido com atraso') {
+    if (cs !== 'Concluido com atraso' && cs !== 'Com atraso') {
       var d = parsePrazoAcao(a.prazo);
       if (!d) return 999;                    // sem prazo → fora
       if (d < HOJE) return 999;              // prazo passado → não é urgência futura
@@ -2051,13 +2052,13 @@ renderDiscStatus();
     + ' de ação imediata</span>';
 
     // Paleta por status computado
-  var stBg  = { 'Concluido com atraso':'#FDECEA', 'Em andamento':'#FDECEA',
+  var stBg  = { 'Com atraso':'#FDECEA', 'Concluido com atraso':'#FDECEA', 'Em andamento':'#FDECEA',
                 'Pendente':'#FFF8EC', 'Futuro':'#F3EEFF' };
-  var stTxt = { 'Concluido com atraso':'#7B1D1D', 'Em andamento':'#7B1D1D',
+  var stTxt = { 'Com atraso':'#7B1D1D', 'Concluido com atraso':'#7B1D1D', 'Em andamento':'#7B1D1D',
                 'Pendente':'#7A4500',  'Futuro':'#6B3FA0' };
-  var stBdr = { 'Concluido com atraso':'#E24B4A', 'Em andamento':'#E24B4A',
+  var stBdr = { 'Com atraso':'#E24B4A', 'Concluido com atraso':'#E24B4A', 'Em andamento':'#E24B4A',
                 'Pendente':'#F59E0B',  'Futuro':'#9B6FD4' };
-  var stLbl = { 'Concluido com atraso':'Com atraso', 'Em andamento':'Em andamento',
+  var stLbl = { 'Com atraso':'Com atraso', 'Concluido com atraso':'Com atraso', 'Em andamento':'Em andamento',
                 'Pendente':'Pendente', 'Futuro':'Futuro' };
   var crioBg  = { 'Crítica':'#FDECEA', 'Alta':'#FFF5E6', 'Media':'#EBF4FF' };
   var crioTxt = { 'Crítica':'#7B1D1D', 'Alta':'#7A4500', 'Media':'#1A4F8A' };
@@ -2145,8 +2146,8 @@ function goToAcoesUrgentes() {
   var _D15_REF = dataReferencia; // início da janela (hoje)
   var _D15 = new Date(dataReferencia.getTime() + 15 * 24 * 60 * 60 * 1000);
   var _ST  = {
-    'Crítica': { 'Concluido com atraso': 1, 'Pendente': 2, 'Em andamento': 3, 'Futuro': 4 },
-    'Alta':    { 'Concluido com atraso': 5, 'Pendente': 6, 'Em andamento': 7 }
+    'Crítica': { 'Concluido com atraso': 1, 'Com atraso': 1, 'Pendente': 2, 'Em andamento': 3, 'Futuro': 4 },
+    'Alta':    { 'Concluido com atraso': 5, 'Com atraso': 5, 'Pendente': 6, 'Em andamento': 7 }
   };
   function _sf(a) {
     var cs   = computeAcaoStatus(a);
@@ -2154,7 +2155,7 @@ function goToAcoesUrgentes() {
     if (cs === 'Concluido') return 999;
     var cm = _ST[crit]; if (!cm) return 999;
     var sc = cm[cs];    if (sc == null) return 999;
-    if (cs !== 'Concluido com atraso') {
+    if (cs !== 'Concluido com atraso' && cs !== 'Com atraso') {
       var d = parsePrazoAcao(a.prazo);
       if (!d || d < _D15_REF || d > _D15) return 999; // prazo deve estar na janela [hoje, hoje+15]
     }
@@ -2216,7 +2217,7 @@ function goToAcoesUrgentes() {
     var sl = statusLabel[_cs] || statusLabel[a.status] || _cs;
     var resolvedClass = concluido ? 'resolved-row' : '';
 
-    var _conclusaoLbl = _cs === 'Concluido com atraso' ? '✓ Concluído (com atraso) em ' : '✓ Concluído em ';
+    var _conclusaoLbl = _cs === 'Concluido com atraso' ? '✓ Concluído (com atraso) em ' : _cs === 'Com atraso' ? '⚠ Em atraso — prazo: ' : '✓ Concluído em ';
     var conclusaoTag = (concluido && a.conclusao && a.conclusao !== '-')
       ? '<span style="display:inline-flex;align-items:center;gap:4px;font-size:9px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:#1D6B1E;background:#D4F4D4;padding:2px 8px;border-radius:3px;margin-left:2px;">' + _conclusaoLbl + a.conclusao + '</span>'
       : '';
@@ -3452,7 +3453,7 @@ function renderAcoesKPI(filteredList) {
   var concl   = lista.filter(function(a) { return computeAcaoStatus(a) === 'Concluido'; }).length;
   var emAnd   = lista.filter(function(a) { return computeAcaoStatus(a) === 'Em andamento'; }).length;
   var pend    = lista.filter(function(a) { return computeAcaoStatus(a) === 'Pendente'; }).length;
-  var atraso  = lista.filter(function(a) { return computeAcaoStatus(a) === 'Concluido com atraso'; }).length;
+  var atraso  = lista.filter(function(a) { var _s=computeAcaoStatus(a); return _s==='Concluido com atraso'||_s==='Com atraso'; }).length;
   var futuro  = lista.filter(function(a) { return computeAcaoStatus(a) === 'Futuro'; }).length;
   var kpis = [
     { label:"Total",        val:total,  cor:"var(--black)" },
@@ -3485,7 +3486,7 @@ function renderAcoesUnified() {
     var okPrio = prioVals[0] === 'todos' || prioVals.indexOf(a.criticidade) >= 0;
     var computedStatus = computeAcaoStatus(a);
     var okStd  = stdVals[0] === 'todos'
-      || (stdVals.indexOf('atraso')       >= 0 && computedStatus === 'Concluido com atraso')
+      || (stdVals.indexOf('atraso')       >= 0 && (computedStatus === 'Concluido com atraso' || computedStatus === 'Com atraso'))
       || (stdVals.indexOf('Concluido')    >= 0 && (computedStatus === 'Concluido' || a.status === 'Concluido'))
       || (stdVals.indexOf('Futuro')       >= 0 && computedStatus === 'Futuro')
       || (stdVals.indexOf('Nao iniciado') >= 0 && computedStatus === 'Pendente')
@@ -3549,7 +3550,7 @@ function renderAcoesUnified() {
     var sl = statusLabel[_cs] || statusLabel[a.status] || _cs;
     var resolvedClass = concluido ? 'resolved-row' : '';
 
-    var _conclusaoLbl = _cs === 'Concluido com atraso' ? '✓ Concluído (com atraso) em ' : '✓ Concluído em ';
+    var _conclusaoLbl = _cs === 'Concluido com atraso' ? '✓ Concluído (com atraso) em ' : _cs === 'Com atraso' ? '⚠ Em atraso — prazo: ' : '✓ Concluído em ';
     var conclusaoTag = (concluido && a.conclusao && a.conclusao !== '-')
       ? '<span style="display:inline-flex;align-items:center;gap:4px;font-size:9px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:#1D6B1E;background:#D4F4D4;padding:2px 8px;border-radius:3px;margin-left:2px;">' + _conclusaoLbl + a.conclusao + '</span>'
       : '';
@@ -4358,7 +4359,7 @@ function updateDiscHighlight() {
     var cs   = computeAcaoStatus(a);
     var okPrio = prioVals[0] === 'todos' || prioVals.indexOf(crio) >= 0;
     var okStd  = stdVals[0] === 'todos'
-      || (stdVals.indexOf('atraso')       >= 0 && cs === 'Concluido com atraso')
+      || (stdVals.indexOf('atraso')       >= 0 && (cs === 'Concluido com atraso' || cs === 'Com atraso'))
       || (stdVals.indexOf('Concluido')    >= 0 && cs === 'Concluido')
       || (stdVals.indexOf('Futuro')       >= 0 && cs === 'Futuro')
       || (stdVals.indexOf('Nao iniciado') >= 0 && cs === 'Pendente')
