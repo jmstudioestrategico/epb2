@@ -1429,21 +1429,25 @@ const dataReferencia = (function(s) {
 // Datas derivadas de dataReferencia — sem conversão UTC para evitar offset de fuso horário
 // Parseia os componentes diretamente da string ISO para garantir a data correta em qualquer fuso
 const _dataRefISO = (function() {
-  // Usa _CROR_DATA_REF diretamente — string pura, sem conversão de timezone
-  var s = _CROR_DATA_REF; // "YYYY-MM-DD" — fonte: campo max "Criado" do CROR xlsx
+  // _CROR_DATA_REF: data de referência dos dados do CROR
+  var s = _CROR_DATA_REF;
   var p = s.split("-");
   var y = parseInt(p[0]), m = parseInt(p[1]), d = parseInt(p[2]);
-  // _dataRefISO: "YYYY-MM-DD" para inputs type=date
   var iso = p[0] + "-" + (m<10?"0":"")+m + "-" + (d<10?"0":"")+d;
-  // _fim90ISO: adiciona 90 dias sem risco de UTC offset
-  var dt90 = new Date(y, m-1, d + 90); // new Date(y,m,d) = local midnight sem UTC offset
+  window._dataRefFmt = (d<10?"0":"")+d + "/" + (m<10?"0":"")+m + "/" + y;
+
+  // _fim90: usa _EXEC_DATA (data da execução) para calcular a janela de 90 dias
+  // Isso garante consistência com HOJE_ACOES (que também usa _EXEC_DATA)
+  var execSrc = (typeof _EXEC_DATA !== 'undefined' && _EXEC_DATA) ? _EXEC_DATA : s;
+  var pe = execSrc.split("-");
+  var ye = parseInt(pe[0]), me = parseInt(pe[1]), de = parseInt(pe[2]);
+  var dt90 = new Date(ye, me-1, de + 90);
   var y90 = dt90.getFullYear();
   var m90 = dt90.getMonth()+1;
   var d90 = dt90.getDate();
   window._fim90ISO = y90 + "-" + (m90<10?"0":"")+m90 + "-" + (d90<10?"0":"")+d90;
   window._fim90    = dt90;
-  // Guarda o formato DD/MM/YYYY para atualizar o DOM após o parse completo
-  window._dataRefFmt = (d<10?"0":"")+d + "/" + (m<10?"0":"")+m + "/" + y;
+
   return iso;
 })();
 // Atualiza "Atualizado em" no header e footer após DOM estar pronto
@@ -1510,6 +1514,7 @@ function goTab(i) {
   var kpiBar = document.getElementById('kpi-bar');
   if (kpiBar) kpiBar.style.display = (String(i) === '0') ? '' : 'none';
   // renderizar aba de ações quando activada (elementos precisam estar visíveis)
+  if (String(i) === '2') { setTimeout(function(){ renderGantt('gantt-main'); }, 30); }
   if (String(i) === '3') { setTimeout(function(){
     populateDiscFilter();
     console.log("[DEBUG] goTab setTimeout: _alertaRendered=", window._alertaRendered);
