@@ -1939,7 +1939,8 @@ function parsePrazoAcao(str) {
   if (!str || str === '-' || str === '--') return null;
   var p = str.split('/');
   if (p.length < 3) return null;
-  return new Date('20' + p[2] + '-' + p[1] + '-' + p[0]);
+  var y = p[2].length === 2 ? 2000 + parseInt(p[2]) : parseInt(p[2]);
+  return new Date(y, parseInt(p[1]) - 1, parseInt(p[0]));
 }
 
 // ── NORMALIZAÇÃO DE DADOS (suporta variantes com/sem acento, maiúsculas) ──────
