@@ -662,7 +662,7 @@ body {
       <button id="raci-export-pdf" title="Exportar tabela RACI completa em PDF" style="position:absolute;top:-36px;right:0;display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border:1px solid var(--border);border-radius:3px;background:var(--white);cursor:pointer;color:var(--muted);transition:border-color .15s,color .15s;z-index:10;" onmouseover="this.style.borderColor='var(--green)';this.style.color='var(--green)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--muted)'">
         <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1.5v8M4 7l3 3 3-3M1.5 12h11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </button>
-    <div id="raci-scroll-wrap" style="overflow:auto;max-height:calc(100vh - 250px);width:100%;box-sizing:border-box;">
+    <div id="raci-scroll-wrap" style="overflow:auto;max-height:334px;width:100%;box-sizing:border-box;">
       <table class="raci-table" id="raci-table">
         <thead id="raci-thead"></thead>
         <tbody id="raci-tbody"></tbody>
@@ -4079,7 +4079,8 @@ function drawTrendChart() {
   var DPR = window.devicePixelRatio || 1;
   // Hoje = calculado dinamicamente a partir de _CROR_DATA_REF
   var _hp = (typeof _CROR_DATA_REF !== 'undefined' ? _CROR_DATA_REF : '2026-04-01').split('-');
-  var HOJE_IDX = (parseInt(_hp[0]) - 2026) * 12 + (parseInt(_hp[1]) - 1);
+  var _daysInMonth = new Date(parseInt(_hp[0]), parseInt(_hp[1]), 0).getDate();
+  var HOJE_IDX = (parseInt(_hp[0]) - 2026) * 12 + (parseInt(_hp[1]) - 1) + (parseInt(_hp[2]) - 1) / _daysInMonth;
   HOJE_IDX = Math.max(0, Math.min(HOJE_IDX, n - 1));
 
   // Curvas calculadas automaticamente a partir das fases do Project
@@ -4104,7 +4105,8 @@ function drawTrendChart() {
   var chartW = W - PAD.left - PAD.right;
   var chartH = H - PAD.top  - PAD.bottom;
   var _hp = (typeof _CROR_DATA_REF !== 'undefined' ? _CROR_DATA_REF : '2026-04-01').split('-');
-  var HOJE_IDX = (parseInt(_hp[0]) - 2026) * 12 + (parseInt(_hp[1]) - 1);
+  var _daysInMonth = new Date(parseInt(_hp[0]), parseInt(_hp[1]), 0).getDate();
+  var HOJE_IDX = (parseInt(_hp[0]) - 2026) * 12 + (parseInt(_hp[1]) - 1) + (parseInt(_hp[2]) - 1) / _daysInMonth;
   HOJE_IDX = Math.max(0, Math.min(HOJE_IDX, n - 1));
 
   function xPos(i) { return PAD.left + (i / (n-1)) * chartW; }
@@ -4498,7 +4500,8 @@ renderProximasEntregas();
   var chartW = W - PAD.left - PAD.right;
   var chartH = H - PAD.top  - PAD.bottom;
   var _hp = (typeof _CROR_DATA_REF !== 'undefined' ? _CROR_DATA_REF : '2026-04-01').split('-');
-  var HOJE_IDX = (parseInt(_hp[0]) - 2026) * 12 + (parseInt(_hp[1]) - 1);
+  var _daysInMonth = new Date(parseInt(_hp[0]), parseInt(_hp[1]), 0).getDate();
+  var HOJE_IDX = (parseInt(_hp[0]) - 2026) * 12 + (parseInt(_hp[1]) - 1) + (parseInt(_hp[2]) - 1) / _daysInMonth;
   HOJE_IDX = Math.max(0, Math.min(HOJE_IDX, n - 1));
 
   function xPos(i) { return PAD.left + (i / (n-1)) * chartW; }
