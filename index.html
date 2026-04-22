@@ -1835,6 +1835,13 @@ function goDiscStatusFilter(key) {
   var stdValMap = { andamento:'Em andamento', futuro:'Futuro', pendente:'Nao iniciado', atraso:'atraso', concluido:'Concluido', todos:'todos' };
   goTab(3);
   setTimeout(function() {
+    // Limpar filtro de data "DE" para não excluir concluídos/atrasados do passado
+    // Manter apenas "ATÉ" = _fim90 (mesma lógica do card STATUS AÇÕES)
+    var fromEl = document.getElementById('acoes-date-from');
+    var toEl   = document.getElementById('acoes-date-to');
+    if (fromEl) fromEl.value = '';
+    if (toEl)   toEl.value   = _fim90ISO;
+
     document.querySelectorAll('[data-ms-group="acao-disc"]').forEach(function(b) { b.classList.remove('active'); });
     var discTodas = document.querySelector('[data-ms-group="acao-disc"][data-ms-val="todos"]');
     if (discTodas) discTodas.classList.add('active');
