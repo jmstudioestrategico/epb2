@@ -1517,17 +1517,16 @@ function goTab(i) {
   if (String(i) === '2') { setTimeout(function(){ renderGantt('gantt-main'); }, 30); }
   if (String(i) === '3') { setTimeout(function(){
     populateDiscFilter();
-    console.log("[DEBUG] goTab setTimeout: _alertaRendered=", window._alertaRendered);
     if (window._alertaRendered) {
-      window._alertaRendered = false; // já renderizado por goToAcoesUrgentes
+      window._alertaRendered = false;
     } else {
-      renderAcoesUnified();
+      // Preencher datas ANTES de renderizar (evita render duplo)
       var fromEl = document.getElementById('acoes-date-from');
       var toEl   = document.getElementById('acoes-date-to');
       if (!window._fromStatusCard) {
         if (fromEl && !fromEl.value) fromEl.value = _dataRefISO;
         if (toEl   && !toEl.value)   toEl.value   = _fim90ISO;
-      } // dataReferencia + 90 dias
+      }
       renderAcoesUnified();
     }
   }, 30); }
