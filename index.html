@@ -1982,10 +1982,14 @@ function computeAcaoStatus(a) {
   if (a.status === 'Pendente') return 'Pendente'; // status editorial explícito da planilha
   var prazoDate = parsePrazoAcao(a.prazo);
   if (!prazoDate) return a.status;
-  if (prazoDate > HOJE_ACOES && a.status === 'Nao iniciado') return 'Futuro';
-  if (prazoDate < HOJE_ACOES && a.status === 'Nao iniciado') return 'Com atraso';
-  if (prazoDate.getTime() === HOJE_ACOES.getTime() && a.status === 'Nao iniciado') return 'Pendente';
-  if (prazoDate < HOJE_ACOES && a.status === 'Em andamento') return 'Com atraso';
+  if (a.status === 'Nao iniciado') {
+    if (prazoDate < HOJE_ACOES) return 'Com atraso';
+    return 'Futuro';
+  }
+  if (a.status === 'Em andamento') {
+    if (prazoDate < HOJE_ACOES) return 'Com atraso';
+    return 'Em andamento';
+  }
   return a.status;
 }
 
