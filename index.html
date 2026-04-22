@@ -4173,6 +4173,21 @@ function drawTrendChart() {
   drawLine(planejado, '#DDDDDD', false, 1.5);
   drawLine(projecao,  '#F59E0B', true,  2);
   drawLine(realData,  '#3BD23D', false, 2.5);
+  // Extend green line to "Hoje" position (fractional month)
+  (function() {
+    var lastIdx = -1, lastVal = null;
+    realData.forEach(function(v, i) { if (v !== null) { lastIdx = i; lastVal = v; } });
+    if (lastIdx >= 0 && HOJE_IDX > lastIdx) {
+      ctx.strokeStyle = '#3BD23D'; ctx.lineWidth = 2.5; ctx.setLineDash([]);
+      ctx.beginPath();
+      ctx.moveTo(xPos(lastIdx), yPos(lastVal));
+      ctx.lineTo(xPos(HOJE_IDX), yPos(lastVal));
+      ctx.stroke();
+      // Draw dot at the Hoje position
+      ctx.fillStyle = '#3BD23D';
+      ctx.beginPath(); ctx.arc(xPos(HOJE_IDX), yPos(lastVal), 4, 0, Math.PI*2); ctx.fill();
+    }
+  })();
   drawDots(realData,  '#3BD23D', 4);
   drawDots(projecao,  '#F59E0B', 3);
 
@@ -4568,6 +4583,21 @@ renderProximasEntregas();
   drawLine(planejado, '#DDDDDD', false, 1.5);
   drawLine(projecao,  '#F59E0B', true,  2);
   drawLine(realData,  '#3BD23D', false, 2.5);
+  // Extend green line to "Hoje" position (fractional month)
+  (function() {
+    var lastIdx = -1, lastVal = null;
+    realData.forEach(function(v, i) { if (v !== null) { lastIdx = i; lastVal = v; } });
+    if (lastIdx >= 0 && HOJE_IDX > lastIdx) {
+      ctx.strokeStyle = '#3BD23D'; ctx.lineWidth = 2.5; ctx.setLineDash([]);
+      ctx.beginPath();
+      ctx.moveTo(xPos(lastIdx), yPos(lastVal));
+      ctx.lineTo(xPos(HOJE_IDX), yPos(lastVal));
+      ctx.stroke();
+      // Draw dot at the Hoje position
+      ctx.fillStyle = '#3BD23D';
+      ctx.beginPath(); ctx.arc(xPos(HOJE_IDX), yPos(lastVal), 4, 0, Math.PI*2); ctx.fill();
+    }
+  })();
   drawDots(realData,  '#3BD23D', 4);
   drawDots(projecao,  '#F59E0B', 3);
 
