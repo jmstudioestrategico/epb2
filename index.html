@@ -470,7 +470,7 @@ body {
       </div>
       <div style="display:flex;flex-direction:column;gap:20px;">
         <div class="card card-anchor" onclick="goTab(2)" title="Ver Linha do Tempo Macro">
-          <div class="card-title" title="Média ponderada pelo trabalho (horas) das tarefas do ciclo" style="cursor:help;">Ciclos — Anteprojeto (AP)</div>
+          <div class="card-title ciclos-title" title="Média ponderada pelo trabalho (horas) das tarefas do ciclo" style="cursor:help;">Ciclos — Anteprojeto (AP)</div>
           <div id="ciclos-list"></div>
           <div class="card-link-hint">→ Ver linha do tempo macro</div>
         </div>
@@ -504,7 +504,7 @@ body {
         <div id="etapas-detail"></div>
       </div>
       <div class="card">
-        <div class="card-title" title="Média ponderada pelo trabalho (horas) das tarefas do ciclo" style="cursor:help;">Ciclos — Anteprojeto (AP)</div>
+        <div class="card-title ciclos-title" title="Média ponderada pelo trabalho (horas) das tarefas do ciclo" style="cursor:help;">Ciclos — Anteprojeto (AP)</div>
         <div id="ciclos-detail"></div>
       </div>
     </div>
@@ -769,21 +769,52 @@ var respDisplayName = {
 };
 
 // ── DATA ──────────────────────────────────────────────────────────────────────
+// ETAPAS_START
 const etapas = [
   { id:"EP", label:"Estudo Preliminar (EP)", inicio:"06/01/26", fim:"13/10/26", progresso:23, cor:"#1D9E75" },
   { id:"AP", label:"Anteprojeto (AP)", inicio:"16/07/26", fim:"15/03/28", progresso:0, cor:"#378ADD" },
   { id:"PE", label:"Pré-Executivo (PE)", inicio:"29/11/27", fim:"28/11/28", progresso:0, cor:"#7F77DD" },
   { id:"EX", label:"Executivo (EX)", inicio:"23/08/28", fim:"30/05/29", progresso:0, cor:"#BA7517" },
+  { id:"LO", label:"Liberado Obra (LO)", inicio:"21/12/28", fim:"29/03/29", progresso:0, cor:"#6B7280" },
 ];
+// ETAPAS_END
 
-
-// CICLOS_AP_START
-const ciclosAP = [
-  { id:"C1", label:"Ciclo 01", sub:"Torres A-D + Embasamento + Torres E-G", inicio:"16/07/26", fim:"12/03/27", progresso:0 },
-  { id:"C2", label:"Ciclo 02", sub:"Torres A-D + Embasamento + Torres E-G", inicio:"15/03/27", fim:"26/08/27", progresso:0 },
-  { id:"C3", label:"Ciclo 03", sub:"Embasamento + Torres A-D + Torres E-G", inicio:"28/07/27", fim:"15/03/28", progresso:0 },
+// APROVACOES_START
+var aprovacoesOficiais = [
+  { label:"Aprov. Prefeitura", inicio:"20/03/26", fim:"20/04/26", cor:"#E24B4A" },
+  { label:"Aprov. Celesc", inicio:"18/06/26", fim:"29/07/26", cor:"#F59E0B" },
+  { label:"Aprov. Bombeiros", inicio:"18/06/26", fim:"29/07/26", cor:"#D4537E" },
+  { label:"Aprov. Casan", inicio:"18/06/26", fim:"29/07/26", cor:"#378ADD" },
 ];
-// CICLOS_AP_END
+// APROVACOES_END
+
+// CICLOS_START
+const ciclos = [
+  { id:"C1", etapa:"AP", label:"Ciclo 01", sub:"Torres A-D + Embasamento + Torres E-G", inicio:"16/07/26", fim:"12/03/27", progresso:0 },
+  { id:"C2", etapa:"AP", label:"Ciclo 02", sub:"Torres A-D + Embasamento + Torres E-G", inicio:"15/03/27", fim:"26/08/27", progresso:0 },
+  { id:"C3", etapa:"AP", label:"Ciclo 03", sub:"Embasamento + Torres A-D + Torres E-G", inicio:"28/07/27", fim:"15/03/28", progresso:0 },
+  { id:"C1", etapa:"PE", label:"Ciclo 01", sub:"Embasamento + Torres A,B,C,D + Torres E,F,G", inicio:"29/11/27", fim:"22/08/28", progresso:0 },
+  { id:"C2", etapa:"PE", label:"Ciclo 02", sub:"Embasamento + Torres A,B,C,D + Torres E,F,G", inicio:"25/04/28", fim:"28/11/28", progresso:0 },
+];
+// Alias de retrocompatibilidade — remover quando nada mais referenciar ciclosAP
+const ciclosAP = ciclos.filter(function(c){return c.etapa==="AP";});
+// CICLOS_END
+
+// Decisão Julliet/MANNZ (24/04/2026): os ciclos do PE só aparecem no
+// dashboard quando a etapa PE tiver iniciado no CROR (progresso > 0).
+// Enquanto PE não inicia, mostra-se apenas os ciclos do AP.
+function ciclosVisiveis() {
+  var etapaPE = etapas.find(function(e) { return e.id === 'PE'; });
+  var peIniciada = !!(etapaPE && etapaPE.progresso > 0);
+  return ciclos.filter(function(c) {
+    return c.etapa === 'AP' || (c.etapa === 'PE' && peIniciada);
+  });
+}
+function corDaEtapa(id) {
+  var e = etapas.find(function(x) { return x.id === id; });
+  return e ? e.cor : '#888';
+}
+
 const disciplinas = [
   { nome:"Bernardes",          tipo:"Arquitetura",         status:"", perc:0, proxEntrega:"--", obs:"" },
   { nome:"Thorus",             tipo:"Instalações HID/SAN", status:"", perc:0, proxEntrega:"--", obs:"" },
@@ -1434,8 +1465,9 @@ document.addEventListener("DOMContentLoaded", function() {
 const _fim90ISO = window._fim90ISO;
 const _fim90    = window._fim90;
 const hoje           = dataReferencia;
-// percGeral from Project file (EP=20%, AP=3%, PE=0%, EX=0%, weighted by duration)
+// PERCGERAL_START
 const percGeral = 3;
+// PERCGERAL_END
 const prioLabel = { critica:"Critica", alta:"Alta", media:"Media" };
 const stdLabel  = { andamento:"Em andamento", futuro:"Futuro", resolvido:"Concluido" };
 const discLabel = { ok:"Em dia", atencao:"Atenção", pendente:"Pendente" };
@@ -1637,19 +1669,34 @@ var _eb = document.getElementById('etapas-bars'); if (_eb) _eb.innerHTML = etapa
 }).join('');
 
 // ── CICLOS ────────────────────────────────────────────────────────────────────
-var _cl = document.getElementById('ciclos-list'); if (_cl) _cl.innerHTML = ciclosAP.map(function(c) {
+// Título dinâmico — muda de "Ciclos — Anteprojeto (AP)" para
+// "Ciclos — Anteprojeto (AP) + Pré-Executivo (PE)" quando a etapa PE
+// inicia (ver regra em ciclosVisiveis()). Afeta só elementos com classe
+// .ciclos-title, não todos os .card-title da página.
+(function() {
+  var cv = ciclosVisiveis();
+  var temPE = cv.some(function(c){ return c.etapa === 'PE'; });
+  var titulo = temPE
+    ? 'Ciclos — Anteprojeto (AP) + Pré-Executivo (PE)'
+    : 'Ciclos — Anteprojeto (AP)';
+  document.querySelectorAll('.ciclos-title').forEach(function(el) {
+    el.textContent = titulo;
+  });
+})();
+var _cl = document.getElementById('ciclos-list'); if (_cl) _cl.innerHTML = ciclosVisiveis().map(function(c) {
+  var cor = corDaEtapa(c.etapa);
   var tt = 'Média ponderada pelo trabalho (horas) das tarefas do ciclo';
   return '<div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;" title="'+tt+'">'
     + '<div style="min-width:72px;">'
-    + '<div style="font-size:9px;color:#378ADD;letter-spacing:.14em;text-transform:uppercase;font-weight:500;">' + c.id + '</div>'
+    + '<div style="font-size:9px;color:' + cor + ';letter-spacing:.14em;text-transform:uppercase;font-weight:500;">' + c.etapa + '·' + c.id + '</div>'
     + '<div style="font-size:12px;font-weight:500;">' + c.label + '</div>'
     + '<div style="font-size:10px;color:var(--muted);font-weight:300;">' + c.sub + '</div>'
     + '</div>'
     + '<div style="flex:1;">'
-    + pbar(c.progresso, '#378ADD')
+    + pbar(c.progresso, cor)
     + '<div style="font-size:9px;color:var(--muted);margin-top:4px;">' + c.inicio + ' — ' + c.fim + '</div>'
     + '</div>'
-    + '<div style="font-size:14px;font-weight:500;color:' + (c.progresso > 0 ? '#378ADD' : 'var(--muted)') + ';">' + c.progresso + '%</div>'
+    + '<div style="font-size:14px;font-weight:500;color:' + (c.progresso > 0 ? cor : 'var(--muted)') + ';">' + c.progresso + '%</div>'
     + '</div>';
 }).join('');
 
@@ -1662,10 +1709,16 @@ function renderGantt(id) {
   var etapasEventos = etapas.map(function(e) {
     return { label:e.label, s:parseDMYgantt(e.inicio), e:parseDMYgantt(e.fim), cor:e.cor };
   });
-  var extras = [
-    { label:"Aprov. Prefeitura", s:new Date("2026-03-31"), e:new Date("2026-08-30"), cor:"#E24B4A" },
-    { label:"Aprov. Bombeiros", s:new Date("2026-05-01"), e:new Date("2026-08-30"), cor:"#D4537E" },
-  ];
+  // aprovacoesOficiais é injetada pelo GAS entre os marcadores
+  // "APROVACOES_START/END" a partir do CROR (regra combo
+  // verbo+órgão). Array pode vir vazio — nesse caso o Gantt mostra
+  // só as etapas. Guarda typeof para o caso de HTML antigo sem o
+  // bloco injetado (ex: deploy anterior ao marcador).
+  var extras = (typeof aprovacoesOficiais !== 'undefined' ? aprovacoesOficiais : [])
+    .filter(function(a){ return a && a.inicio && a.fim && a.inicio !== '--' && a.fim !== '--'; })
+    .map(function(a) {
+      return { label:a.label, s:parseDMYgantt(a.inicio), e:parseDMYgantt(a.fim), cor:a.cor };
+    });
   var eventos = etapasEventos.concat(extras);
   var allS = eventos.map(function(e){return e.s;}), allE = eventos.map(function(e){return e.e;});
   var gStart = new Date(Math.min.apply(null,allS)), gEnd = new Date(Math.max.apply(null,allE));
@@ -1731,19 +1784,20 @@ var _ed = document.getElementById('etapas-detail'); if (_ed) _ed.innerHTML = eta
 }).join('');
 
 // ── CICLOS DETAIL ─────────────────────────────────────────────────────────────
-var _cd = document.getElementById('ciclos-detail'); if (_cd) _cd.innerHTML = ciclosAP.map(function(c) {
+var _cd = document.getElementById('ciclos-detail'); if (_cd) _cd.innerHTML = ciclosVisiveis().map(function(c) {
+  var cor = corDaEtapa(c.etapa);
   return '<div style="margin-bottom:22px;">'
     + '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">'
     + '<div>'
-    + '<div style="font-size:9px;color:#378ADD;letter-spacing:.14em;text-transform:uppercase;font-weight:500;margin-bottom:2px;">' + c.id + '</div>'
+    + '<div style="font-size:9px;color:' + cor + ';letter-spacing:.14em;text-transform:uppercase;font-weight:500;margin-bottom:2px;">' + c.etapa + '·' + c.id + '</div>'
     + '<div style="font-size:13px;font-weight:500;">' + c.label + '</div>'
     + '<div style="font-size:10px;color:var(--muted);font-weight:300;margin-top:1px;">' + c.sub + '</div>'
     + '</div>'
     + '<div style="text-align:right;">'
-    + '<div style="font-size:22px;font-weight:700;color:' + (c.progresso > 0 ? '#378ADD' : 'var(--muted)') + ';">' + c.progresso + '%</div>'
+    + '<div style="font-size:22px;font-weight:700;color:' + (c.progresso > 0 ? cor : 'var(--muted)') + ';">' + c.progresso + '%</div>'
     + '<div style="font-size:9px;color:var(--muted);">' + c.inicio + ' — ' + c.fim + '</div>'
     + '</div></div>'
-    + pbar(c.progresso, '#378ADD')
+    + pbar(c.progresso, cor)
     + '</div>';
 }).join('');
 
