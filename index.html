@@ -434,7 +434,7 @@ body {
     <div class="tab" data-tab="3">Ações por Disciplina</div>
     
     <div class="tab" data-tab="7">Entregáveis</div>
-    <div class="tab" data-tab="4">Reuniões <span class="tab-chip" id="cnt-reu">4</span></div>
+    <div class="tab" data-tab="4">Reuniões</div>
     <div class="tab" data-tab="5">RACI</div>
     <a href="https://plataforma.autodoc.com.br/projetos/directories/folder/69bbe7359301cf89984f2718" target="_blank" class="tab" style="text-decoration:none;" title="Abrir BEP no Autodoc">BEP ↗</a>
   </div>
@@ -2240,7 +2240,7 @@ function goToAcoesUrgentes() {
       + '<div style="display:flex;gap:6px;align-items:center;flex-shrink:0;flex-wrap:wrap;">'
       + (function() {
         var discCode = a.disc ? discFullToCode[a.disc] : respToDisc[a.resp];
-        if (!discCode || !discHasEntregaveis[discCode]) return '';
+        if (!discCode || !discHasEntregaveis[discCode] || !/entreg[áa]ve[li]s?/i.test(a.item)) return '';
         return '<button onclick="goToEntregaveis(\'' + discCode + '\')" style="font-family:inherit;font-size:9px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border:1px solid var(--border);border-radius:2px;background:var(--white);color:var(--muted);cursor:pointer;white-space:nowrap;transition:border-color .15s,color .15s;" onmouseover="this.style.borderColor=\'var(--green)\';this.style.color=\'var(--green)\'" onmouseout="this.style.borderColor=\'var(--border)\';this.style.color=\'var(--muted)\'">&#8599; Entregáveis</button>';
       })()
       + '<span title="Prioridade" style="padding:3px 8px;border-radius:3px;background:' + pc.bg + ';color:' + pc.txt + ';font-size:9px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;cursor:default;">' + a.criticidade + '</span>'
@@ -2341,7 +2341,6 @@ function renderReu() {
       + (r.decisoes ? '<div class="reu-decisao">' + decisaoTxt + '</div>' : '')
       + '</div>';
   }).join('');
-  var cntReu = document.getElementById('cnt-reu'); if (cntReu) cntReu.textContent = list.length;
 }
 document.getElementById('reu-list') && renderReu();
 document.getElementById('reu-date-from') && document.getElementById('reu-date-from').addEventListener('change', renderReu);
@@ -3694,7 +3693,7 @@ function renderAcoesUnified() {
       + '<div style="display:flex;gap:6px;align-items:center;flex-shrink:0;flex-wrap:wrap;">'
       + (function() {
         var discCode = a.disc ? discFullToCode[a.disc] : respToDisc[a.resp];
-        if (!discCode || !discHasEntregaveis[discCode]) return '';
+        if (!discCode || !discHasEntregaveis[discCode] || !/entreg[áa]ve[li]s?/i.test(a.item)) return '';
         return '<button onclick="goToEntregaveis(\'' + discCode + '\')" style="font-family:inherit;font-size:9px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border:1px solid var(--border);border-radius:2px;background:var(--white);color:var(--muted);cursor:pointer;white-space:nowrap;transition:border-color .15s,color .15s;" onmouseover="this.style.borderColor=\'var(--green)\';this.style.color=\'var(--green)\'" onmouseout="this.style.borderColor=\'var(--border)\';this.style.color=\'var(--muted)\'">&#8599; Entregáveis</button>';
       })()
       + '<span title="Prioridade" style="padding:3px 8px;border-radius:3px;background:' + pc.bg + ';color:' + pc.txt + ';font-size:9px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;cursor:default;">' + a.criticidade + '</span>'
