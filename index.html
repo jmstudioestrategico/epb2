@@ -707,18 +707,21 @@ var discRespMap = {
 // split por '/'. NÃO EDITAR — ver gerarRespToDiscFilterJS_ no GAS.
 // Responsáveis não resolvidos estão em window._epb2Report.resps_nao_resolvidos.
 var respToDiscFilter = {
-  "AXIA": ["CONSTRUTORA"],
-  "BERNARDES": ["ARQUITETURA","INTERIORES"],
+  "Axia": ["CONSTRUTORA"],
   "BORNSALES ENGENHARIA": ["FUNDAÇÕES E CONTENÇÕES"],
+  "Bernardes": ["ARQUITETURA","INTERIORES"],
+  "Born Sales": ["FUNDAÇÕES E CONTENÇÕES"],
   "EDUARDO PENTEADO PROJETOS DE ENGENHARIA": ["ESTRUTURAL"],
-  "ERLISE": ["COZINHA INDUSTRIAL"],
-  "EYTAN MAGAL": ["SEGURANÇA PATRIMONIAL"],
-  "GARAGEPLAN": ["PERSONALIZAÇÃO GARAGEM"],
-  "HANAZAKI": ["PAISAGISMO"],
-  "MANNZ": ["COORDENAÇÃO E COMPATIBILIZAÇÃO"],
-  "TECSET": ["AQUECIMENTO CENTRAL"],
-  "THÓRUS": ["HIDRÁULICO E SANITÁRIO","PREVENTIVO","ELÉTRICO E TELECOMUNICAÇÕES","SPDA"],
-  "VALUE": ["CLIMATIZAÇÃO E EXAUSTÃO"],
+  "Eduardo Penteado": ["ESTRUTURAL"],
+  "Erlise": ["COZINHA INDUSTRIAL"],
+  "Eytan Magal": ["SEGURANÇA PATRIMONIAL"],
+  "GaragePlan": ["PERSONALIZAÇÃO GARAGEM"],
+  "Hanazaki": ["PAISAGISMO"],
+  "Mannz": ["COORDENAÇÃO E COMPATIBILIZAÇÃO"],
+  "NWO": ["PROJETO LEGAL"],
+  "Tecset": ["AQUECIMENTO CENTRAL"],
+  "Thórus": ["HIDRÁULICO E SANITÁRIO","PREVENTIVO","ELÉTRICO E TELECOMUNICAÇÕES","SPDA"],
+  "Value": ["CLIMATIZAÇÃO E EXAUSTÃO"],
 };
 // RESPTODISCFILTER_END
 
@@ -3553,19 +3556,22 @@ var prioCorBadge  = {
 // Mapeamento responsável → código de disciplina (para botão Entregáveis).
 // Derivado de DISCIPLINASxRESPONSAVEL + DISC_TO_CODE. NÃO EDITAR.
 var respToDisc = {
-  "AXIA": null,
-  "BERNARDES": "ARQ",
+  "Axia": null,
   "BORNSALES ENGENHARIA": "FUN",
+  "Bernardes": "ARQ",
+  "Born Sales": "FUN",
   "EDUARDO PENTEADO PROJETOS DE ENGENHARIA": "EST",
   "EM CONTRATAÇÃO": null,
-  "ERLISE": "CZI",
-  "EYTAN MAGAL": "SEG",
-  "GARAGEPLAN": "GAR",
-  "HANAZAKI": "PAI",
-  "MANNZ": null,
-  "TECSET": "AQC",
-  "THÓRUS": "ELE",
-  "VALUE": "CLI",
+  "Eduardo Penteado": "EST",
+  "Erlise": "CZI",
+  "Eytan Magal": "SEG",
+  "GaragePlan": "GAR",
+  "Hanazaki": "PAI",
+  "Mannz": null,
+  "NWO": null,
+  "Tecset": "AQC",
+  "Thórus": "ELE",
+  "Value": "CLI",
 };
 // RESPTODISC_END
 
@@ -4491,6 +4497,19 @@ document.getElementById('ent-list') && renderEntregaveis();
 // Disciplinas com pelo menos um entregável no AXIA601-DOC-ENTREGAVEIS.
 // Derivado automaticamente de ent.totais pelo GAS — NÃO EDITAR.
 var discHasEntregaveis = {
+  "AQC": true,
+  "ARQ": true,
+  "CLI": true,
+  "CZI": true,
+  "ELE": true,
+  "EST": true,
+  "FUN": true,
+  "GAR": true,
+  "HID": true,
+  "INT": true,
+  "PAI": true,
+  "PCI": true,
+  "SEG": true,
 };
 // DISCHASENTREGAVEIS_END
 
