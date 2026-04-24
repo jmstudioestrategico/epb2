@@ -701,52 +701,29 @@ var discRespMap = {
   "ACÚSTICA": "EM CONTRATAÇÃO",
 };
 
+// RESPTODISCFILTER_START
+// Mapa responsável → lista de disciplinas (para filtros da aba Ações).
+// 100% derivado do DISCIPLINASxRESPONSAVEL com matcher normalizado + fuzzy +
+// split por '/'. NÃO EDITAR — ver gerarRespToDiscFilterJS_ no GAS.
+// Responsáveis não resolvidos estão em window._epb2Report.resps_nao_resolvidos.
 var respToDiscFilter = {
-  "Mannz":                          ["COORDENAÇÃO E COMPATIBILIZAÇÃO"],
-  "MANNZ":                          ["COORDENAÇÃO E COMPATIBILIZAÇÃO"],
-  "Bernardes":                      ["ARQUITETURA"],
-  "Thorus":                         ["HIDRÁULICO E SANITÁRIO","PREVENTIVO","ELÉTRICO E TELECOMUNICAÇÕES"],
-  "Thórus":                         ["HIDRÁULICO E SANITÁRIO","PREVENTIVO","ELÉTRICO E TELECOMUNICAÇÕES"],
-  "Value":                          ["CLIMATIZAÇÃO E EXAUSTÃO"],
-  "Value/Mannz":                    ["CLIMATIZAÇÃO E EXAUSTÃO","COORDENAÇÃO E COMPATIBILIZAÇÃO"],
-  "Estrutura":                      ["ESTRUTURAL"],
-  "Eduardo Penteado":               ["ESTRUTURAL"],
-  "Hanazaki":                       ["PAISAGISMO"],
-  "Piscina":                        ["PISCINA"],
-  "Impermeabilização":              ["IMPERMEABILIZAÇÃO"],
-  "Acústica":                       ["ACÚSTICA"],
-  "Contenção":                      ["FUNDAÇÕES E CONTENÇÕES"],
-  "Bornsales":                      ["FUNDAÇÕES E CONTENÇÕES"],
-  "Born Sales":                     ["FUNDAÇÕES E CONTENÇÕES"],
-  "Consultoria Esquadrias":         ["ESQUADRIAS"],
-  "NWO":                            ["PROJETO LEGAL"],
-  "Axia/NWO":                       ["CONSTRUTORA","PROJETO LEGAL"],
-  "Axia":                           ["CONSTRUTORA"],
-  "Interiores":                     ["ARQUITETURA"],
-  "Garage Plan":                    ["PERSONALIZAÇÃO GARAGEM"],
-  "Garagem":                        ["PERSONALIZAÇÃO GARAGEM"],
-  "GaragePlan":                     ["PERSONALIZAÇÃO GARAGEM"],
-  "Eytan Magal":                    ["SEGURANÇA PATRIMONIAL"],
-  "Tecset":                         ["AQUECIMENTO CENTRAL"],
-  "Erlise":                         ["COZINHA INDUSTRIAL"],
-  "Mannz/Axia":                     ["COORDENAÇÃO E COMPATIBILIZAÇÃO","CONSTRUTORA"],
-  "Mannz/Consultoria Cozinha/Axia": ["COZINHA INDUSTRIAL"],
-  "Arq. Lider (Fernanda R.)":       ["ARQUITETURA"],
-  "Arq. Especialista (Camila D.)":  ["ARQUITETURA"],
-  "Arq. Legal (Bruno L.)":          ["PROJETO LEGAL"],
-  "Coord. BIM (Juliana F.)":        ["COORDENAÇÃO E COMPATIBILIZAÇÃO"],
-  "Coord. Projetos (Lucas P.)":     ["COORDENAÇÃO E COMPATIBILIZAÇÃO"],
-  "Coord. Geral":                   ["COORDENAÇÃO E COMPATIBILIZAÇÃO"],
-  "Eng. Estrutural (Marina S.)":    ["ESTRUTURAL"],
-  "Eng. Civil (Carlos M.)":         ["ESTRUTURAL"],
-  "Eng. Instalações (Rafael T.)":   ["HIDRÁULICO E SANITÁRIO"],
-  "Eng. Orçamentista (Diego V.)":   ["COORDENAÇÃO E COMPATIBILIZAÇÃO"],
-  "Elevadores":                     ["ELEVADORES"],
-  "Churrasqueira":                  ["CONSTRUTORA"],
-  "Cliente + Arq. Lider":           ["CONSTRUTORA","ARQUITETURA"],
-  "Equipe de Arquitetura":          ["ARQUITETURA"],
-  "Aprovação":                      ["CONSTRUTORA"]
+  "Axia": ["CONSTRUTORA"],
+  "BORNSALES ENGENHARIA": ["FUNDAÇÕES E CONTENÇÕES"],
+  "Bernardes": ["ARQUITETURA","INTERIORES"],
+  "Born Sales": ["FUNDAÇÕES E CONTENÇÕES"],
+  "EDUARDO PENTEADO PROJETOS DE ENGENHARIA": ["ESTRUTURAL"],
+  "Eduardo Penteado": ["ESTRUTURAL"],
+  "Erlise": ["COZINHA INDUSTRIAL"],
+  "Eytan Magal": ["SEGURANÇA PATRIMONIAL"],
+  "GaragePlan": ["PERSONALIZAÇÃO GARAGEM"],
+  "Hanazaki": ["PAISAGISMO"],
+  "Mannz": ["COORDENAÇÃO E COMPATIBILIZAÇÃO"],
+  "NWO": ["PROJETO LEGAL"],
+  "Tecset": ["AQUECIMENTO CENTRAL"],
+  "Thórus": ["HIDRÁULICO E SANITÁRIO","PREVENTIVO","ELÉTRICO E TELECOMUNICAÇÕES","SPDA"],
+  "Value": ["CLIMATIZAÇÃO E EXAUSTÃO"],
 };
+// RESPTODISCFILTER_END
 
 // ── Mapa resp → nome de exibição (permanente — não sobrescrito pela automação) ──
 // Quando a.resp for um código genérico (ex: "Estrutura"), exibe o nome real da empresa.
@@ -2280,14 +2257,6 @@ function goToAcoesUrgentes() {
       + '</div>'
       + '<div style="display:flex;gap:6px;align-items:center;flex-shrink:0;flex-wrap:wrap;">'
       + (function() {
-        // Map full disc name to short code for entItens
-        var discFullToCode = {
-          "ARQUITETURA":"ARQ","ESTRUTURAL":"EST","HIDRÁULICO E SANITÁRIO":"HID",
-          "HIDRÁULICO E SANITÁRIO":"HID","PREVENTIVO":"PCI","ELÉTRICO E TELECOMUNICAÇÕES":"ELE",
-          "CLIMATIZAÇÃO E EXAUSTÃO":"CLI","SEGURANÇA PATRIMONIAL":"SEG","PERSONALIZAÇÃO GARAGEM":"GAR",
-          "COZINHA INDUSTRIAL":"CZI","PAISAGISMO":"PAI","INTERIORES":"INT",
-          "FUNDAÇÕES E CONTENÇÕES":"FUN","AQUECIMENTO CENTRAL":"AQC","PISCINA":"PIS",
-        };
         var discCode = a.disc ? discFullToCode[a.disc] : respToDisc[a.resp];
         if (!a.entregavel || !discCode) return '';
         return '<button onclick="goToEntregaveis(\'' + discCode + '\')" style="font-family:inherit;font-size:9px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border:1px solid var(--border);border-radius:2px;background:var(--white);color:var(--muted);cursor:pointer;white-space:nowrap;transition:border-color .15s,color .15s;" onmouseover="this.style.borderColor=\'var(--green)\';this.style.color=\'var(--green)\'" onmouseout="this.style.borderColor=\'var(--border)\';this.style.color=\'var(--muted)\'">&#8599; Entregáveis</button>';
@@ -3549,22 +3518,69 @@ var prioCorBadge  = {
   "Alto":    { bg:"#FFF5E6", txt:"#7A4500" },
   "Media":   { bg:"#EBF4FF", txt:"#1A4F8A" },
   "Médio":   { bg:"#EBF4FF", txt:"#1A4F8A" },
-  "Médio":   { bg:"#EBF4FF", txt:"#1A4F8A" },
   "Crítica": { bg:"#FDECEA", txt:"#7B1D1D" },
   "Crítico": { bg:"#FDECEA", txt:"#7B1D1D" },
   "critica": { bg:"#FDECEA", txt:"#7B1D1D" },
 };
 
 
-// Mapeamento responsável → código disciplina (para link nos entregáveis)
+// RESPTODISC_START
+// Mapeamento responsável → código de disciplina (para botão Entregáveis).
+// Derivado de DISCIPLINASxRESPONSAVEL + DISC_TO_CODE. NÃO EDITAR.
 var respToDisc = {
-  "Bernardes":"ARQ", "Thorus":"HID", "Thórus":"HID",
-  "Value":"CLI", "Estrutura":"EST", "Hanazaki":"PAI",
-  "Piscina":"PIS", "Fundação/Contenção":"FUN",
-  "MANNZ":null, "Mannz":null, "Axia":null, "NWO":null,
-  "Bornsales":"FUN", "Eytan Magal":null,
-  "Garageplan":null, "Tecset":null,
+  "Axia": null,
+  "BORNSALES ENGENHARIA": "FUN",
+  "Bernardes": "ARQ",
+  "Born Sales": "FUN",
+  "EDUARDO PENTEADO PROJETOS DE ENGENHARIA": "EST",
+  "EM CONTRATAÇÃO": null,
+  "Eduardo Penteado": "EST",
+  "Erlise": "CZI",
+  "Eytan Magal": "SEG",
+  "GaragePlan": "GAR",
+  "Hanazaki": "PAI",
+  "Mannz": null,
+  "NWO": null,
+  "Tecset": "AQC",
+  "Thórus": "ELE",
+  "Value": "CLI",
 };
+// RESPTODISC_END
+
+// DISCFULLTOCODE_START
+// Mapa nome canônico de disciplina → código de 3 letras (universo fechado).
+// Para ampliar, editar gerarDiscFullToCodeJS_ no GAS.
+var discFullToCode = {
+  "ACÚSTICA": "ACU",
+  "ANCORAGEM": "ANC",
+  "AQUECIMENTO CENTRAL": "AQC",
+  "ARQUITETURA": "ARQ",
+  "ATP ESTRUTURA": "ATP",
+  "AUTOMAÇÃO": "AUT",
+  "CLIMATIZAÇÃO E EXAUSTÃO": "CLI",
+  "COMUNICAÇÃO VISUAL": "CVI",
+  "CONFORTO TÉRMICO-LUMÍNICO": "CTL",
+  "CONSTRUTORA": "CTR",
+  "COORDENAÇÃO E COMPATIBILIZAÇÃO": "COO",
+  "COZINHA INDUSTRIAL": "CZI",
+  "ELEVADORES": "ELV",
+  "ELÉTRICO E TELECOMUNICAÇÕES": "ELE",
+  "ESQUADRIAS": "ESQ",
+  "ESTRUTURAL": "EST",
+  "FUNDAÇÕES E CONTENÇÕES": "FUN",
+  "HIDRÁULICO E SANITÁRIO": "HID",
+  "ILUMINAÇÃO FACHADA": "ILU",
+  "IMPERMEABILIZAÇÃO": "IMP",
+  "INTERIORES": "INT",
+  "IRRIGAÇÃO": "IRR",
+  "PAISAGISMO": "PAI",
+  "PERSONALIZAÇÃO GARAGEM": "GAR",
+  "PISCINA": "PIS",
+  "PREVENTIVO": "PCI",
+  "PROJETO LEGAL": "LEG",
+  "SEGURANÇA PATRIMONIAL": "SEG",
+};
+// DISCFULLTOCODE_END
 
 // ── AÇÕES UNIFICADAS ─────────────────────────────────────────────────────────
 var aFiltPrio = 'todos', aFiltStd = 'todos', aFiltResp = 'todos';
@@ -3695,14 +3711,6 @@ function renderAcoesUnified() {
       + '</div>'
       + '<div style="display:flex;gap:6px;align-items:center;flex-shrink:0;flex-wrap:wrap;">'
       + (function() {
-        // Map full disc name to short code for entItens
-        var discFullToCode = {
-          "ARQUITETURA":"ARQ","ESTRUTURAL":"EST","HIDRÁULICO E SANITÁRIO":"HID",
-          "HIDRÁULICO E SANITÁRIO":"HID","PREVENTIVO":"PCI","ELÉTRICO E TELECOMUNICAÇÕES":"ELE",
-          "CLIMATIZAÇÃO E EXAUSTÃO":"CLI","SEGURANÇA PATRIMONIAL":"SEG","PERSONALIZAÇÃO GARAGEM":"GAR",
-          "COZINHA INDUSTRIAL":"CZI","PAISAGISMO":"PAI","INTERIORES":"INT",
-          "FUNDAÇÕES E CONTENÇÕES":"FUN","AQUECIMENTO CENTRAL":"AQC","PISCINA":"PIS",
-        };
         var discCode = a.disc ? discFullToCode[a.disc] : respToDisc[a.resp];
         if (!a.entregavel || !discCode) return '';
         return '<button onclick="goToEntregaveis(\'' + discCode + '\')" style="font-family:inherit;font-size:9px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border:1px solid var(--border);border-radius:2px;background:var(--white);color:var(--muted);cursor:pointer;white-space:nowrap;transition:border-color .15s,color .15s;" onmouseover="this.style.borderColor=\'var(--green)\';this.style.color=\'var(--green)\'" onmouseout="this.style.borderColor=\'var(--border)\';this.style.color=\'var(--muted)\'">&#8599; Entregáveis</button>';
@@ -4455,18 +4463,27 @@ document.getElementById('ent-list') && renderEntregaveis();
 })();
 
 
-// Mapeamento responsável → código disciplina (para link nos entregáveis)
-var respToDisc = {
-  "Bernardes":"ARQ", "Thorus":"HID", "Thórus":"HID",
-  "Value":"CLI", "Estrutura":"EST", "Hanazaki":"PAI",
-  "Piscina":"PIS", "Fundação/Contenção":"FUN",
-  "MANNZ":null, "Mannz":null, "Axia":null, "NWO":null,
-  "Bornsales":"FUN", "Eytan Magal":null,
-  "Garageplan":null, "Tecset":null,
-};
 
-// Disciplinas que têm pelo menos um entregável registrado na planilha
-var discHasEntregaveis = { "AQC":true, "ARQ":true, "CLI":true, "CZI":true, "ELE":true, "EST":true, "FUN":true, "GAR":true, "HID":true, "INT":true, "PAI":true, "PCI":true, "SEG":true };
+
+// DISCHASENTREGAVEIS_START
+// Disciplinas com pelo menos um entregável no AXIA601-DOC-ENTREGAVEIS.
+// Derivado automaticamente de ent.totais pelo GAS — NÃO EDITAR.
+var discHasEntregaveis = {
+  "AQC": true,
+  "ARQ": true,
+  "CLI": true,
+  "CZI": true,
+  "ELE": true,
+  "EST": true,
+  "FUN": true,
+  "GAR": true,
+  "HID": true,
+  "INT": true,
+  "PAI": true,
+  "PCI": true,
+  "SEG": true,
+};
+// DISCHASENTREGAVEIS_END
 
 // ── AÇÕES UNIFICADAS ─────────────────────────────────────────────────────────
 var aFiltPrio = 'todos', aFiltStd = 'todos', aFiltResp = 'todos';
@@ -4517,16 +4534,7 @@ function updateDiscHighlight() {
   });
 }
 
-// Event listeners — prioridade
-
-
-// Status
-
-
-// Responsável
-
-
-// Datas
+// Event listeners — datas
 document.getElementById('acoes-date-from') && document.getElementById('acoes-date-from').addEventListener('change', renderAcoesUnified);
 document.getElementById('acoes-date-to')   && document.getElementById('acoes-date-to').addEventListener('change', renderAcoesUnified);
 document.getElementById('acoes-date-clear') && document.getElementById('acoes-date-clear').addEventListener('click', function() {
@@ -4707,6 +4715,17 @@ renderProximasEntregas();
   });
 })();
 
+
+// UNRESOLVED_RESPS_START
+// Responsáveis que não resolveram para nenhuma disciplina (nem exact nem fuzzy).
+// Ações desses responsáveis aparecem no dashboard mas SEM filtro de disciplina.
+// Gerado pelo GAS — NÃO EDITAR. Para corrigir: editar DISCIPLINASxRESPONSAVEL
+// ou o campo Responsável da ação no CONTROLE_ACOES.
+var _unresolvedResps = [
+  { resp: "EM CONTRATAÇÃO", acoes_count: 102, exemplo: "PIS: ENTREGÁVEIS ETAPA EP" },
+];
+// UNRESOLVED_RESPS_END
+
 /* ═══════════════════════════════════════════════════════════════════════
    RELATÓRIO DE CONFERÊNCIA — EPB2 Dashboard
    Calculado em runtime a partir das vars do próprio HTML.
@@ -4752,7 +4771,8 @@ renderProximasEntregas();
         cadastradas: _discCadastradas.length,
         em_acoes:    _discAcoes.length,
         lista:       _discCadastradas
-      }
+      },
+      resps_nao_resolvidos: (typeof _unresolvedResps !== 'undefined' && _unresolvedResps) ? _unresolvedResps : []
     };
 
     var r = window._epb2Report;
@@ -4776,6 +4796,16 @@ renderProximasEntregas();
       console.log("[EPB2]   Cadastradas (DISCxRESP): " + r.disciplinas.cadastradas);
       console.log("[EPB2]   Com ações no dashboard : " + r.disciplinas.em_acoes);
       console.log("[EPB2]   Lista: " + r.disciplinas.lista.join(" | "));
+      if (r.resps_nao_resolvidos && r.resps_nao_resolvidos.length > 0) {
+        console.log("[EPB2] " + sep);
+        console.log("[EPB2] ⚠ RESPONSÁVEIS NÃO RESOLVIDOS (" + r.resps_nao_resolvidos.length + "):");
+        r.resps_nao_resolvidos.forEach(function(u) {
+          console.log("[EPB2]   • " + u.resp + "  (" + u.acoes_count + " ação(ões))  ex: " + (u.exemplo || ""));
+        });
+        console.log("[EPB2]   ➜ Ações aparecem nas listas, mas SEM filtro de disciplina.");
+        console.log("[EPB2]   ➜ Corrija editando a célula Responsável no DISCIPLINASxRESPONSAVEL");
+        console.log("[EPB2]     ou o campo Responsável na ação (CONTROLE_ACOES).");
+      }
       console.log("[EPB2] " + sep);
     }
   } catch(e) {
