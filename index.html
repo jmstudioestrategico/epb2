@@ -756,15 +756,6 @@ const etapas = [
 ];
 // ETAPAS_END
 
-// APROVACOES_START
-var aprovacoesOficiais = [
-  { label:"Aprov. Prefeitura", inicio:"20/03/26", fim:"20/04/26", cor:"#E24B4A" },
-  { label:"Aprov. Celesc", inicio:"18/06/26", fim:"29/07/26", cor:"#F59E0B" },
-  { label:"Aprov. Bombeiros", inicio:"18/06/26", fim:"29/07/26", cor:"#D4537E" },
-  { label:"Aprov. Casan", inicio:"18/06/26", fim:"29/07/26", cor:"#378ADD" },
-];
-// APROVACOES_END
-
 // CICLOS_START
 const ciclos = [
   { id:"C1", etapa:"AP", label:"Ciclo 01", sub:"Torres A-D + Embasamento + Torres E-G", inicio:"16/07/26", fim:"12/03/27", progresso:0 },
@@ -1682,21 +1673,12 @@ function parseDMYgantt(s) {
   var p = s.split('/'); return new Date('20'+p[2]+'-'+p[1]+'-'+p[0]);
 }
 function renderGantt(id) {
-  // Derivado de const etapas — não editar datas aqui
-  var etapasEventos = etapas.map(function(e) {
+  // Gantt macro: APENAS as fases do projeto vindas de const etapas.
+  // Decisão Julliet/MANNZ 24/04/2026: aprovações são tarefas internas
+  // das etapas, não devem ter barra própria no Gantt macro.
+  var eventos = etapas.map(function(e) {
     return { label:e.label, s:parseDMYgantt(e.inicio), e:parseDMYgantt(e.fim), cor:e.cor };
   });
-  // aprovacoesOficiais é injetada pelo GAS entre os marcadores
-  // "APROVACOES_START/END" a partir do CROR (regra combo
-  // verbo+órgão). Array pode vir vazio — nesse caso o Gantt mostra
-  // só as etapas. Guarda typeof para o caso de HTML antigo sem o
-  // bloco injetado (ex: deploy anterior ao marcador).
-  var extras = (typeof aprovacoesOficiais !== 'undefined' ? aprovacoesOficiais : [])
-    .filter(function(a){ return a && a.inicio && a.fim && a.inicio !== '--' && a.fim !== '--'; })
-    .map(function(a) {
-      return { label:a.label, s:parseDMYgantt(a.inicio), e:parseDMYgantt(a.fim), cor:a.cor };
-    });
-  var eventos = etapasEventos.concat(extras);
   var allS = eventos.map(function(e){return e.s;}), allE = eventos.map(function(e){return e.e;});
   var gStart = new Date(Math.min.apply(null,allS)), gEnd = new Date(Math.max.apply(null,allE));
   var nowPct = Math.min(100, Math.round(((hoje - gStart) / (gEnd - gStart)) * 100));
@@ -2258,7 +2240,7 @@ function goToAcoesUrgentes() {
       + '<div style="display:flex;gap:6px;align-items:center;flex-shrink:0;flex-wrap:wrap;">'
       + (function() {
         var discCode = a.disc ? discFullToCode[a.disc] : respToDisc[a.resp];
-        if (!a.entregavel || !discCode) return '';
+        if (!discCode || !discHasEntregaveis[discCode]) return '';
         return '<button onclick="goToEntregaveis(\'' + discCode + '\')" style="font-family:inherit;font-size:9px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border:1px solid var(--border);border-radius:2px;background:var(--white);color:var(--muted);cursor:pointer;white-space:nowrap;transition:border-color .15s,color .15s;" onmouseover="this.style.borderColor=\'var(--green)\';this.style.color=\'var(--green)\'" onmouseout="this.style.borderColor=\'var(--border)\';this.style.color=\'var(--muted)\'">&#8599; Entregáveis</button>';
       })()
       + '<span title="Prioridade" style="padding:3px 8px;border-radius:3px;background:' + pc.bg + ';color:' + pc.txt + ';font-size:9px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;cursor:default;">' + a.criticidade + '</span>'
@@ -3712,7 +3694,7 @@ function renderAcoesUnified() {
       + '<div style="display:flex;gap:6px;align-items:center;flex-shrink:0;flex-wrap:wrap;">'
       + (function() {
         var discCode = a.disc ? discFullToCode[a.disc] : respToDisc[a.resp];
-        if (!a.entregavel || !discCode) return '';
+        if (!discCode || !discHasEntregaveis[discCode]) return '';
         return '<button onclick="goToEntregaveis(\'' + discCode + '\')" style="font-family:inherit;font-size:9px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border:1px solid var(--border);border-radius:2px;background:var(--white);color:var(--muted);cursor:pointer;white-space:nowrap;transition:border-color .15s,color .15s;" onmouseover="this.style.borderColor=\'var(--green)\';this.style.color=\'var(--green)\'" onmouseout="this.style.borderColor=\'var(--border)\';this.style.color=\'var(--muted)\'">&#8599; Entregáveis</button>';
       })()
       + '<span title="Prioridade" style="padding:3px 8px;border-radius:3px;background:' + pc.bg + ';color:' + pc.txt + ';font-size:9px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;cursor:default;">' + a.criticidade + '</span>'
