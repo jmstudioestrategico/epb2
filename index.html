@@ -465,7 +465,7 @@ body {
         <div id="etapas-bars"></div>
         <div id="etapas-spacer" style="flex:1;padding-top:22px;cursor:pointer;border-top:1px solid var(--border);margin-top:12px;padding-top:14px;" onclick="goTab(2)" title="Ver cronograma completo">
           <div style="font-size:9px;letter-spacing:.14em;text-transform:uppercase;font-weight:500;color:var(--muted);margin-bottom:10px;">Posição no calendário <span style="color:var(--green);font-size:9px;margin-left:4px;">→ cronograma</span></div>
-          <canvas id="mini-gantt-chart" style="width:100%;height:190px;display:block;pointer-events:none;"></canvas>
+          <canvas id="mini-gantt-chart" style="width:100%;height:210px;display:block;pointer-events:none;"></canvas>
         </div>
       </div>
       <div style="display:flex;flex-direction:column;gap:20px;">
@@ -1522,8 +1522,19 @@ function goTab(i) {
       var fromEl = document.getElementById('acoes-date-from');
       var toEl   = document.getElementById('acoes-date-to');
       if (!window._fromStatusCard) {
-        if (fromEl && !fromEl.value) fromEl.value = _dataRefISO;
-        if (toEl   && !toEl.value)   toEl.value   = _fim90ISO;
+        // DE vazio = sem limite inferior (inclui atrasados de qualquer data)
+        if (fromEl) fromEl.value = '';
+        // ATÉ mantém janela de 90 dias a partir da última execução
+        if (toEl && !toEl.value) toEl.value = _fim90ISO;
+
+        // Pré-marcar status: Futuro + Em andamento + Pendente + Com atraso
+        // (Concluído fica desmarcado por padrao; usuário clica se quiser ver)
+        var stdGroup = document.querySelectorAll('[data-ms-group="acao-std"]');
+        stdGroup.forEach(function(b) { b.classList.remove('active'); });
+        ['Futuro', 'Em andamento', 'Nao iniciado', 'atraso'].forEach(function(v) {
+          var b = document.querySelector('[data-ms-group="acao-std"][data-ms-val="' + v + '"]');
+          if (b) b.classList.add('active');
+        });
       }
       renderAcoesUnified();
     }
@@ -3414,7 +3425,7 @@ document.getElementById('ent-list') && renderEntregaveis();
 
   var DPR = window.devicePixelRatio || 1;
   var W   = canvas.parentElement.offsetWidth || 600;
-  var H   = 190;
+  var H   = 210;
   canvas.width  = W * DPR;
   canvas.height = H * DPR;
   canvas.style.width  = W + 'px';
@@ -3437,7 +3448,7 @@ document.getElementById('ent-list') && renderEntregaveis();
   var hoje      = new Date();
   var span      = projEnd - projStart;
 
-  var PAD = { left: 4, right: 40, top: 38, bottom: 22 };
+  var PAD = { left: 4, right: 40, top: 38, bottom: 30 };
   var trackH = 12;
   var gap    = 22;
   var chartW = W - PAD.left - PAD.right;
@@ -4382,7 +4393,7 @@ document.getElementById('ent-list') && renderEntregaveis();
 
   var DPR = window.devicePixelRatio || 1;
   var W   = canvas.parentElement.offsetWidth || 600;
-  var H   = 190;
+  var H   = 210;
   canvas.width  = W * DPR;
   canvas.height = H * DPR;
   canvas.style.width  = W + 'px';
@@ -4405,7 +4416,7 @@ document.getElementById('ent-list') && renderEntregaveis();
   var hoje      = new Date();
   var span      = projEnd - projStart;
 
-  var PAD = { left: 4, right: 40, top: 38, bottom: 22 };
+  var PAD = { left: 4, right: 40, top: 38, bottom: 30 };
   var trackH = 12;
   var gap    = 22;
   var chartW = W - PAD.left - PAD.right;
