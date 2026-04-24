@@ -378,52 +378,10 @@ body {
 <script>
 (function() {
   /* ═══════════════════════════════════════════════════════════════════════
-     RELATÓRIO DE ATUALIZAÇÃO — EPB2 Dashboard
-     Invisível ao usuário. Abra o console (F12) para conferência.
-     Acesse também: window._epb2Report
+     Relatório de conferência agora é gerado dinamicamente no final do body,
+     depois das vars `acoesSemanal`, `acoesCROR`, `reunioes` e `etapas`
+     estarem disponíveis. Abra o console (F12) e acesse window._epb2Report.
      ═══════════════════════════════════════════════════════════════════════ */
-  try {
-    window._epb2Report = {
-      fonte_cror: "EPB2-DOC-EX-0000-CROR.xlsx",
-      cror: {
-        linhas_id_pos: 579,
-        sumarios:      75,
-        reunioes:      33,
-        acoes:         471
-      },
-      dashboard: {
-        acoes_semanal: 29,
-        acoes_cror:    471,
-        total:         497
-      },
-      acoes_sem_disciplina: ["CONTRATAÇÃO PAISAGISMO", "CONTRATAÇÃO SONDAGEM COMPLEMENTAR", "CONTRATAÇÃO PISCINA", "CONTRATAÇÃO IMPERMEABILIZAÇÃO", "CONTRATAÇÃO ACÚSTICA", "CONTRATAÇÃO CONSULTORIA ESQUADRIAS", "CONTRATAÇÃO CONSULTORIA ELEVADORES", "CONTRATAÇÃO CONSULTOR ACESSIBILIDADE", "CONTRATAÇÃO IRRIGAÇÃO", "CONTRATAÇÃO AUTOMAÇÃO", "CONTRATAÇÃO LUMINOTÉCNICO FACHADA", "CONTRATAÇÃO ANCORAGENS", "REINGRESSO ARQUITETURA PREFEITURA", "APROVAÇÃO CELESC", "APROVAÇÃO BOMBEIROS", "APROVAÇÃO HIDROSSANITÁRIO", "EMISSÃO MATERIAL FEDERADO OBRA", "QUANTITATIVO FINAL ARQUITETURA", "EMISSÃO DAS DISCIPLINAS COM CARIMBO LO"],
-      disciplinas: ["ACESSIBILIDADE", "ACÚSTICA", "ANCORAGEM", "AQUECIMENTO CENTRAL", "ARQUITETURA", "AUTOMAÇÃO", "CLIMATIZAÇÃO E EXAUSTÃO", "CONSTRUTORA", "CONSULTORIA COZINHA INDUSTRIAL", "COORDENAÇÃO E COMPATIBILIZAÇÃO", "ELEVADORES", "ELÉTRICO E TELECOMUNICAÇÕES", "ESQUADRIAS", "ESTRUTURAL", "FACHADA", "FUNDAÇÕES E CONTENÇÕES", "PERSONALIZAÇÃO GARAGEM", "HIDRÁULICO E SANITÁRIO", "IMPERMEABILIZAÇÃO", "INTERIORES", "IRRIGAÇÃO", "PAISAGISMO", "PISCINA", "PREVENTIVO", "SEGURANÇA PATRIMONIAL", "SONDAGEM"]
-    };
-    var r = window._epb2Report;
-    var sep = "─────────────────────────────────────────────";
-    if (typeof console !== "undefined" && console.log) {
-      console.log("[EPB2] " + sep);
-      console.log("[EPB2] RELATÓRIO DE ATUALIZAÇÃO — Dashboard EPB2");
-      console.log("[EPB2] " + sep);
-      console.log("[EPB2] CROR (MS Project):");
-      console.log("[EPB2]   Linhas de tarefa (ID > 0) : " + r.cror.linhas_id_pos);
-      console.log("[EPB2]   — Sumários                : " + r.cror.sumarios);
-      console.log("[EPB2]   — Reuniões                : " + r.cror.reunioes);
-      console.log("[EPB2]   — Ações de projeto        : " + r.cror.acoes);
-      console.log("[EPB2] Dashboard:");
-      console.log("[EPB2]   Ações Controle de Ações   : " + r.dashboard.acoes_semanal);
-      console.log("[EPB2]   Ações CROR                : " + r.dashboard.acoes_cror);
-      console.log("[EPB2]   TOTAL no dashboard        : " + r.dashboard.total);
-      if (r.acoes_sem_disciplina.length > 0) {
-        console.log("[EPB2] AVISO: " + r.acoes_sem_disciplina.length + " tarefa(s) sem prefixo de disciplina (aparecem em Todas):");
-        r.acoes_sem_disciplina.forEach(function(t) { console.log("[EPB2]   · " + t); });
-      } else {
-        console.log("[EPB2]   OK: Todas as tarefas têm disciplina mapeada");
-      }
-      console.log("[EPB2] Disciplinas (" + r.disciplinas.length + "): " + r.disciplinas.join(" | "));
-      console.log("[EPB2] " + sep);
-    }
-  } catch(e) {}
 })();
 </script>
 </head>
@@ -473,7 +431,7 @@ body {
     <div class="tab active" data-tab="0">Visão Geral</div>
 
     <div class="tab" data-tab="2">Cronograma</div>
-    <div class="tab" data-tab="3">Ações por Disciplina <span class="tab-chip" id="cnt-pend">22</span></div>
+    <div class="tab" data-tab="3">Ações por Disciplina</div>
     
     <div class="tab" data-tab="7">Entregáveis</div>
     <div class="tab" data-tab="4">Reuniões <span class="tab-chip" id="cnt-reu">4</span></div>
@@ -681,19 +639,6 @@ body {
         <div class="filter-group-label">Disciplina</div>
         <div class="filter-row" id="ent-disc-filters">
           <button class="filter-btn active" data-ms-group="ent-disc" data-ms-val="todos">Todas</button>
-          <button class="filter-btn" data-ms-group="ent-disc" data-ms-val="AQC">Aquecimento</button>
-          <button class="filter-btn" data-ms-group="ent-disc" data-ms-val="ARQ">Arquitetura</button>
-          <button class="filter-btn" data-ms-group="ent-disc" data-ms-val="CLI">Climatização</button>
-          <button class="filter-btn" data-ms-group="ent-disc" data-ms-val="ELE">Elétrico</button>
-          <button class="filter-btn" data-ms-group="ent-disc" data-ms-val="EST">Estrutura</button>
-          <button class="filter-btn" data-ms-group="ent-disc" data-ms-val="FUN">Contenção</button>
-          <button class="filter-btn" data-ms-group="ent-disc" data-ms-val="GAR">Garagem</button>
-          <button class="filter-btn" data-ms-group="ent-disc" data-ms-val="HID">Hidrossanitário</button>
-          <button class="filter-btn" data-ms-group="ent-disc" data-ms-val="INT">Interiores</button>
-          <button class="filter-btn" data-ms-group="ent-disc" data-ms-val="PAI">Paisagismo</button>
-          <button class="filter-btn" data-ms-group="ent-disc" data-ms-val="PCI">Preventivo</button>
-          <button class="filter-btn" data-ms-group="ent-disc" data-ms-val="PIS">Piscina</button>
-          <button class="filter-btn" data-ms-group="ent-disc" data-ms-val="SEG">Segurança</button>
         </div>
       </div>
       <div>
@@ -783,9 +728,9 @@ var respToDiscFilter = {
   "GaragePlan":                     ["PERSONALIZAÇÃO GARAGEM"],
   "Eytan Magal":                    ["SEGURANÇA PATRIMONIAL"],
   "Tecset":                         ["AQUECIMENTO CENTRAL"],
-  "Erlise":                         ["CONSULTORIA COZINHA INDUSTRIAL"],
+  "Erlise":                         ["COZINHA INDUSTRIAL"],
   "Mannz/Axia":                     ["COORDENAÇÃO E COMPATIBILIZAÇÃO","CONSTRUTORA"],
-  "Mannz/Consultoria Cozinha/Axia": ["CONSULTORIA COZINHA INDUSTRIAL"],
+  "Mannz/Consultoria Cozinha/Axia": ["COZINHA INDUSTRIAL"],
   "Arq. Lider (Fernanda R.)":       ["ARQUITETURA"],
   "Arq. Especialista (Camila D.)":  ["ARQUITETURA"],
   "Arq. Legal (Bruno L.)":          ["PROJETO LEGAL"],
@@ -832,11 +777,13 @@ const etapas = [
 ];
 
 
+// CICLOS_AP_START
 const ciclosAP = [
   { id:"C1", label:"Ciclo 01", sub:"Torres A-D + Embasamento + Torres E-G", inicio:"16/07/26", fim:"12/03/27", progresso:0 },
   { id:"C2", label:"Ciclo 02", sub:"Torres A-D + Embasamento + Torres E-G", inicio:"15/03/27", fim:"26/08/27", progresso:0 },
   { id:"C3", label:"Ciclo 03", sub:"Embasamento + Torres A-D + Torres E-G", inicio:"28/07/27", fim:"15/03/28", progresso:0 },
 ];
+// CICLOS_AP_END
 const disciplinas = [
   { nome:"Bernardes",          tipo:"Arquitetura",         status:"", perc:0, proxEntrega:"--", obs:"" },
   { nome:"Thorus",             tipo:"Instalações HID/SAN", status:"", perc:0, proxEntrega:"--", obs:"" },
@@ -1676,7 +1623,6 @@ function goToEntregaveis(disc) {
       + (k.sub ? '<div class="kpi-sub">' + k.sub + '</div>' : '')
       + '</div>';
   }).join('');
-  var _cpend = document.getElementById('cnt-pend'); if (_cpend) _cpend.textContent = abertos;
 })();
 
 // ── ETAPAS BARS ───────────────────────────────────────────────────────────────
@@ -2229,15 +2175,7 @@ function goToAcoesUrgentes() {
   });
 
   // Update chip count
-  var abertos = acoes.filter(function(a) {
-    var d = parsePrazoAcao(a.prazo);
-    var inRange = !d || (d >= dataReferencia && d <= new Date(dataReferencia.getTime() + 90*86400000));
-    if (!inRange) return false;
-    var cs = computeAcaoStatus(a);
-    return cs === 'Em andamento' || cs === 'Futuro' || cs === 'Pendente';
-  }).length;
-  var chip = document.getElementById('cnt-pend');
-  if (chip) chip.textContent = abertos;
+  // (removido — o badge da aba Ações por Disciplina foi retirado)
 
   if (!list.length) {
     var listEl = document.getElementById('acoes-unified-list');
@@ -2293,7 +2231,7 @@ function goToAcoesUrgentes() {
           "ARQUITETURA":"ARQ","ESTRUTURAL":"EST","HIDRÁULICO E SANITÁRIO":"HID",
           "HIDRÁULICO E SANITÁRIO":"HID","PREVENTIVO":"PCI","ELÉTRICO E TELECOMUNICAÇÕES":"ELE",
           "CLIMATIZAÇÃO E EXAUSTÃO":"CLI","SEGURANÇA PATRIMONIAL":"SEG","PERSONALIZAÇÃO GARAGEM":"GAR",
-          "CONSULTORIA COZINHA INDUSTRIAL":"CZI","PAISAGISMO":"PAI","INTERIORES":"INT",
+          "COZINHA INDUSTRIAL":"CZI","PAISAGISMO":"PAI","INTERIORES":"INT",
           "FUNDAÇÕES E CONTENÇÕES":"FUN","AQUECIMENTO CENTRAL":"AQC","PISCINA":"PIS",
         };
         var discCode = a.disc ? discFullToCode[a.disc] : respToDisc[a.resp];
@@ -2423,67 +2361,137 @@ var critCor = { "Alta":{ bg:"#FFF5E6", txt:"#7A4500" }, "Media":{ bg:"#EBF4FF", 
 
 
 
-// ── ENTREGAVEIS ─────────────────────────────────────────────────────────────
+// ENTREGAVEIS_START
 var entregaveis = [
+  { disc:"AQC", nome:"Aquecimento Central", fase:"EP", itens:8, entregues:0, parciais:0 },
+  { disc:"AQC", nome:"Aquecimento Central", fase:"AP", itens:16, entregues:0, parciais:0 },
+  { disc:"AQC", nome:"Aquecimento Central", fase:"PE", itens:10, entregues:0, parciais:0 },
+  { disc:"AQC", nome:"Aquecimento Central", fase:"EX", itens:9, entregues:0, parciais:0 },
+  { disc:"AQC", nome:"Aquecimento Central", fase:"LO", itens:4, entregues:0, parciais:0 },
   { disc:"ARQ", nome:"Arquitetura", fase:"EP", itens:11, entregues:0, parciais:0 },
   { disc:"ARQ", nome:"Arquitetura", fase:"AP", itens:28, entregues:0, parciais:0 },
   { disc:"ARQ", nome:"Arquitetura", fase:"PE", itens:12, entregues:0, parciais:0 },
   { disc:"ARQ", nome:"Arquitetura", fase:"EX", itens:2, entregues:0, parciais:0 },
-  { disc:"EST", nome:"Estrutural", fase:"EP", itens:8, entregues:2, parciais:3 },
-  { disc:"EST", nome:"Estrutural", fase:"AP", itens:18, entregues:0, parciais:0 },
-  { disc:"EST", nome:"Estrutural", fase:"PE", itens:17, entregues:0, parciais:0 },
-  { disc:"EST", nome:"Estrutural", fase:"EX", itens:72, entregues:0, parciais:0 },
-  { disc:"FUN", nome:"Fundações", fase:"EP", itens:7, entregues:0, parciais:0 },
-  { disc:"FUN", nome:"Fundações", fase:"AP", itens:6, entregues:0, parciais:0 },
-  { disc:"FUN", nome:"Fundações", fase:"EX", itens:10, entregues:0, parciais:0 },
-  { disc:"AQC", nome:"Aquecimento", fase:"EP", itens:8, entregues:0, parciais:0 },
-  { disc:"AQC", nome:"Aquecimento", fase:"AP", itens:16, entregues:0, parciais:0 },
-  { disc:"AQC", nome:"Aquecimento", fase:"PE", itens:10, entregues:0, parciais:0 },
-  { disc:"AQC", nome:"Aquecimento", fase:"EX", itens:9, entregues:0, parciais:0 },
-  { disc:"SEG", nome:"Segurança", fase:"EP", itens:24, entregues:17, parciais:0 },
-  { disc:"SEG", nome:"Segurança", fase:"AP", itens:8, entregues:0, parciais:0 },
-  { disc:"SEG", nome:"Segurança", fase:"PE", itens:12, entregues:0, parciais:0 },
-  { disc:"SEG", nome:"Segurança", fase:"EX", itens:12, entregues:0, parciais:0 },
-  { disc:"HID", nome:"Hidrossanitário", fase:"EP", itens:20, entregues:2, parciais:4 },
-  { disc:"HID", nome:"Hidrossanitário", fase:"AP", itens:34, entregues:0, parciais:0 },
-  { disc:"HID", nome:"Hidrossanitário", fase:"PE", itens:5, entregues:0, parciais:0 },
-  { disc:"HID", nome:"Hidrossanitário", fase:"EX", itens:11, entregues:0, parciais:0 },
-  { disc:"ELE", nome:"Elétrico", fase:"EP", itens:17, entregues:0, parciais:8 },
-  { disc:"ELE", nome:"Elétrico", fase:"AP", itens:32, entregues:0, parciais:0 },
-  { disc:"ELE", nome:"Elétrico", fase:"PE", itens:7, entregues:0, parciais:0 },
-  { disc:"ELE", nome:"Elétrico", fase:"EX", itens:6, entregues:0, parciais:0 },
-  { disc:"PCI", nome:"Preventivo", fase:"EP", itens:18, entregues:4, parciais:2 },
-  { disc:"PCI", nome:"Preventivo", fase:"AP", itens:28, entregues:0, parciais:0 },
-  { disc:"PCI", nome:"Preventivo", fase:"PE", itens:5, entregues:0, parciais:0 },
-  { disc:"PCI", nome:"Preventivo", fase:"EX", itens:7, entregues:0, parciais:0 },
-  { disc:"CLI", nome:"Climatização", fase:"EP", itens:10, entregues:0, parciais:0 },
-  { disc:"CLI", nome:"Climatização", fase:"AP", itens:28, entregues:0, parciais:0 },
-  { disc:"CLI", nome:"Climatização", fase:"PE", itens:6, entregues:0, parciais:0 },
-  { disc:"CLI", nome:"Climatização", fase:"EX", itens:6, entregues:0, parciais:0 },
+  { disc:"ARQ", nome:"Arquitetura", fase:"LO", itens:2, entregues:0, parciais:0 },
+  { disc:"CLI", nome:"Climatização e Exaustão", fase:"EP", itens:10, entregues:0, parciais:0 },
+  { disc:"CLI", nome:"Climatização e Exaustão", fase:"AP", itens:28, entregues:0, parciais:0 },
+  { disc:"CLI", nome:"Climatização e Exaustão", fase:"PE", itens:6, entregues:0, parciais:0 },
+  { disc:"CLI", nome:"Climatização e Exaustão", fase:"EX", itens:6, entregues:0, parciais:0 },
+  { disc:"CLI", nome:"Climatização e Exaustão", fase:"LO", itens:3, entregues:0, parciais:0 },
   { disc:"CZI", nome:"Cozinha Industrial", fase:"EP", itens:4, entregues:0, parciais:0 },
   { disc:"CZI", nome:"Cozinha Industrial", fase:"AP", itens:6, entregues:0, parciais:0 },
   { disc:"CZI", nome:"Cozinha Industrial", fase:"PE", itens:12, entregues:0, parciais:0 },
   { disc:"CZI", nome:"Cozinha Industrial", fase:"EX", itens:5, entregues:0, parciais:0 },
-  { disc:"PAI", nome:"Paisagismo", fase:"EP", itens:8, entregues:0, parciais:0 },
-  { disc:"PAI", nome:"Paisagismo", fase:"AP", itens:14, entregues:0, parciais:0 },
-  { disc:"PAI", nome:"Paisagismo", fase:"PE", itens:8, entregues:0, parciais:0 },
-  { disc:"PAI", nome:"Paisagismo", fase:"EX", itens:3, entregues:0, parciais:0 },
+  { disc:"CZI", nome:"Cozinha Industrial", fase:"LO", itens:2, entregues:0, parciais:0 },
+  { disc:"ELE", nome:"Elétrico e Telecomunicações", fase:"EP", itens:17, entregues:0, parciais:8 },
+  { disc:"ELE", nome:"Elétrico e Telecomunicações", fase:"AP", itens:32, entregues:0, parciais:0 },
+  { disc:"ELE", nome:"Elétrico e Telecomunicações", fase:"PE", itens:7, entregues:0, parciais:0 },
+  { disc:"ELE", nome:"Elétrico e Telecomunicações", fase:"EX", itens:6, entregues:0, parciais:0 },
+  { disc:"ELE", nome:"Elétrico e Telecomunicações", fase:"LO", itens:3, entregues:0, parciais:0 },
+  { disc:"EST", nome:"Estrutural", fase:"EP", itens:8, entregues:2, parciais:3 },
+  { disc:"EST", nome:"Estrutural", fase:"AP", itens:18, entregues:0, parciais:0 },
+  { disc:"EST", nome:"Estrutural", fase:"PE", itens:17, entregues:0, parciais:0 },
+  { disc:"EST", nome:"Estrutural", fase:"EX", itens:72, entregues:0, parciais:0 },
+  { disc:"EST", nome:"Estrutural", fase:"LO", itens:3, entregues:0, parciais:0 },
+  { disc:"FUN", nome:"Fundações e Contenções", fase:"EP", itens:7, entregues:0, parciais:0 },
+  { disc:"FUN", nome:"Fundações e Contenções", fase:"AP", itens:6, entregues:0, parciais:0 },
+  { disc:"FUN", nome:"Fundações e Contenções", fase:"EX", itens:10, entregues:0, parciais:0 },
+  { disc:"FUN", nome:"Fundações e Contenções", fase:"LO", itens:2, entregues:0, parciais:0 },
+  { disc:"HID", nome:"Hidráulico e Sanitário", fase:"EP", itens:20, entregues:2, parciais:4 },
+  { disc:"HID", nome:"Hidráulico e Sanitário", fase:"AP", itens:34, entregues:0, parciais:0 },
+  { disc:"HID", nome:"Hidráulico e Sanitário", fase:"PE", itens:5, entregues:0, parciais:0 },
+  { disc:"HID", nome:"Hidráulico e Sanitário", fase:"EX", itens:11, entregues:0, parciais:0 },
+  { disc:"HID", nome:"Hidráulico e Sanitário", fase:"LO", itens:3, entregues:0, parciais:0 },
   { disc:"INT", nome:"Interiores", fase:"EP", itens:1, entregues:0, parciais:0 },
   { disc:"INT", nome:"Interiores", fase:"AP", itens:17, entregues:0, parciais:0 },
   { disc:"INT", nome:"Interiores", fase:"PE", itens:8, entregues:0, parciais:0 },
   { disc:"INT", nome:"Interiores", fase:"EX", itens:5, entregues:0, parciais:0 },
-  { disc:"GAR", nome:"Garagem", fase:"EP", itens:5, entregues:0, parciais:5 },
-  { disc:"GAR", nome:"Garagem", fase:"AP", itens:10, entregues:0, parciais:0 },
-  { disc:"GAR", nome:"Garagem", fase:"PE", itens:7, entregues:0, parciais:0 },
-  { disc:"GAR", nome:"Garagem", fase:"EX", itens:10, entregues:0, parciais:0 },
+  { disc:"INT", nome:"Interiores", fase:"LO", itens:2, entregues:0, parciais:0 },
+  { disc:"PAI", nome:"Paisagismo", fase:"EP", itens:8, entregues:0, parciais:0 },
+  { disc:"PAI", nome:"Paisagismo", fase:"AP", itens:14, entregues:0, parciais:0 },
+  { disc:"PAI", nome:"Paisagismo", fase:"PE", itens:8, entregues:0, parciais:0 },
+  { disc:"PAI", nome:"Paisagismo", fase:"EX", itens:3, entregues:0, parciais:0 },
+  { disc:"PAI", nome:"Paisagismo", fase:"LO", itens:3, entregues:0, parciais:0 },
+  { disc:"GAR", nome:"Personalização Garagem", fase:"EP", itens:5, entregues:0, parciais:5 },
+  { disc:"GAR", nome:"Personalização Garagem", fase:"AP", itens:10, entregues:0, parciais:0 },
+  { disc:"GAR", nome:"Personalização Garagem", fase:"PE", itens:7, entregues:0, parciais:0 },
+  { disc:"GAR", nome:"Personalização Garagem", fase:"EX", itens:10, entregues:0, parciais:0 },
+  { disc:"PCI", nome:"Preventivo", fase:"EP", itens:18, entregues:4, parciais:2 },
+  { disc:"PCI", nome:"Preventivo", fase:"AP", itens:28, entregues:0, parciais:0 },
+  { disc:"PCI", nome:"Preventivo", fase:"PE", itens:5, entregues:0, parciais:0 },
+  { disc:"PCI", nome:"Preventivo", fase:"EX", itens:7, entregues:0, parciais:0 },
+  { disc:"PCI", nome:"Preventivo", fase:"LO", itens:3, entregues:0, parciais:0 },
+  { disc:"SEG", nome:"Segurança Patrimonial", fase:"EP", itens:24, entregues:17, parciais:0 },
+  { disc:"SEG", nome:"Segurança Patrimonial", fase:"AP", itens:8, entregues:0, parciais:0 },
+  { disc:"SEG", nome:"Segurança Patrimonial", fase:"PE", itens:12, entregues:0, parciais:0 },
+  { disc:"SEG", nome:"Segurança Patrimonial", fase:"EX", itens:12, entregues:0, parciais:0 },
+  { disc:"SEG", nome:"Segurança Patrimonial", fase:"LO", itens:2, entregues:0, parciais:0 },
 ];
+// ENTREGAVEIS_END
 
 var faseLabel = { EP:"Estudo Preliminar", AP:"Anteprojeto", PE:"Pre-Executivo", EX:"Executivo", LO:"Liberado Obra" };
 var faseCor   = { EP:"#1D9E75", AP:"#378ADD", PE:"#7F77DD", EX:"#BA7517", LO:"#2C9E5A" };
 var entDisc = 'todos', entFase = 'todos';
 
-// Itens detalhados por disciplina/fase (fonte: EPB2-DOC-0001-ENTREGAVEIS-EMREVISÃO.xlsx)
+// ENTITENS_START
 var entItens = {
+  "AQC-EP": [
+    { item:"Preenchimento e cadastro do Formulário de Informações Técnicas (FIT) e/ou relatório de análise", status:"nao", obs:"" },
+    { item:"Pré-dimensionamento dos aquecedores e das áreas necessárias", status:"nao", obs:"" },
+    { item:"Pré-dimensionamento dos reservatórios de água quente", status:"nao", obs:"" },
+    { item:"Definição das alternativas de sistema de aquecimento a ser projetado", status:"nao", obs:"" },
+    { item:"Análise econômica das alternativas de equipamentos disponíveis", status:"nao", obs:"" },
+    { item:"Relatório de interferências dos Eps do projeto completo das demais disciplinas", status:"nao", obs:"" },
+    { item:"Pacote Entregue (PDF/DWG): Representação áreas necessárias", status:"nao", obs:"" },
+    { item:"Pacote Entregue (PDF): Documentos", status:"nao", obs:"" },
+  ],
+  "AQC-AP": [
+    { item:"Ajustes conforme solicitações da Compatibilização (Construflow)", status:"nao", obs:"" },
+    { item:"Listagem de pranchas a serem produzidas", status:"nao", obs:"" },
+    { item:"Emissão das plantas do projeto compatibilizadas com as informações contidas na etapa anterior", status:"nao", obs:"" },
+    { item:"Dimensionamento do sistema de geração de água quente definido", status:"nao", obs:"" },
+    { item:"Dimensionamento dos reservatórios de água quente", status:"nao", obs:"" },
+    { item:"Definição da localização dos aparelhos e dispositivos", status:"nao", obs:"" },
+    { item:"Determinação do traçado geométrico e detalhamento dos componentes que interligam sistemas e reservatórios", status:"nao", obs:"" },
+    { item:"Dimensionamento de bombas do sistema de geração de água quente", status:"nao", obs:"" },
+    { item:"Determinação das potências instaladas do apoio para auxiliar no dimensionamento das demais disciplinas", status:"nao", obs:"" },
+    { item:"Planta de markup de todas as plantas relacionadas com esta disciplina", status:"nao", obs:"" },
+    { item:"Atualização plantas de furação (conforme atualização de projeto e comentários da analise de estrutura)", status:"nao", obs:"" },
+    { item:"Relatório e interferências tipo para cima dos Aps das demais disciplinas", status:"nao", obs:"" },
+    { item:"Ajustes / Respostas Construflow - Relatório de Compatibilização", status:"nao", obs:"" },
+    { item:"Pacote Entregue (PDF): Documentos", status:"nao", obs:"" },
+    { item:"Pacote Entregue (PDF/ DWG): Projeto com informações descritas acima", status:"nao", obs:"" },
+    { item:"Pacote Entregue (IFC): Modelo BIM (Espelho das plantas, em caso de divergêcia, será considerado o modelo como informação na compatibilização)", status:"nao", obs:"" },
+  ],
+  "AQC-PE": [
+    { item:"Ajustes conforme solicitações da Compatibilização (Construflow)", status:"nao", obs:"" },
+    { item:"Relatório sobre análise de implantação do sistema", status:"nao", obs:"" },
+    { item:"Emissão das plantas do projeto com acréscimo das informações de detalhamento", status:"nao", obs:"" },
+    { item:"Especificação técnica de materiais", status:"nao", obs:"" },
+    { item:"Especificação técnica de componentes", status:"nao", obs:"" },
+    { item:"Relação quantitativa dos equipamentos necessários", status:"nao", obs:"" },
+    { item:"Ajustes / Respostas Construflow - Relatório de Compatibilização", status:"nao", obs:"" },
+    { item:"Pacote Entregue (PDF): Documentos", status:"nao", obs:"" },
+    { item:"Pacote Entregue (PDF/ DWG): Projeto com informações descritas acima", status:"nao", obs:"" },
+    { item:"Pacote Entregue (IFC): Modelo BIM (Espelho das plantas, em caso de divergêcia, será considerado o modelo como informação na compatibilização)", status:"nao", obs:"" },
+  ],
+  "AQC-EX": [
+    { item:"Relatório final sobre análise de implantação do sistema", status:"nao", obs:"" },
+    { item:"Emissão das plantas do projeto com acréscimo das informações de detalhamento", status:"nao", obs:"" },
+    { item:"Memorial descritivo dos sistemas de aquecimento (detalhes e diagramas de quadros)", status:"nao", obs:"" },
+    { item:"Especificação técnica de materiais", status:"nao", obs:"" },
+    { item:"Especificação técnica de componentes", status:"nao", obs:"" },
+    { item:"Relação quantitativa dos equipamentos necessários", status:"nao", obs:"" },
+    { item:"Pacote Entregue (PDF): Documentos", status:"nao", obs:"" },
+    { item:"Pacote Entregue (PDF/ DWG): Projeto com informações descritas acima", status:"nao", obs:"" },
+    { item:"Pacote Entregue (IFC): Modelo BIM (Espelho das plantas, em caso de divergêcia, será considerado o modelo como informação na compatibilização)", status:"nao", obs:"" },
+  ],
+  "AQC-LO": [
+    { item:"Pacote Entregue (PDF/ DWG): Pranchas de todo o projeto compatibilizados e carimbados", status:"nao", obs:"" },
+    { item:"Pacote Entregue (IFC): Modelo BIM (Espelho das plantas, em caso de divergêcia, será considerado o modelo como informação na compatibilização)", status:"nao", obs:"" },
+    { item:"Pacote Entregue (PDF): Memorial descritivo", status:"nao", obs:"" },
+    { item:"Pacote Entregue (PDF): ART", status:"nao", obs:"" },
+  ],
   "ARQ-EP": [
     { item:"Implantação", status:"nao", obs:"" },
     { item:"Plantas Civil / Layout", status:"nao", obs:"" },
@@ -2543,6 +2551,187 @@ var entItens = {
   ],
   "ARQ-EX": [
     { item:"Pacote Entregue (PDF/ DWG): Emissão final todas as séries", status:"nao", obs:"" },
+    { item:"Pacote Entregue (IFC): Modelo BIM (Espelho das plantas, em caso de divergêcia, será considerado o modelo como informação na compatibilização)", status:"nao", obs:"" },
+  ],
+  "ARQ-LO": [
+    { item:"Pacote Entregue (PDF/ DWG): Pranchas de todo o Projeto", status:"nao", obs:"" },
+    { item:"Pacote Entregue (PDF): SpecBook de Interiores", status:"nao", obs:"" },
+  ],
+  "CLI-EP": [
+    { item:"Definição do tipo de Sistema (validar com construtora)", status:"nao", obs:"" },
+    { item:"Dimensão de área técnica para condensadoras com ventilação mínima necessária", status:"nao", obs:"" },
+    { item:"Dimensionamento dos BTUs", status:"nao", obs:"" },
+    { item:"Posição das evaporadoras", status:"nao", obs:"" },
+    { item:"Altura das evaporadoras e altura mínima de entreforro", status:"nao", obs:"" },
+    { item:"Verificar necessidade de desumificação de piscina e spa (casa de bombas e dutos) (Confirmar necessidade em função do porte do projeto)", status:"nao", obs:"" },
+    { item:"Definição do ponto exaustão (ventilação forçada, coifa, secadora, churrasqueiras) (Confirmar necessidade em função do porte do projeto)", status:"nao", obs:"" },
+    { item:"Definição dos pontos de exaustão para cozinha industrial", status:"nao", obs:"" },
+    { item:"Pacote Entregue (PDF/ DWG): Planta Baixa dos Pavimentos (sem cotas)", status:"nao", obs:"" },
+    { item:"Pacote Entregue (PDF): Documentos", status:"nao", obs:"" },
+  ],
+  "CLI-AP": [
+    { item:"C1 - Ajustes conforme solicitações da Compatibilização (Construflow)", status:"nao", obs:"" },
+    { item:"C1 - Validação da dimensão de área técnica para condensadoras com ventilação mínima necessária", status:"nao", obs:"" },
+    { item:"C1 - Cálculos preliminares de carga términa e vazão de ar", status:"nao", obs:"" },
+    { item:"C1 - Seleção preliminar de equipamentos, com dados referenciais de dimensões, capacidade, consumo energético, consumo de água e peso", status:"nao", obs:"" },
+    { item:"C1 - Dimensionamento preliminar das redes de dutos principais", status:"nao", obs:"" },
+    { item:"C1 - Definição dos espaços de passagem vertical e horizontal necessários", status:"nao", obs:"" },
+    { item:"C1 - Dimensionamento preliminar das redes hidráulicas e frigorígenas principais", status:"nao", obs:"" },
+    { item:"C1 - Posicionamento dos equipamentos nas áreas técnicas", status:"nao", obs:"" },
+    { item:"C1 - Definição da posição dos ventiladores nas garagens (Confirmar necessidade em função do porte do projeto)", status:"nao", obs:"" },
+    { item:"C1 - Ajustes / Respostas Construflow - Relatório de Compatibilização", status:"nao", obs:"" },
+    { item:"C1 - Pacote Entregue (PDF/ DWG): Planta Baixa dos Pavimentos (sem cotas)", status:"nao", obs:"" },
+    { item:"C1 - Pacote Entregue (IFC): Modelo BIM (Espelho das plantas, em caso de divergêcia, será considerado o modelo como informação na compatibilização)", status:"nao", obs:"" },
+    { item:"C2 - Ajustes conforme solicitações da Compatibilização (Construflow)", status:"nao", obs:"" },
+    { item:"C2 - Lançamento pontos solicitados por interiores", status:"nao", obs:"" },
+    { item:"C2 - Consolidação dos cálculos, seleção de equipamentos", status:"nao", obs:"" },
+    { item:"C2 - Localização e dimensões das casas de máquinas", status:"nao", obs:"" },
+    { item:"C2 - Dimensionamento de toda a rede de dutos, distribuição de ar, rede hidráulica e frigorígena", status:"nao", obs:"" },
+    { item:"C2 - Posicionamento de grelhas e difusores", status:"nao", obs:"" },
+    { item:"C2 - Emissão plantas prévias de furação", status:"nao", obs:"" },
+    { item:"C2 - Ajustes / Respostas Construflow - Relatório de Compatibilização", status:"nao", obs:"" },
+    { item:"C2 - Pacote Entregue (PDF/ DWG): Planta Baixa dos Pavimentos (sem cotas)", status:"nao", obs:"" },
+    { item:"C2 - Pacote Entregue (IFC): Modelo BIM (Espelho das plantas, em caso de divergêcia, será considerado o modelo como informação na compatibilização)", status:"nao", obs:"" },
+    { item:"C3 - Ajustes conforme solicitações da Compatibilização (Construflow)", status:"nao", obs:"" },
+    { item:"C3 - Distribuição tubulações após aprovação dos pontos solicitados por interiores", status:"nao", obs:"" },
+    { item:"C3 - Atualização plantas de furação (conforme atualização de projeto e comentários da analise de estrutura)", status:"nao", obs:"" },
+    { item:"C3 - Ajustes / Respostas Construflow - Relatório de Compatibilização", status:"nao", obs:"" },
+    { item:"C3 - Pacote Entregue (PDF/ DWG): Planta Baixa dos Pavimentos (sem cotas)", status:"nao", obs:"" },
+    { item:"C3 - Pacote Entregue (IFC): Modelo BIM (Espelho das plantas, em caso de divergêcia, será considerado o modelo como informação na compatibilização)", status:"nao", obs:"" },
+  ],
+  "CLI-PE": [
+    { item:"Ajustes conforme solicitações da Compatibilização (Construflow)", status:"nao", obs:"" },
+    { item:"Necessidades a serem supridas pela infraestrutura das instalações prediais de energia elétrica, gás, água e esgoto", status:"nao", obs:"" },
+    { item:"Atualização plantas de furação (conforme atualização de projeto e comentários da analise de estrutura)", status:"nao", obs:"" },
+    { item:"Ajustes / Respostas Construflow - Relatório de Compatibilização", status:"nao", obs:"" },
+    { item:"Pacote Entregue (PDF/ DWG): Planta Baixa dos Pavimentos (sem cotas)", status:"nao", obs:"" },
+    { item:"Pacote Entregue (IFC): Modelo BIM (Espelho das plantas, em caso de divergêcia, será considerado o modelo como informação na compatibilização)", status:"nao", obs:"" },
+  ],
+  "CLI-EX": [
+    { item:"Planta de todos os pavimentos", status:"nao", obs:"" },
+    { item:"Detalhes executivos", status:"nao", obs:"" },
+    { item:"Memoriais", status:"nao", obs:"" },
+    { item:"Pacote Entregue (PDF): Documentos", status:"nao", obs:"" },
+    { item:"Pacote Entregue (PDF/ DWG): Planta Baixa dos Pavimentos e Detalhes - COM COTAS", status:"nao", obs:"" },
+    { item:"Pacote Entregue (IFC): Modelo BIM (Espelho das plantas, em caso de divergêcia, será considerado o modelo como informação na compatibilização)", status:"nao", obs:"" },
+  ],
+  "CLI-LO": [
+    { item:"Pacote Entregue (PDF/ DWG): Pranchas de todo o projeto compatibilizados e carimbados", status:"nao", obs:"" },
+    { item:"Pacote Entregue (PDF): Documentação final", status:"nao", obs:"" },
+    { item:"Pacote Entregue (IFC): Modelo BIM (Espelho das plantas, em caso de divergêcia, será considerado o modelo como informação na compatibilização)", status:"nao", obs:"" },
+  ],
+  "CZI-EP": [
+    { item:"Desenvolvimento do Layout / Fluxos ideais", status:"nao", obs:"" },
+    { item:"Listagem de equipamentos das áreas operacionais", status:"nao", obs:"" },
+    { item:"Pacote Entregue (PDF/ DWG): Planta Baixa dos Pavimentos (sem cotas)", status:"nao", obs:"" },
+    { item:"Pacote Entregue (PDF): Documentos", status:"nao", obs:"" },
+  ],
+  "CZI-AP": [
+    { item:"Ajustes conforme solicitações da Compatibilização (Construflow)", status:"nao", obs:"" },
+    { item:"Planta orientativa de pontos de utilização e consumos das áreas operacionais", status:"nao", obs:"" },
+    { item:"Planta de Layout", status:"nao", obs:"" },
+    { item:"Listagem de equipamentos das áreas operacionais", status:"nao", obs:"" },
+    { item:"Ajustes / Respostas Construflow - Relatório de Compatibilização", status:"nao", obs:"" },
+    { item:"Pacote Entregue (PDF/ DWG): Planta Baixa dos Pavimentos (sem cotas)", status:"nao", obs:"" },
+  ],
+  "CZI-PE": [
+    { item:"Ajustes conforme solicitações da Compatibilização (Construflow)", status:"nao", obs:"" },
+    { item:"Planta de Layout", status:"nao", obs:"" },
+    { item:"Listagem de equipamentos das áreas operacionais", status:"nao", obs:"" },
+    { item:"Planta orientativa de pontos de utilização e consumos das áreas operacionais", status:"nao", obs:"" },
+    { item:"Elevações Detalhadas das áreas operacionais", status:"nao", obs:"" },
+    { item:"Planta de execução das áreas operacionais", status:"nao", obs:"" },
+    { item:"Planta de piso das áreas operacionais", status:"nao", obs:"" },
+    { item:"Planta de forro das áreas operacionais", status:"nao", obs:"" },
+    { item:"Mapeamento de esquadrias das áreas operacionais", status:"nao", obs:"" },
+    { item:"Detalhes construtivos das áreas operacionais", status:"nao", obs:"" },
+    { item:"Ajustes / Respostas Construflow - Relatório de Compatibilização", status:"nao", obs:"" },
+    { item:"Pacote Entregue (PDF/ DWG): Planta Baixa dos Pavimentos (sem cotas)", status:"nao", obs:"" },
+  ],
+  "CZI-EX": [
+    { item:"Plantas entregues na etapa anterior", status:"nao", obs:"" },
+    { item:"Detalhes executivos", status:"nao", obs:"" },
+    { item:"Memoriais", status:"nao", obs:"" },
+    { item:"Pacote Entregue (PDF): Documentos", status:"nao", obs:"" },
+    { item:"Pacote Entregue (PDF/ DWG): Planta Baixa dos Pavimentos e Detalhes - COM COTAS", status:"nao", obs:"" },
+  ],
+  "CZI-LO": [
+    { item:"Pacote Entregue (PDF/ DWG): Pranchas de todo o projeto compatibilizados e carimbados", status:"nao", obs:"" },
+    { item:"Pacote Entregue (PDF): Documentação final", status:"nao", obs:"" },
+  ],
+  "ELE-EP": [
+    { item:"Posição e caminhamento da Entrada de Energia/Telecom e prumadas", status:"nao", obs:"Não se aplica para o ciclo de Torres. Será verificado após entrega do ciclo de Embasamento" },
+    { item:"Posição e Dimensionamento do Gerador. Tomadas de ar, saída de ar quente e escapamento (Confirmar necessidade em função do porte do projeto)", status:"nao", obs:"Validar possibilidade de entrega da tarefa" },
+    { item:"Posição e Dimensionamento Subestação, acesso e ventilação mínima. (Confirmar necessidade em função do porte do projeto)", status:"nao", obs:"Validar possibilidade de entrega da tarefa" },
+    { item:"Definição de Salas para CPD's (RACK Telecom / Automação)", status:"nao", obs:"Não se aplica para o ciclo de Torres. Será verificado após entrega do ciclo de Embasamento" },
+    { item:"Dimensionamento de cargas para carregamento elétrico veicular (Confirmar existência no briefing do projeto)", status:"nao", obs:"Validar possibilidade de entrega da tarefa" },
+    { item:"Posição e Dimensionamento Barramento Blindado", status:"nao", obs:"Validar possibilidade de entrega da tarefa" },
+    { item:"Posição do Centro de Medição Elétrica", status:"nao", obs:"Validar possibilidade de entrega da tarefa" },
+    { item:"Posição dos Quadros de Disjuntor geral, central de interfone e rack de cftv", status:"nao", obs:"Não se aplica para o ciclo de Torres. Será verificado após entrega do ciclo de Embasamento" },
+    { item:"Posição dos Quadro de Distribuição, Força, Comando, Automação", status:"parcial", obs:"Foi entregue das torres (conforme combinado). Demais pavimentos devem ser entregues na próxima postagem de Embasamento." },
+    { item:"Definições de Caixas de Passagem Elétrica e Telecom", status:"parcial", obs:"Foi entregue das torres (conforme combinado). Demais pavimentos devem ser entregues na próxima postagem de Embasamento." },
+    { item:"Validação do dimensionamento e localização dos shafts Gerais (Hall Condomínio)", status:"parcial", obs:"Foi entregue das torres (conforme combinado). Demais pavimentos devem ser entregues na próxima postagem de Embasamento." },
+    { item:"Pacote Entregue (PDF/ DWG): Planta Baixa dos Pavimentos (sem cotas)", status:"parcial", obs:"Foi entregue das torres (conforme combinado). Demais pavimentos devem ser entregues na próxima postagem de Embasamento." },
+    { item:"Pacote Entregue (IFC): Modelo BIM (Espelho das plantas, em caso de divergêcia, será considerado o modelo como informação na compatibilização)", status:"parcial", obs:"" },
+    { item:"PROJETO LEGAL: EMISSÃO DA CONSULTA PRÉVIA (CELESC)", status:"nao", obs:"" },
+    { item:"C1 - Lançamento de pontos - TUG's, TUE's, Iluminação, Comunicação, Monitoramento", status:"parcial", obs:"Foi entregue das torres na fase EP." },
+    { item:"C1 - Distribuição de pontos Telecom em todos os pavimentos (Dados, Voz, Imagem, Controle de Acesso, Som)", status:"parcial", obs:"Foi entregue das torres na fase EP." },
+    { item:"C1 - Indicação de necessidades de enchimentos, incompatibilidades, duvidas e indefinições", status:"parcial", obs:"Foi entregue das torres na fase EP." },
+  ],
+  "ELE-AP": [
+    { item:"C1 - Ajustes conforme solicitações da Compatibilização (Construflow)", status:"nao", obs:"" },
+    { item:"C1 - Posição dos quadros de medição, subestação (se houver) e gerador (se houver)", status:"nao", obs:"" },
+    { item:"C1 - Lançamento das prumadas com caixas de passagem e eletrodutos / eletrocalhas", status:"nao", obs:"" },
+    { item:"C1 - Posição da central de monitoramento", status:"nao", obs:"" },
+    { item:"C1 - Lançamento de pontos - TUG's, TUE's, Iluminação, Comunicação, Monitoramento", status:"nao", obs:"Foi entregue das torres na fase EP." },
+    { item:"C1 - Distribuição de pontos Telecom em todos os pavimentos (Dados, Voz, Imagem, Controle de Acesso, Som)", status:"nao", obs:"Foi entregue das torres na fase EP." },
+    { item:"C1 - Indicação de necessidades de enchimentos, incompatibilidades, duvidas e indefinições", status:"nao", obs:"Foi entregue das torres na fase EP." },
+    { item:"C1 - Ajustes / Respostas Construflow - Relatório de Compatibilização", status:"nao", obs:"" },
+    { item:"C1 - Pacote Entregue (PDF/ DWG): Planta Baixa dos Pavimentos (sem cotas)", status:"nao", obs:"" },
+    { item:"C1 - Pacote Entregue (IFC): Modelo BIM (Espelho das plantas, em caso de divergêcia, será considerado o modelo como informação na compatibilização)", status:"nao", obs:"" },
+    { item:"C2 - Ajustes conforme solicitações da Compatibilização (Construflow)", status:"nao", obs:"" },
+    { item:"C2 - Lançamento pontos solicitados por interiores, paisagismo, segurança, aquecimento central, cozinha industrial", status:"nao", obs:"Validar possibilidade de entrega da tarefa" },
+    { item:"C2 - Lançamento de eletrodutos conforme pontos aprovados (lajes/paredes/pisos)", status:"nao", obs:"" },
+    { item:"C2 - Definições de circuitos elétricos aos pontos", status:"nao", obs:"" },
+    { item:"C2 - Lançamento das tubulações de ar condicionado e ventilação/exaustão", status:"nao", obs:"" },
+    { item:"C2 - Indicação de necessidades de enchimentos, incompatibilidades, duvidas e indefinições", status:"nao", obs:"" },
+    { item:"C2 - Validação dos tamanhos dos quadros elétricos conforme Layout de Circuitos", status:"nao", obs:"" },
+    { item:"C2 - Emissão plantas prévias de furação", status:"nao", obs:"" },
+    { item:"C2 - Ajustes / Respostas Construflow - Relatório de Compatibilização", status:"nao", obs:"" },
+    { item:"C2 - Pacote Entregue (PDF/ DWG): Planta Baixa dos Pavimentos (sem cotas)", status:"nao", obs:"" },
+    { item:"C2 - Pacote Entregue (IFC): Modelo BIM (Espelho das plantas, em caso de divergêcia, será considerado o modelo como informação na compatibilização)", status:"nao", obs:"" },
+    { item:"C3 - Ajustes conforme solicitações da Compatibilização (Construflow)", status:"nao", obs:"" },
+    { item:"C3 - Distribuição eletrodutos após aprovação dos pontos solicitados por interiores, paisagismo, segurança, aquecimento central, cozinha industrial", status:"nao", obs:"Validar possibilidade de entrega da tarefa" },
+    { item:"C3 - Plantas baixas de todos os pavimentos do Projeto Elétrico e de Automação com Lançamento das fiações nas tubulações aprovadas", status:"nao", obs:"" },
+    { item:"C3 - Validação das bitolas dos eletrodutos conforme ocupação da fiação", status:"nao", obs:"" },
+    { item:"C3 - Plantas baixas de todos os pavimentos do Projeto de Telecomunicações (VOZ / DADOS / SOM / AUTOMAÇÃO)", status:"nao", obs:"" },
+    { item:"C3 - Emissão dos Esquemas Verticais dos projetos Elétricos / Telecomunicações / Preventivo", status:"nao", obs:"" },
+    { item:"C3 - Emissão do Projeto de SPDA Estrutural", status:"nao", obs:"" },
+    { item:"C3 - Atualização plantas de furação (conforme atualização de projeto e comentários da analise de estrutura)", status:"nao", obs:"" },
+    { item:"C3 - Ajustes / Respostas Construflow - Relatório de Compatibilização", status:"nao", obs:"" },
+    { item:"C3 - Pacote Entregue (PDF/ DWG): Planta Baixa dos Pavimentos (sem cotas)", status:"nao", obs:"" },
+    { item:"C3 - Pacote Entregue (IFC): Modelo BIM (Espelho das plantas, em caso de divergêcia, será considerado o modelo como informação na compatibilização)", status:"nao", obs:"" },
+  ],
+  "ELE-PE": [
+    { item:"Ajustes conforme solicitações da Compatibilização (Construflow)", status:"nao", obs:"" },
+    { item:"Planta baixa de todos os pavimentos com fiação elétrica", status:"nao", obs:"No escopo a demanda está entregue em EX. Validar possibilidade de entregar em PE." },
+    { item:"Planta baixa de todos os pavimentos com projeto de comunicação e segurança", status:"nao", obs:"No escopo a demanda está entregue em EX. Validar possibilidade de entregar em PE." },
+    { item:"Atualização plantas de furação (conforme atualização de projeto e comentários da analise de estrutura)", status:"nao", obs:"" },
+    { item:"Ajustes / Respostas Construflow - Relatório de Compatibilização", status:"nao", obs:"" },
+    { item:"Pacote Entregue (PDF/ DWG): Planta Baixa dos Pavimentos (sem cotas)", status:"nao", obs:"" },
+    { item:"Pacote Entregue (IFC): Modelo BIM (Espelho das plantas, em caso de divergêcia, será considerado o modelo como informação na compatibilização)", status:"nao", obs:"" },
+  ],
+  "ELE-EX": [
+    { item:"Detalhes executivos convenientes a instalação", status:"nao", obs:"" },
+    { item:"Diagramas unifilares", status:"nao", obs:"" },
+    { item:"Lista de Materiais", status:"nao", obs:"" },
+    { item:"Pacote Entregue (PDF): Documentos / Quantitativos", status:"nao", obs:"" },
+    { item:"Pacote Entregue (PDF/ DWG): Planta Baixa dos Pavimentos e Detalhes - COM COTAS", status:"nao", obs:"" },
+    { item:"Pacote Entregue (IFC): Modelo BIM (Espelho das plantas, em caso de divergêcia, será considerado o modelo como informação na compatibilização)", status:"nao", obs:"" },
+  ],
+  "ELE-LO": [
+    { item:"Pacote Entregue (PDF/ DWG): Pranchas de todo o projeto compatibilizados e carimbados", status:"nao", obs:"" },
+    { item:"Pacote Entregue (PDF): Documentação final", status:"nao", obs:"" },
     { item:"Pacote Entregue (IFC): Modelo BIM (Espelho das plantas, em caso de divergêcia, será considerado o modelo como informação na compatibilização)", status:"nao", obs:"" },
   ],
   "EST-EP": [
@@ -2668,6 +2857,11 @@ var entItens = {
     { item:"ETAPA 06 - Pacote Entregue (PDF/DWG): Formas, Pilares, Vigas, Detalhes 2D - COM COTAS", status:"nao", obs:"" },
     { item:"ETAPA 06 - Pacote Entregue (IFC): Modelo BIM (Espelho das Formas, em caso de divergêcia, será considerado o modelo como informação na compatibilização)", status:"nao", obs:"" },
   ],
+  "EST-LO": [
+    { item:"Pacote Entregue (PDF/DWG): Pranchas de todo o projeto compatibilizados e carimbados", status:"nao", obs:"" },
+    { item:"Pacote Entregue (IFC): Modelo BIM (Espelho das Formas, em caso de divergêcia, será considerado o modelo como informação na compatibilização)", status:"nao", obs:"" },
+    { item:"Pacote Entregue (PDF): Memorial descritivo", status:"nao", obs:"" },
+  ],
   "FUN-EP": [
     { item:"Análise e Definiçao (junto a Axia) de possíveis soluções de estabilização de encostas", status:"nao", obs:"" },
     { item:"Especificação e Análise de investigações geotécnicas (caso necessário)", status:"nao", obs:"" },
@@ -2697,120 +2891,9 @@ var entItens = {
     { item:"Notas técnicas executivas", status:"nao", obs:"" },
     { item:"Pacote Entregue (PDF/DWG): Projeto completo", status:"nao", obs:"" },
   ],
-  "AQC-EP": [
-    { item:"Preenchimento e cadastro do Formulário de Informações Técnicas (FIT) e/ou relatório de análise", status:"nao", obs:"" },
-    { item:"Pré-dimensionamento dos aquecedores e das áreas necessárias", status:"nao", obs:"" },
-    { item:"Pré-dimensionamento dos reservatórios de água quente", status:"nao", obs:"" },
-    { item:"Definição das alternativas de sistema de aquecimento a ser projetado", status:"nao", obs:"" },
-    { item:"Análise econômica das alternativas de equipamentos disponíveis", status:"nao", obs:"" },
-    { item:"Relatório de interferências dos Eps do projeto completo das demais disciplinas", status:"nao", obs:"" },
-    { item:"Pacote Entregue (PDF/DWG): Representação áreas necessárias", status:"nao", obs:"" },
-    { item:"Pacote Entregue (PDF): Documentos", status:"nao", obs:"" },
-  ],
-  "AQC-AP": [
-    { item:"Ajustes conforme solicitações da Compatibilização (Construflow)", status:"nao", obs:"" },
-    { item:"Listagem de pranchas a serem produzidas", status:"nao", obs:"" },
-    { item:"Emissão das plantas do projeto compatibilizadas com as informações contidas na etapa anterior", status:"nao", obs:"" },
-    { item:"Dimensionamento do sistema de geração de água quente definido", status:"nao", obs:"" },
-    { item:"Dimensionamento dos reservatórios de água quente", status:"nao", obs:"" },
-    { item:"Definição da localização dos aparelhos e dispositivos", status:"nao", obs:"" },
-    { item:"Determinação do traçado geométrico e detalhamento dos componentes que interligam sistemas e reservatórios", status:"nao", obs:"" },
-    { item:"Dimensionamento de bombas do sistema de geração de água quente", status:"nao", obs:"" },
-    { item:"Determinação das potências instaladas do apoio para auxiliar no dimensionamento das demais disciplinas", status:"nao", obs:"" },
-    { item:"Planta de markup de todas as plantas relacionadas com esta disciplina", status:"nao", obs:"" },
-    { item:"Atualização plantas de furação (conforme atualização de projeto e comentários da analise de estrutura)", status:"nao", obs:"" },
-    { item:"Relatório e interferências tipo para cima dos Aps das demais disciplinas", status:"nao", obs:"" },
-    { item:"Ajustes / Respostas Construflow - Relatório de Compatibilização", status:"nao", obs:"" },
-    { item:"Pacote Entregue (PDF): Documentos", status:"nao", obs:"" },
-    { item:"Pacote Entregue (PDF/ DWG): Projeto com informações descritas acima", status:"nao", obs:"" },
-    { item:"Pacote Entregue (IFC): Modelo BIM (Espelho das plantas, em caso de divergêcia, será considerado o modelo como informação na compatibilização)", status:"nao", obs:"" },
-  ],
-  "AQC-PE": [
-    { item:"Ajustes conforme solicitações da Compatibilização (Construflow)", status:"nao", obs:"" },
-    { item:"Relatório sobre análise de implantação do sistema", status:"nao", obs:"" },
-    { item:"Emissão das plantas do projeto com acréscimo das informações de detalhamento", status:"nao", obs:"" },
-    { item:"Especificação técnica de materiais", status:"nao", obs:"" },
-    { item:"Especificação técnica de componentes", status:"nao", obs:"" },
-    { item:"Relação quantitativa dos equipamentos necessários", status:"nao", obs:"" },
-    { item:"Ajustes / Respostas Construflow - Relatório de Compatibilização", status:"nao", obs:"" },
-    { item:"Pacote Entregue (PDF): Documentos", status:"nao", obs:"" },
-    { item:"Pacote Entregue (PDF/ DWG): Projeto com informações descritas acima", status:"nao", obs:"" },
-    { item:"Pacote Entregue (IFC): Modelo BIM (Espelho das plantas, em caso de divergêcia, será considerado o modelo como informação na compatibilização)", status:"nao", obs:"" },
-  ],
-  "AQC-EX": [
-    { item:"Relatório final sobre análise de implantação do sistema", status:"nao", obs:"" },
-    { item:"Emissão das plantas do projeto com acréscimo das informações de detalhamento", status:"nao", obs:"" },
-    { item:"Memorial descritivo dos sistemas de aquecimento (detalhes e diagramas de quadros)", status:"nao", obs:"" },
-    { item:"Especificação técnica de materiais", status:"nao", obs:"" },
-    { item:"Especificação técnica de componentes", status:"nao", obs:"" },
-    { item:"Relação quantitativa dos equipamentos necessários", status:"nao", obs:"" },
-    { item:"Pacote Entregue (PDF): Documentos", status:"nao", obs:"" },
-    { item:"Pacote Entregue (PDF/ DWG): Projeto com informações descritas acima", status:"nao", obs:"" },
-    { item:"Pacote Entregue (IFC): Modelo BIM (Espelho das plantas, em caso de divergêcia, será considerado o modelo como informação na compatibilização)", status:"nao", obs:"" },
-  ],
-  "SEG-EP": [
-    { item:"Definição para estruturação do Plano Diretor de Segurança", status:"sim", obs:"" },
-    { item:"Elaboração do Guia de Convivência Social", status:"sim", obs:"" },
-    { item:"Elaboração das Diretrizes de Segurança com Descritivo Geral do Sistema de Proteção", status:"sim", obs:"" },
-    { item:"Pacote Entregue (PDF): Documentos (Lista dos Recursos de Segurança e Guia de Convivência Social)", status:"sim", obs:"" },
-    { item:"Revisão do projeto urbanístico e da arquitetura considerando o CPTED", status:"sim", obs:"" },
-    { item:"Análise da Criminalidade da região com base em informações e dados abertos", status:"sim", obs:"" },
-    { item:"Análise dos Serviços Públicos e Privados", status:"sim", obs:"" },
-    { item:"Levantamento de Riscos e Ameaças", status:"sim", obs:"" },
-    { item:"Definições - Conceito de Proteção", status:"sim", obs:"" },
-    { item:"Definições - Premissas da Segurança Perimetral", status:"sim", obs:"" },
-    { item:"Definições - Premissas de Acesso Pedestres, Veículos e Entregas", status:"sim", obs:"" },
-    { item:"Definições - Subistemas de Segurança: Controle de Acesso, CFTV, Sensores e Alarmes, Interfonia, Iluminação de Segurança e Gestão de Informações", status:"sim", obs:"" },
-    { item:"Indicar os Ambientes para operacionalização da segurança humana, ténica e entregas", status:"sim", obs:"" },
-    { item:"Recomendação dos Recursos Humanos, Técnicos e Organizacionais", status:"sim", obs:"" },
-    { item:"Apresentar a estimativa de Investimento (Capex e Opex)", status:"sim", obs:"" },
-    { item:"Elaboração do Plano de Ação", status:"sim", obs:"" },
-    { item:"Pacote Entregue (PDF): Documentos (Plano Diretor de Segurança - Riscos e Ameaças; Dados da Segurança pública da região), Detalhamento dos Recursos, Estimativa de Investimentos, Plano de Ação", status:"sim", obs:"" },
-    { item:"Plantas baixas - Alocação de Pontos e comentários", status:"nao", obs:"" },
-    { item:"Detalhamentos - Conceito de Proteção, Premissas de Segurança Perimetral, Premissas de Acesso Pedestres, Veículos e Entregas, Subsistemas de Segurança", status:"nao", obs:"" },
-    { item:"Proposição de modificações e melhorias em função de aspectos arquitetônicos", status:"nao", obs:"" },
-    { item:"Apresentação do Relatório", status:"nao", obs:"" },
-    { item:"Revisão conforme necessidade e comentários", status:"nao", obs:"" },
-    { item:"Pacote Entregue (PDF/DWG): Planta baixa", status:"nao", obs:"" },
-    { item:"Pacote Entregue (PDF): Documentos (Relatório considerando itens acima)", status:"nao", obs:"" },
-  ],
-  "SEG-AP": [
-    { item:"Ajustes conforme solicitações da Compatibilização (Construflow)", status:"nao", obs:"" },
-    { item:"Plantas baixas - Alocação de Pontos e comentários", status:"nao", obs:"" },
-    { item:"Diagrama de Blocos/Diagrama de unifilares/Planilha de Pontos", status:"nao", obs:"" },
-    { item:"Revisão conforme necessidade e comentários", status:"nao", obs:"" },
-    { item:"Assessoria ao projetista de elétrica, comunicação e iluminação", status:"nao", obs:"" },
-    { item:"Ajustes / Respostas Construflow - Relatório de Compatibilização", status:"nao", obs:"" },
-    { item:"Pacote Entregue (PDF): Documentos (Descritos acima)", status:"nao", obs:"" },
-    { item:"Pacote Entregue (PDF/ DWG): Projeto com informações descritas acima", status:"nao", obs:"" },
-  ],
-  "SEG-PE": [
-    { item:"Ajustes conforme solicitações da Compatibilização (Construflow)", status:"nao", obs:"" },
-    { item:"Plantas baixas - Alocação de Pontos e comentários (atualização se necessário)", status:"nao", obs:"" },
-    { item:"Diagrama de Blocos/Diagrama de unifilares/Planilha de Pontos (atualização se necessário)", status:"nao", obs:"" },
-    { item:"Revisão conforme necessidade e comentários (se necessário)", status:"nao", obs:"" },
-    { item:"Assessoria ao projetista de elétrica, comunicação e iluminação", status:"nao", obs:"" },
-    { item:"Detalhes de instalação", status:"nao", obs:"" },
-    { item:"Elaboração de Lista de Materiais", status:"nao", obs:"" },
-    { item:"Elaboração do Memorial Descritivo", status:"nao", obs:"" },
-    { item:"Apresentação da Estimativa de Investimentos", status:"nao", obs:"" },
-    { item:"Ajustes / Respostas Construflow - Relatório de Compatibilização", status:"nao", obs:"" },
-    { item:"Pacote Entregue (PDF): Documentos", status:"nao", obs:"" },
-    { item:"Pacote Entregue (PDF/ DWG): Projeto com informações descritas acima", status:"nao", obs:"" },
-  ],
-  "SEG-EX": [
-    { item:"Plantas baixas - Alocação de Pontos e comentários", status:"nao", obs:"" },
-    { item:"Diagrama de Blocos/Diagrama de unifilares/Planilha de Pontos e detalhes", status:"nao", obs:"" },
-    { item:"Detalhes de instalação", status:"nao", obs:"" },
-    { item:"Elaboração de Lista de Materiais", status:"nao", obs:"" },
-    { item:"Elaboração do Memorial Descritivo", status:"nao", obs:"" },
-    { item:"Apresentação da Estimativa de Investimentos", status:"nao", obs:"" },
-    { item:"Assessoria ao projetista de elétrica, comunicação e iluminação", status:"nao", obs:"" },
-    { item:"Quantitativo de equipamentos e estimativas de cabos", status:"nao", obs:"" },
-    { item:"Orçamento estimativo definitivo", status:"nao", obs:"" },
-    { item:"Pacote Entregue (PDF): ART", status:"nao", obs:"" },
-    { item:"Pacote Entregue (PDF): Documentos / Quantitativos", status:"nao", obs:"" },
-    { item:"Pacote Entregue (PDF/ DWG): Projeto com informações descritas acima", status:"nao", obs:"" },
+  "FUN-LO": [
+    { item:"Pacote Entregue (PDF/ DWG): Pranchas de todo o projeto compatibilizados e carimbados", status:"nao", obs:"" },
+    { item:"Pacote Entregue (PDF): Memorial descritivo", status:"nao", obs:"" },
   ],
   "HID-EP": [
     { item:"Posição e volume reservatório de aproveitamento pluvial", status:"nao", obs:"Não se aplica para o ciclo de Torres. Será verificado após entrega do ciclo de Embasamento" },
@@ -2890,75 +2973,139 @@ var entItens = {
     { item:"Pacote Entregue (PDF/ DWG): Planta Baixa dos Pavimentos e Detalhes - COM COTAS", status:"nao", obs:"" },
     { item:"Pacote Entregue (IFC): Modelo BIM (Espelho das plantas, em caso de divergêcia, será considerado o modelo como informação na compatibilização)", status:"nao", obs:"" },
   ],
-  "ELE-EP": [
-    { item:"Posição e caminhamento da Entrada de Energia/Telecom e prumadas", status:"nao", obs:"Não se aplica para o ciclo de Torres. Será verificado após entrega do ciclo de Embasamento" },
-    { item:"Posição e Dimensionamento do Gerador. Tomadas de ar, saída de ar quente e escapamento (Confirmar necessidade em função do porte do projeto)", status:"nao", obs:"Validar possibilidade de entrega da tarefa" },
-    { item:"Posição e Dimensionamento Subestação, acesso e ventilação mínima. (Confirmar necessidade em função do porte do projeto)", status:"nao", obs:"Validar possibilidade de entrega da tarefa" },
-    { item:"Definição de Salas para CPD's (RACK Telecom / Automação)", status:"nao", obs:"Não se aplica para o ciclo de Torres. Será verificado após entrega do ciclo de Embasamento" },
-    { item:"Dimensionamento de cargas para carregamento elétrico veicular (Confirmar existência no briefing do projeto)", status:"nao", obs:"Validar possibilidade de entrega da tarefa" },
-    { item:"Posição e Dimensionamento Barramento Blindado", status:"nao", obs:"Validar possibilidade de entrega da tarefa" },
-    { item:"Posição do Centro de Medição Elétrica", status:"nao", obs:"Validar possibilidade de entrega da tarefa" },
-    { item:"Posição dos Quadros de Disjuntor geral, central de interfone e rack de cftv", status:"nao", obs:"Não se aplica para o ciclo de Torres. Será verificado após entrega do ciclo de Embasamento" },
-    { item:"Posição dos Quadro de Distribuição, Força, Comando, Automação", status:"parcial", obs:"Foi entregue das torres (conforme combinado). Demais pavimentos devem ser entregues na próxima postagem de Embasamento." },
-    { item:"Definições de Caixas de Passagem Elétrica e Telecom", status:"parcial", obs:"Foi entregue das torres (conforme combinado). Demais pavimentos devem ser entregues na próxima postagem de Embasamento." },
-    { item:"Validação do dimensionamento e localização dos shafts Gerais (Hall Condomínio)", status:"parcial", obs:"Foi entregue das torres (conforme combinado). Demais pavimentos devem ser entregues na próxima postagem de Embasamento." },
-    { item:"Pacote Entregue (PDF/ DWG): Planta Baixa dos Pavimentos (sem cotas)", status:"parcial", obs:"Foi entregue das torres (conforme combinado). Demais pavimentos devem ser entregues na próxima postagem de Embasamento." },
-    { item:"Pacote Entregue (IFC): Modelo BIM (Espelho das plantas, em caso de divergêcia, será considerado o modelo como informação na compatibilização)", status:"parcial", obs:"" },
-    { item:"PROJETO LEGAL: EMISSÃO DA CONSULTA PRÉVIA (CELESC)", status:"nao", obs:"" },
-    { item:"C1 - Lançamento de pontos - TUG's, TUE's, Iluminação, Comunicação, Monitoramento", status:"parcial", obs:"Foi entregue das torres na fase EP." },
-    { item:"C1 - Distribuição de pontos Telecom em todos os pavimentos (Dados, Voz, Imagem, Controle de Acesso, Som)", status:"parcial", obs:"Foi entregue das torres na fase EP." },
-    { item:"C1 - Indicação de necessidades de enchimentos, incompatibilidades, duvidas e indefinições", status:"parcial", obs:"Foi entregue das torres na fase EP." },
+  "HID-LO": [
+    { item:"Pacote Entregue (PDF/ DWG): Pranchas de todo o projeto compatibilizados e carimbados", status:"nao", obs:"" },
+    { item:"Pacote Entregue (PDF): Documentação final", status:"nao", obs:"" },
+    { item:"Pacote Entregue (IFC): Modelo BIM (Espelho das plantas, em caso de divergêcia, será considerado o modelo como informação na compatibilização)", status:"nao", obs:"" },
   ],
-  "ELE-AP": [
-    { item:"C1 - Ajustes conforme solicitações da Compatibilização (Construflow)", status:"nao", obs:"" },
-    { item:"C1 - Posição dos quadros de medição, subestação (se houver) e gerador (se houver)", status:"nao", obs:"" },
-    { item:"C1 - Lançamento das prumadas com caixas de passagem e eletrodutos / eletrocalhas", status:"nao", obs:"" },
-    { item:"C1 - Posição da central de monitoramento", status:"nao", obs:"" },
-    { item:"C1 - Lançamento de pontos - TUG's, TUE's, Iluminação, Comunicação, Monitoramento", status:"nao", obs:"Foi entregue das torres na fase EP." },
-    { item:"C1 - Distribuição de pontos Telecom em todos os pavimentos (Dados, Voz, Imagem, Controle de Acesso, Som)", status:"nao", obs:"Foi entregue das torres na fase EP." },
-    { item:"C1 - Indicação de necessidades de enchimentos, incompatibilidades, duvidas e indefinições", status:"nao", obs:"Foi entregue das torres na fase EP." },
-    { item:"C1 - Ajustes / Respostas Construflow - Relatório de Compatibilização", status:"nao", obs:"" },
-    { item:"C1 - Pacote Entregue (PDF/ DWG): Planta Baixa dos Pavimentos (sem cotas)", status:"nao", obs:"" },
-    { item:"C1 - Pacote Entregue (IFC): Modelo BIM (Espelho das plantas, em caso de divergêcia, será considerado o modelo como informação na compatibilização)", status:"nao", obs:"" },
-    { item:"C2 - Ajustes conforme solicitações da Compatibilização (Construflow)", status:"nao", obs:"" },
-    { item:"C2 - Lançamento pontos solicitados por interiores, paisagismo, segurança, aquecimento central, cozinha industrial", status:"nao", obs:"Validar possibilidade de entrega da tarefa" },
-    { item:"C2 - Lançamento de eletrodutos conforme pontos aprovados (lajes/paredes/pisos)", status:"nao", obs:"" },
-    { item:"C2 - Definições de circuitos elétricos aos pontos", status:"nao", obs:"" },
-    { item:"C2 - Lançamento das tubulações de ar condicionado e ventilação/exaustão", status:"nao", obs:"" },
-    { item:"C2 - Indicação de necessidades de enchimentos, incompatibilidades, duvidas e indefinições", status:"nao", obs:"" },
-    { item:"C2 - Validação dos tamanhos dos quadros elétricos conforme Layout de Circuitos", status:"nao", obs:"" },
-    { item:"C2 - Emissão plantas prévias de furação", status:"nao", obs:"" },
+  "INT-EP": [
+    { item:"Apoio Arquitetura na elaboração de layouts", status:"nao", obs:"" },
+  ],
+  "INT-AP": [
+    { item:"C1 - Conceito de áreas comuns - Layout, referências de interiores, materialidade", status:"nao", obs:"" },
+    { item:"C1 - Conceito de áreas privativas - Layout, referências de interiores, materialidade", status:"nao", obs:"AXIA A DEFINIR QUANTIDADE DE AMBIENTES PARA DEFINIÇÃO DO PRAZO" },
+    { item:"C1 - Conceito de áreas comuns e privativas - Layout, referênciais, materialidade (material orientativo para equipe que desenvolverá imagens de venda)", status:"nao", obs:"APÓS CONSOLIDAÇÃO DO LAYOUT JUNTO A AXIA" },
+    { item:"C1 - Apoio na definição de Memorial de Acabamentos (escopo arquitetura)", status:"nao", obs:"" },
+    { item:"C1 - Análise Imagens de Vendas", status:"nao", obs:"" },
+    { item:"C1 - Pacote Entregue (PDF/ DWG): Materiais descritos acima", status:"nao", obs:"" },
+    { item:"C2 - Ajustes conforme Relatório de compatibilização (Construflow)", status:"nao", obs:"" },
     { item:"C2 - Ajustes / Respostas Construflow - Relatório de Compatibilização", status:"nao", obs:"" },
-    { item:"C2 - Pacote Entregue (PDF/ DWG): Planta Baixa dos Pavimentos (sem cotas)", status:"nao", obs:"" },
-    { item:"C2 - Pacote Entregue (IFC): Modelo BIM (Espelho das plantas, em caso de divergêcia, será considerado o modelo como informação na compatibilização)", status:"nao", obs:"" },
-    { item:"C3 - Ajustes conforme solicitações da Compatibilização (Construflow)", status:"nao", obs:"" },
-    { item:"C3 - Distribuição eletrodutos após aprovação dos pontos solicitados por interiores, paisagismo, segurança, aquecimento central, cozinha industrial", status:"nao", obs:"Validar possibilidade de entrega da tarefa" },
-    { item:"C3 - Plantas baixas de todos os pavimentos do Projeto Elétrico e de Automação com Lançamento das fiações nas tubulações aprovadas", status:"nao", obs:"" },
-    { item:"C3 - Validação das bitolas dos eletrodutos conforme ocupação da fiação", status:"nao", obs:"" },
-    { item:"C3 - Plantas baixas de todos os pavimentos do Projeto de Telecomunicações (VOZ / DADOS / SOM / AUTOMAÇÃO)", status:"nao", obs:"" },
-    { item:"C3 - Emissão dos Esquemas Verticais dos projetos Elétricos / Telecomunicações / Preventivo", status:"nao", obs:"" },
-    { item:"C3 - Emissão do Projeto de SPDA Estrutural", status:"nao", obs:"" },
-    { item:"C3 - Atualização plantas de furação (conforme atualização de projeto e comentários da analise de estrutura)", status:"nao", obs:"" },
+    { item:"C2 - Pacote Entregue (PDF/ DWG): Materiais descritos acima", status:"nao", obs:"" },
+    { item:"C3 - Ajustes conforme Relatório de compatibilização (Construflow)", status:"nao", obs:"" },
+    { item:"C3 - Desenvolvimento mais aprofundado dos ambientes: Picinas, bares e restaurante", status:"nao", obs:"" },
+    { item:"C3 - Desenvolvimento mais aprofundado dos ambientes: Academia/funcional, cold-plunge, fitness-piscina coberta-hidro, hall em frente a sala dos professores, salão de beleza, sauna seca, sauna úmida, spa", status:"nao", obs:"" },
+    { item:"C3 - Desenvolvimento mais aprofundado dos ambientes: Salão festas + externo, gourmet 01 e 02 + área externa, boate-salão + hall", status:"nao", obs:"" },
+    { item:"C3 - Desenvolvimento mais aprofundado dos ambientes: Kids-interno, business center, sala social, terraço, circulações, hall social/clube, foyer-circ. Vertical-clube, quadra poliesportiva, quadra tênis, salão jogos", status:"nao", obs:"" },
+    { item:"C3 - Desenvolvimento mais aprofundado dos ambientes: Halls das torres, bicicletário condôminos, estar social, conceito geral de banheiros e vestiários", status:"nao", obs:"" },
     { item:"C3 - Ajustes / Respostas Construflow - Relatório de Compatibilização", status:"nao", obs:"" },
-    { item:"C3 - Pacote Entregue (PDF/ DWG): Planta Baixa dos Pavimentos (sem cotas)", status:"nao", obs:"" },
-    { item:"C3 - Pacote Entregue (IFC): Modelo BIM (Espelho das plantas, em caso de divergêcia, será considerado o modelo como informação na compatibilização)", status:"nao", obs:"" },
+    { item:"C3 - Pacote Entregue (PDF/ DWG): Materiais descritos acima", status:"nao", obs:"" },
   ],
-  "ELE-PE": [
+  "INT-PE": [
     { item:"Ajustes conforme solicitações da Compatibilização (Construflow)", status:"nao", obs:"" },
-    { item:"Planta baixa de todos os pavimentos com fiação elétrica", status:"nao", obs:"No escopo a demanda está entregue em EX. Validar possibilidade de entregar em PE." },
-    { item:"Planta baixa de todos os pavimentos com projeto de comunicação e segurança", status:"nao", obs:"No escopo a demanda está entregue em EX. Validar possibilidade de entregar em PE." },
-    { item:"Atualização plantas de furação (conforme atualização de projeto e comentários da analise de estrutura)", status:"nao", obs:"" },
+    { item:"Plantas com mapeamento dos itens de marcenaria, cortina, mobiliários e tapetes", status:"nao", obs:"" },
+    { item:"Áreas comuns - ampliação de ambientes", status:"nao", obs:"" },
+    { item:"Backoffice - ampliação de ambientes", status:"nao", obs:"" },
+    { item:"Listagem itens interiores indicado no mapeamento", status:"nao", obs:"" },
+    { item:"Apoio para definição de LPO, Piso, Forro, Paineis, Portas (escopo arquitetura)", status:"nao", obs:"" },
     { item:"Ajustes / Respostas Construflow - Relatório de Compatibilização", status:"nao", obs:"" },
-    { item:"Pacote Entregue (PDF/ DWG): Planta Baixa dos Pavimentos (sem cotas)", status:"nao", obs:"" },
-    { item:"Pacote Entregue (IFC): Modelo BIM (Espelho das plantas, em caso de divergêcia, será considerado o modelo como informação na compatibilização)", status:"nao", obs:"" },
+    { item:"Pacote Entregue (PDF/ DWG): Materiais descritos acima", status:"nao", obs:"" },
   ],
-  "ELE-EX": [
-    { item:"Detalhes executivos convenientes a instalação", status:"nao", obs:"" },
-    { item:"Diagramas unifilares", status:"nao", obs:"" },
-    { item:"Lista de Materiais", status:"nao", obs:"" },
-    { item:"Pacote Entregue (PDF): Documentos / Quantitativos", status:"nao", obs:"" },
-    { item:"Pacote Entregue (PDF/ DWG): Planta Baixa dos Pavimentos e Detalhes - COM COTAS", status:"nao", obs:"" },
-    { item:"Pacote Entregue (IFC): Modelo BIM (Espelho das plantas, em caso de divergêcia, será considerado o modelo como informação na compatibilização)", status:"nao", obs:"" },
+  "INT-EX": [
+    { item:"Ajustes conforme solicitações da Compatibilização (Construflow)", status:"nao", obs:"" },
+    { item:"Mesmo escopo de PE", status:"nao", obs:"" },
+    { item:"Detalhamentos", status:"nao", obs:"" },
+    { item:"Planilhas estimativa", status:"nao", obs:"" },
+    { item:"Pacote Entregue (PDF/ DWG): Materiais descritos acima", status:"nao", obs:"" },
+  ],
+  "INT-LO": [
+    { item:"Pacote Entregue (PDF/ DWG): Pranchas de todo o Projeto", status:"nao", obs:"" },
+    { item:"Pacote Entregue (PDF): SpecBook de Interiores", status:"nao", obs:"" },
+  ],
+  "PAI-EP": [
+    { item:"Apresentação do conceito paisagistico", status:"nao", obs:"" },
+    { item:"Planta baixa / Implantação (croqui a mão ou DWG, PDF e IFC)", status:"nao", obs:"" },
+    { item:"Indicação dos elementos construtivos (pérgolas, piscinas, espelho d'água, escadas, rampas, pisadas, etc.)", status:"nao", obs:"" },
+    { item:"Análise da sugestão do plano de compensação ambiental proposto para DEPAVE, conforme conceito do plantio proposto", status:"nao", obs:"" },
+    { item:"Indicação preliminar de mobiliários propostos pelo projeto", status:"nao", obs:"" },
+    { item:"Volumetrias para ilustração da proposta de projeto paisagistico", status:"nao", obs:"" },
+    { item:"Pacote Entregue: Documentos", status:"nao", obs:"" },
+    { item:"Pacote Entregue (PDF/ DWG): Planta Baixa / Implantação", status:"nao", obs:"" },
+  ],
+  "PAI-AP": [
+    { item:"Ajustes conforme discussões construtora / arquitetura", status:"nao", obs:"" },
+    { item:"Implantação / Planta baixa (DWG e PDF)", status:"nao", obs:"" },
+    { item:"Indicação dos elementos construtivos (pérgolas, piscinas, espelho d'água, escadas, rampas, pisadas, etc.)", status:"nao", obs:"" },
+    { item:"Referências arquitetônicas", status:"nao", obs:"" },
+    { item:"Referências de materialidade", status:"nao", obs:"" },
+    { item:"Referência das espécies vegetais", status:"nao", obs:"" },
+    { item:"Imagem de refrência para ilustração da proposta de projeto paisagístico", status:"nao", obs:"" },
+    { item:"Caderno de referências para base de imagens de venda e maquete (imagem não é desenvolvida pela Hanazaki, apenas análise das imagens)", status:"nao", obs:"" },
+    { item:"Planta com indicação de profundidades e níveis das floreiras", status:"nao", obs:"" },
+    { item:"Indicação das larguras mínimas das floreiras conforme espécie", status:"nao", obs:"" },
+    { item:"Indicação de sobrecargas nas lajes", status:"nao", obs:"" },
+    { item:"Indicação torneira de jardim", status:"nao", obs:"" },
+    { item:"Pacote Entregue: Documentos", status:"nao", obs:"" },
+    { item:"Pacote Entregue (PDF/ DWG): Planta Baixa / Implantação", status:"nao", obs:"" },
+  ],
+  "PAI-PE": [
+    { item:"Ajustes conforme solicitações da Compatibilização (Construflow)", status:"nao", obs:"" },
+    { item:"Planta Baixa / Implantação", status:"nao", obs:"" },
+    { item:"Cortes e elevações", status:"nao", obs:"" },
+    { item:"Detalhe dos elementos construtivos (pérgolas, piscinas, espelho d'água, escadas, rampas, pisadas, etc.)", status:"nao", obs:"" },
+    { item:"Distribuição do mobiliário urbano com as respectivas quantidades", status:"nao", obs:"" },
+    { item:"Planilha quantitativa de paisagismo e mobiliários básicos", status:"nao", obs:"" },
+    { item:"Ajustes / Respostas Construflow - Relatório de Compatibilização", status:"nao", obs:"" },
+    { item:"Pacote Entregue (PDF/ DWG): Planta Baixa dos Pavimentos", status:"nao", obs:"" },
+  ],
+  "PAI-EX": [
+    { item:"Projeto Civil (Elementos Construtivos)", status:"nao", obs:"" },
+    { item:"Projeto de Plantio (Vegetações)", status:"nao", obs:"" },
+    { item:"Pacote Entregue (PDF/ DWG): Planta Baixa dos Pavimentos e detalhamentos pertinentes", status:"nao", obs:"" },
+  ],
+  "PAI-LO": [
+    { item:"Memorial", status:"nao", obs:"" },
+    { item:"Pacote Entregue (PDF/ DWG): Pranchas de todo o projeto compatibilizados e carimbados", status:"nao", obs:"" },
+    { item:"Pacote Entregue (PDF): Documentação final", status:"nao", obs:"" },
+  ],
+  "GAR-EP": [
+    { item:"Avaliação dos pontos críticos da garagem", status:"parcial", obs:"Deverá ser feita revisão do EP considerando a Arq atualizada" },
+    { item:"Análise das circulações e rampas", status:"parcial", obs:"Deverá ser feita revisão do EP considerando a Arq atualizada" },
+    { item:"Avaliação dos fluxos e da dinâmica de estacionamento", status:"parcial", obs:"Deverá ser feita revisão do EP considerando a Arq atualizada" },
+    { item:"Análise dos acessos", status:"parcial", obs:"Deverá ser feita revisão do EP considerando a Arq atualizada" },
+    { item:"Pacote Entregue (PDF): Documentos", status:"parcial", obs:"Deverá ser feita revisão do EP considerando a Arq atualizada" },
+  ],
+  "GAR-AP": [
+    { item:"Proposta de Layout e Simulações - Elaboração de proposta de layout das vagas de garagem", status:"nao", obs:"" },
+    { item:"Proposta de Layout e Simulações - Realização de simulações de manobras e circulações de veículos", status:"nao", obs:"" },
+    { item:"Proposta de Layout e Simulações - Proposição de adequações nos layouts de vagas", status:"nao", obs:"" },
+    { item:"Proposta de Layout e Simulações - Desenvolvimento de plantas e cortes esquemáticos das rampas de veículos", status:"nao", obs:"" },
+    { item:"Proposta de Layout e Simulações - Simulações de chegada e saída de veículos nas rampas da garagem", status:"nao", obs:"" },
+    { item:"Proposta de Layout e Simulações - Desenvolvimento de plantas esquemáticas dos fluxos de veículos e pedestres", status:"nao", obs:"" },
+    { item:"Proposta de Layout e Simulações - Projeto técnico de implantação de controles de acessos, raias de cancelas e eclusas", status:"nao", obs:"" },
+    { item:"Proposta de Layout e Simulações - Definição de pontos de embarque/desembarque (Valet)", status:"nao", obs:"" },
+    { item:"Parking Design - Sinalização e Interiores (Conceito - Relatórios e Imagens renderizadas)", status:"nao", obs:"" },
+    { item:"Pacote Entregue (PDF/DWG): Plantas Baixas / Cortes / Relatórios / Imagens", status:"nao", obs:"" },
+  ],
+  "GAR-PE": [
+    { item:"Caderno de Vagas - Desenvolvimento de caderno de avalização de conforto das vagas", status:"nao", obs:"" },
+    { item:"Caderno de Vagas - Análise de dimensões e interferências entre vagas e elementos construídos", status:"nao", obs:"" },
+    { item:"Caderno de Vagas - Simulação de todas as vagas livres projetadas", status:"nao", obs:"" },
+    { item:"Caderno de Vagas - Avaliação das vagas conforme parâmetros definidos com a Contratante", status:"nao", obs:"" },
+    { item:"Caderno de Vagas - Desenvolvimento de plantas ilustrativas", status:"nao", obs:"" },
+    { item:"Parking Design - Iluminação cênica ou orientativa (indicação dos pontos e modelo de luminária, se embutir, balizador, led, etc)", status:"nao", obs:"" },
+    { item:"Pacote Entregue (PDF/DWG): Plantas Baixas / Cortes", status:"nao", obs:"" },
+  ],
+  "GAR-EX": [
+    { item:"Sinalização e Comunicação Visual - Análise e desenvolvimento de plantas esquemáticas de fluxos", status:"nao", obs:"" },
+    { item:"Sinalização e Comunicação Visual - Projeto de sinalização horizontal", status:"nao", obs:"" },
+    { item:"Sinalização e Comunicação Visual - Projeto de sinalização vertical e comunicação visual de trânsito da gargaem", status:"nao", obs:"" },
+    { item:"Sinalização e Comunicação Visual - Detalhamento da sinalização horizontal e vertical e pintura de piso", status:"nao", obs:"" },
+    { item:"Detalhamento de demarcação do bicicletário", status:"nao", obs:"" },
+    { item:"Parking Design - Projeto de pintura personalizada", status:"nao", obs:"" },
+    { item:"Parking Design - Comunicação visual e sinalização personalizada", status:"nao", obs:"" },
+    { item:"Parking Design - Setorização e ambientação das áreas de elevadores e escadas", status:"nao", obs:"" },
+    { item:"Sinalização com design personalizado (hall elevadores, escadas, áreas de serviços)", status:"nao", obs:"" },
+    { item:"Pacote Entregue (PDF/DWG): Plantas Baixas / Cortes / Detalhes / Documentos", status:"nao", obs:"" },
   ],
   "PCI-EP": [
     { item:"Definição da Rota de Fuga, saídas de emergência e Paredes TRRF", status:"sim", obs:"Validar possibilidade de entrega de todas as tarefas destacadas em vermelho" },
@@ -3026,220 +3173,81 @@ var entItens = {
     { item:"Pacote Entregue (PDF/ DWG): Planta Baixa dos Pavimentos e Detalhes - COM COTAS", status:"nao", obs:"" },
     { item:"Pacote Entregue (IFC): Modelo BIM (Espelho das plantas, em caso de divergêcia, será considerado o modelo como informação na compatibilização)", status:"nao", obs:"" },
   ],
-  "CLI-EP": [
-    { item:"Definição do tipo de Sistema (validar com construtora)", status:"nao", obs:"" },
-    { item:"Dimensão de área técnica para condensadoras com ventilação mínima necessária", status:"nao", obs:"" },
-    { item:"Dimensionamento dos BTUs", status:"nao", obs:"" },
-    { item:"Posição das evaporadoras", status:"nao", obs:"" },
-    { item:"Altura das evaporadoras e altura mínima de entreforro", status:"nao", obs:"" },
-    { item:"Verificar necessidade de desumificação de piscina e spa (casa de bombas e dutos) (Confirmar necessidade em função do porte do projeto)", status:"nao", obs:"" },
-    { item:"Definição do ponto exaustão (ventilação forçada, coifa, secadora, churrasqueiras) (Confirmar necessidade em função do porte do projeto)", status:"nao", obs:"" },
-    { item:"Definição dos pontos de exaustão para cozinha industrial", status:"nao", obs:"" },
-    { item:"Pacote Entregue (PDF/ DWG): Planta Baixa dos Pavimentos (sem cotas)", status:"nao", obs:"" },
-    { item:"Pacote Entregue (PDF): Documentos", status:"nao", obs:"" },
-  ],
-  "CLI-AP": [
-    { item:"C1 - Ajustes conforme solicitações da Compatibilização (Construflow)", status:"nao", obs:"" },
-    { item:"C1 - Validação da dimensão de área técnica para condensadoras com ventilação mínima necessária", status:"nao", obs:"" },
-    { item:"C1 - Cálculos preliminares de carga términa e vazão de ar", status:"nao", obs:"" },
-    { item:"C1 - Seleção preliminar de equipamentos, com dados referenciais de dimensões, capacidade, consumo energético, consumo de água e peso", status:"nao", obs:"" },
-    { item:"C1 - Dimensionamento preliminar das redes de dutos principais", status:"nao", obs:"" },
-    { item:"C1 - Definição dos espaços de passagem vertical e horizontal necessários", status:"nao", obs:"" },
-    { item:"C1 - Dimensionamento preliminar das redes hidráulicas e frigorígenas principais", status:"nao", obs:"" },
-    { item:"C1 - Posicionamento dos equipamentos nas áreas técnicas", status:"nao", obs:"" },
-    { item:"C1 - Definição da posição dos ventiladores nas garagens (Confirmar necessidade em função do porte do projeto)", status:"nao", obs:"" },
-    { item:"C1 - Ajustes / Respostas Construflow - Relatório de Compatibilização", status:"nao", obs:"" },
-    { item:"C1 - Pacote Entregue (PDF/ DWG): Planta Baixa dos Pavimentos (sem cotas)", status:"nao", obs:"" },
-    { item:"C1 - Pacote Entregue (IFC): Modelo BIM (Espelho das plantas, em caso de divergêcia, será considerado o modelo como informação na compatibilização)", status:"nao", obs:"" },
-    { item:"C2 - Ajustes conforme solicitações da Compatibilização (Construflow)", status:"nao", obs:"" },
-    { item:"C2 - Lançamento pontos solicitados por interiores", status:"nao", obs:"" },
-    { item:"C2 - Consolidação dos cálculos, seleção de equipamentos", status:"nao", obs:"" },
-    { item:"C2 - Localização e dimensões das casas de máquinas", status:"nao", obs:"" },
-    { item:"C2 - Dimensionamento de toda a rede de dutos, distribuição de ar, rede hidráulica e frigorígena", status:"nao", obs:"" },
-    { item:"C2 - Posicionamento de grelhas e difusores", status:"nao", obs:"" },
-    { item:"C2 - Emissão plantas prévias de furação", status:"nao", obs:"" },
-    { item:"C2 - Ajustes / Respostas Construflow - Relatório de Compatibilização", status:"nao", obs:"" },
-    { item:"C2 - Pacote Entregue (PDF/ DWG): Planta Baixa dos Pavimentos (sem cotas)", status:"nao", obs:"" },
-    { item:"C2 - Pacote Entregue (IFC): Modelo BIM (Espelho das plantas, em caso de divergêcia, será considerado o modelo como informação na compatibilização)", status:"nao", obs:"" },
-    { item:"C3 - Ajustes conforme solicitações da Compatibilização (Construflow)", status:"nao", obs:"" },
-    { item:"C3 - Distribuição tubulações após aprovação dos pontos solicitados por interiores", status:"nao", obs:"" },
-    { item:"C3 - Atualização plantas de furação (conforme atualização de projeto e comentários da analise de estrutura)", status:"nao", obs:"" },
-    { item:"C3 - Ajustes / Respostas Construflow - Relatório de Compatibilização", status:"nao", obs:"" },
-    { item:"C3 - Pacote Entregue (PDF/ DWG): Planta Baixa dos Pavimentos (sem cotas)", status:"nao", obs:"" },
-    { item:"C3 - Pacote Entregue (IFC): Modelo BIM (Espelho das plantas, em caso de divergêcia, será considerado o modelo como informação na compatibilização)", status:"nao", obs:"" },
-  ],
-  "CLI-PE": [
-    { item:"Ajustes conforme solicitações da Compatibilização (Construflow)", status:"nao", obs:"" },
-    { item:"Necessidades a serem supridas pela infraestrutura das instalações prediais de energia elétrica, gás, água e esgoto", status:"nao", obs:"" },
-    { item:"Atualização plantas de furação (conforme atualização de projeto e comentários da analise de estrutura)", status:"nao", obs:"" },
-    { item:"Ajustes / Respostas Construflow - Relatório de Compatibilização", status:"nao", obs:"" },
-    { item:"Pacote Entregue (PDF/ DWG): Planta Baixa dos Pavimentos (sem cotas)", status:"nao", obs:"" },
+  "PCI-LO": [
+    { item:"Pacote Entregue (PDF/ DWG): Pranchas de todo o projeto compatibilizados e carimbados", status:"nao", obs:"" },
+    { item:"Pacote Entregue (PDF): Documentação final", status:"nao", obs:"" },
     { item:"Pacote Entregue (IFC): Modelo BIM (Espelho das plantas, em caso de divergêcia, será considerado o modelo como informação na compatibilização)", status:"nao", obs:"" },
   ],
-  "CLI-EX": [
-    { item:"Planta de todos os pavimentos", status:"nao", obs:"" },
-    { item:"Detalhes executivos", status:"nao", obs:"" },
-    { item:"Memoriais", status:"nao", obs:"" },
+  "SEG-EP": [
+    { item:"Definição para estruturação do Plano Diretor de Segurança", status:"sim", obs:"" },
+    { item:"Elaboração do Guia de Convivência Social", status:"sim", obs:"" },
+    { item:"Elaboração das Diretrizes de Segurança com Descritivo Geral do Sistema de Proteção", status:"sim", obs:"" },
+    { item:"Pacote Entregue (PDF): Documentos (Lista dos Recursos de Segurança e Guia de Convivência Social)", status:"sim", obs:"" },
+    { item:"Revisão do projeto urbanístico e da arquitetura considerando o CPTED", status:"sim", obs:"" },
+    { item:"Análise da Criminalidade da região com base em informações e dados abertos", status:"sim", obs:"" },
+    { item:"Análise dos Serviços Públicos e Privados", status:"sim", obs:"" },
+    { item:"Levantamento de Riscos e Ameaças", status:"sim", obs:"" },
+    { item:"Definições - Conceito de Proteção", status:"sim", obs:"" },
+    { item:"Definições - Premissas da Segurança Perimetral", status:"sim", obs:"" },
+    { item:"Definições - Premissas de Acesso Pedestres, Veículos e Entregas", status:"sim", obs:"" },
+    { item:"Definições - Subistemas de Segurança: Controle de Acesso, CFTV, Sensores e Alarmes, Interfonia, Iluminação de Segurança e Gestão de Informações", status:"sim", obs:"" },
+    { item:"Indicar os Ambientes para operacionalização da segurança humana, ténica e entregas", status:"sim", obs:"" },
+    { item:"Recomendação dos Recursos Humanos, Técnicos e Organizacionais", status:"sim", obs:"" },
+    { item:"Apresentar a estimativa de Investimento (Capex e Opex)", status:"sim", obs:"" },
+    { item:"Elaboração do Plano de Ação", status:"sim", obs:"" },
+    { item:"Pacote Entregue (PDF): Documentos (Plano Diretor de Segurança - Riscos e Ameaças; Dados da Segurança pública da região), Detalhamento dos Recursos, Estimativa de Investimentos, Plano de Ação", status:"sim", obs:"" },
+    { item:"Plantas baixas - Alocação de Pontos e comentários", status:"nao", obs:"" },
+    { item:"Detalhamentos - Conceito de Proteção, Premissas de Segurança Perimetral, Premissas de Acesso Pedestres, Veículos e Entregas, Subsistemas de Segurança", status:"nao", obs:"" },
+    { item:"Proposição de modificações e melhorias em função de aspectos arquitetônicos", status:"nao", obs:"" },
+    { item:"Apresentação do Relatório", status:"nao", obs:"" },
+    { item:"Revisão conforme necessidade e comentários", status:"nao", obs:"" },
+    { item:"Pacote Entregue (PDF/DWG): Planta baixa", status:"nao", obs:"" },
+    { item:"Pacote Entregue (PDF): Documentos (Relatório considerando itens acima)", status:"nao", obs:"" },
+  ],
+  "SEG-AP": [
+    { item:"Ajustes conforme solicitações da Compatibilização (Construflow)", status:"nao", obs:"" },
+    { item:"Plantas baixas - Alocação de Pontos e comentários", status:"nao", obs:"" },
+    { item:"Diagrama de Blocos/Diagrama de unifilares/Planilha de Pontos", status:"nao", obs:"" },
+    { item:"Revisão conforme necessidade e comentários", status:"nao", obs:"" },
+    { item:"Assessoria ao projetista de elétrica, comunicação e iluminação", status:"nao", obs:"" },
+    { item:"Ajustes / Respostas Construflow - Relatório de Compatibilização", status:"nao", obs:"" },
+    { item:"Pacote Entregue (PDF): Documentos (Descritos acima)", status:"nao", obs:"" },
+    { item:"Pacote Entregue (PDF/ DWG): Projeto com informações descritas acima", status:"nao", obs:"" },
+  ],
+  "SEG-PE": [
+    { item:"Ajustes conforme solicitações da Compatibilização (Construflow)", status:"nao", obs:"" },
+    { item:"Plantas baixas - Alocação de Pontos e comentários (atualização se necessário)", status:"nao", obs:"" },
+    { item:"Diagrama de Blocos/Diagrama de unifilares/Planilha de Pontos (atualização se necessário)", status:"nao", obs:"" },
+    { item:"Revisão conforme necessidade e comentários (se necessário)", status:"nao", obs:"" },
+    { item:"Assessoria ao projetista de elétrica, comunicação e iluminação", status:"nao", obs:"" },
+    { item:"Detalhes de instalação", status:"nao", obs:"" },
+    { item:"Elaboração de Lista de Materiais", status:"nao", obs:"" },
+    { item:"Elaboração do Memorial Descritivo", status:"nao", obs:"" },
+    { item:"Apresentação da Estimativa de Investimentos", status:"nao", obs:"" },
+    { item:"Ajustes / Respostas Construflow - Relatório de Compatibilização", status:"nao", obs:"" },
     { item:"Pacote Entregue (PDF): Documentos", status:"nao", obs:"" },
-    { item:"Pacote Entregue (PDF/ DWG): Planta Baixa dos Pavimentos e Detalhes - COM COTAS", status:"nao", obs:"" },
-    { item:"Pacote Entregue (IFC): Modelo BIM (Espelho das plantas, em caso de divergêcia, será considerado o modelo como informação na compatibilização)", status:"nao", obs:"" },
+    { item:"Pacote Entregue (PDF/ DWG): Projeto com informações descritas acima", status:"nao", obs:"" },
   ],
-  "CZI-EP": [
-    { item:"Desenvolvimento do Layout / Fluxos ideais", status:"nao", obs:"" },
-    { item:"Listagem de equipamentos das áreas operacionais", status:"nao", obs:"" },
-    { item:"Pacote Entregue (PDF/ DWG): Planta Baixa dos Pavimentos (sem cotas)", status:"nao", obs:"" },
-    { item:"Pacote Entregue (PDF): Documentos", status:"nao", obs:"" },
+  "SEG-EX": [
+    { item:"Plantas baixas - Alocação de Pontos e comentários", status:"nao", obs:"" },
+    { item:"Diagrama de Blocos/Diagrama de unifilares/Planilha de Pontos e detalhes", status:"nao", obs:"" },
+    { item:"Detalhes de instalação", status:"nao", obs:"" },
+    { item:"Elaboração de Lista de Materiais", status:"nao", obs:"" },
+    { item:"Elaboração do Memorial Descritivo", status:"nao", obs:"" },
+    { item:"Apresentação da Estimativa de Investimentos", status:"nao", obs:"" },
+    { item:"Assessoria ao projetista de elétrica, comunicação e iluminação", status:"nao", obs:"" },
+    { item:"Quantitativo de equipamentos e estimativas de cabos", status:"nao", obs:"" },
+    { item:"Orçamento estimativo definitivo", status:"nao", obs:"" },
+    { item:"Pacote Entregue (PDF): ART", status:"nao", obs:"" },
+    { item:"Pacote Entregue (PDF): Documentos / Quantitativos", status:"nao", obs:"" },
+    { item:"Pacote Entregue (PDF/ DWG): Projeto com informações descritas acima", status:"nao", obs:"" },
   ],
-  "CZI-AP": [
-    { item:"Ajustes conforme solicitações da Compatibilização (Construflow)", status:"nao", obs:"" },
-    { item:"Planta orientativa de pontos de utilização e consumos das áreas operacionais", status:"nao", obs:"" },
-    { item:"Planta de Layout", status:"nao", obs:"" },
-    { item:"Listagem de equipamentos das áreas operacionais", status:"nao", obs:"" },
-    { item:"Ajustes / Respostas Construflow - Relatório de Compatibilização", status:"nao", obs:"" },
-    { item:"Pacote Entregue (PDF/ DWG): Planta Baixa dos Pavimentos (sem cotas)", status:"nao", obs:"" },
-  ],
-  "CZI-PE": [
-    { item:"Ajustes conforme solicitações da Compatibilização (Construflow)", status:"nao", obs:"" },
-    { item:"Planta de Layout", status:"nao", obs:"" },
-    { item:"Listagem de equipamentos das áreas operacionais", status:"nao", obs:"" },
-    { item:"Planta orientativa de pontos de utilização e consumos das áreas operacionais", status:"nao", obs:"" },
-    { item:"Elevações Detalhadas das áreas operacionais", status:"nao", obs:"" },
-    { item:"Planta de execução das áreas operacionais", status:"nao", obs:"" },
-    { item:"Planta de piso das áreas operacionais", status:"nao", obs:"" },
-    { item:"Planta de forro das áreas operacionais", status:"nao", obs:"" },
-    { item:"Mapeamento de esquadrias das áreas operacionais", status:"nao", obs:"" },
-    { item:"Detalhes construtivos das áreas operacionais", status:"nao", obs:"" },
-    { item:"Ajustes / Respostas Construflow - Relatório de Compatibilização", status:"nao", obs:"" },
-    { item:"Pacote Entregue (PDF/ DWG): Planta Baixa dos Pavimentos (sem cotas)", status:"nao", obs:"" },
-  ],
-  "CZI-EX": [
-    { item:"Plantas entregues na etapa anterior", status:"nao", obs:"" },
-    { item:"Detalhes executivos", status:"nao", obs:"" },
-    { item:"Memoriais", status:"nao", obs:"" },
-    { item:"Pacote Entregue (PDF): Documentos", status:"nao", obs:"" },
-    { item:"Pacote Entregue (PDF/ DWG): Planta Baixa dos Pavimentos e Detalhes - COM COTAS", status:"nao", obs:"" },
-  ],
-  "PAI-EP": [
-    { item:"Apresentação do conceito paisagistico", status:"nao", obs:"" },
-    { item:"Planta baixa / Implantação (croqui a mão ou DWG, PDF e IFC)", status:"nao", obs:"" },
-    { item:"Indicação dos elementos construtivos (pérgolas, piscinas, espelho d'água, escadas, rampas, pisadas, etc.)", status:"nao", obs:"" },
-    { item:"Análise da sugestão do plano de compensação ambiental proposto para DEPAVE, conforme conceito do plantio proposto", status:"nao", obs:"" },
-    { item:"Indicação preliminar de mobiliários propostos pelo projeto", status:"nao", obs:"" },
-    { item:"Volumetrias para ilustração da proposta de projeto paisagistico", status:"nao", obs:"" },
-    { item:"Pacote Entregue: Documentos", status:"nao", obs:"" },
-    { item:"Pacote Entregue (PDF/ DWG): Planta Baixa / Implantação", status:"nao", obs:"" },
-  ],
-  "PAI-AP": [
-    { item:"Ajustes conforme discussões construtora / arquitetura", status:"nao", obs:"" },
-    { item:"Implantação / Planta baixa (DWG e PDF)", status:"nao", obs:"" },
-    { item:"Indicação dos elementos construtivos (pérgolas, piscinas, espelho d'água, escadas, rampas, pisadas, etc.)", status:"nao", obs:"" },
-    { item:"Referências arquitetônicas", status:"nao", obs:"" },
-    { item:"Referências de materialidade", status:"nao", obs:"" },
-    { item:"Referência das espécies vegetais", status:"nao", obs:"" },
-    { item:"Imagem de refrência para ilustração da proposta de projeto paisagístico", status:"nao", obs:"" },
-    { item:"Caderno de referências para base de imagens de venda e maquete (imagem não é desenvolvida pela Hanazaki, apenas análise das imagens)", status:"nao", obs:"" },
-    { item:"Planta com indicação de profundidades e níveis das floreiras", status:"nao", obs:"" },
-    { item:"Indicação das larguras mínimas das floreiras conforme espécie", status:"nao", obs:"" },
-    { item:"Indicação de sobrecargas nas lajes", status:"nao", obs:"" },
-    { item:"Indicação torneira de jardim", status:"nao", obs:"" },
-    { item:"Pacote Entregue: Documentos", status:"nao", obs:"" },
-    { item:"Pacote Entregue (PDF/ DWG): Planta Baixa / Implantação", status:"nao", obs:"" },
-  ],
-  "PAI-PE": [
-    { item:"Ajustes conforme solicitações da Compatibilização (Construflow)", status:"nao", obs:"" },
-    { item:"Planta Baixa / Implantação", status:"nao", obs:"" },
-    { item:"Cortes e elevações", status:"nao", obs:"" },
-    { item:"Detalhe dos elementos construtivos (pérgolas, piscinas, espelho d'água, escadas, rampas, pisadas, etc.)", status:"nao", obs:"" },
-    { item:"Distribuição do mobiliário urbano com as respectivas quantidades", status:"nao", obs:"" },
-    { item:"Planilha quantitativa de paisagismo e mobiliários básicos", status:"nao", obs:"" },
-    { item:"Ajustes / Respostas Construflow - Relatório de Compatibilização", status:"nao", obs:"" },
-    { item:"Pacote Entregue (PDF/ DWG): Planta Baixa dos Pavimentos", status:"nao", obs:"" },
-  ],
-  "PAI-EX": [
-    { item:"Projeto Civil (Elementos Construtivos)", status:"nao", obs:"" },
-    { item:"Projeto de Plantio (Vegetações)", status:"nao", obs:"" },
-    { item:"Pacote Entregue (PDF/ DWG): Planta Baixa dos Pavimentos e detalhamentos pertinentes", status:"nao", obs:"" },
-  ],
-  "INT-EP": [
-    { item:"Apoio Arquitetura na elaboração de layouts", status:"nao", obs:"" },
-  ],
-  "INT-AP": [
-    { item:"C1 - Conceito de áreas comuns - Layout, referências de interiores, materialidade", status:"nao", obs:"" },
-    { item:"C1 - Conceito de áreas privativas - Layout, referências de interiores, materialidade", status:"nao", obs:"AXIA A DEFINIR QUANTIDADE DE AMBIENTES PARA DEFINIÇÃO DO PRAZO" },
-    { item:"C1 - Conceito de áreas comuns e privativas - Layout, referênciais, materialidade (material orientativo para equipe que desenvolverá imagens de venda)", status:"nao", obs:"APÓS CONSOLIDAÇÃO DO LAYOUT JUNTO A AXIA" },
-    { item:"C1 - Apoio na definição de Memorial de Acabamentos (escopo arquitetura)", status:"nao", obs:"" },
-    { item:"C1 - Análise Imagens de Vendas", status:"nao", obs:"" },
-    { item:"C1 - Pacote Entregue (PDF/ DWG): Materiais descritos acima", status:"nao", obs:"" },
-    { item:"C2 - Ajustes conforme Relatório de compatibilização (Construflow)", status:"nao", obs:"" },
-    { item:"C2 - Ajustes / Respostas Construflow - Relatório de Compatibilização", status:"nao", obs:"" },
-    { item:"C2 - Pacote Entregue (PDF/ DWG): Materiais descritos acima", status:"nao", obs:"" },
-    { item:"C3 - Ajustes conforme Relatório de compatibilização (Construflow)", status:"nao", obs:"" },
-    { item:"C3 - Desenvolvimento mais aprofundado dos ambientes: Picinas, bares e restaurante", status:"nao", obs:"" },
-    { item:"C3 - Desenvolvimento mais aprofundado dos ambientes: Academia/funcional, cold-plunge, fitness-piscina coberta-hidro, hall em frente a sala dos professores, salão de beleza, sauna seca, sauna úmida, spa", status:"nao", obs:"" },
-    { item:"C3 - Desenvolvimento mais aprofundado dos ambientes: Salão festas + externo, gourmet 01 e 02 + área externa, boate-salão + hall", status:"nao", obs:"" },
-    { item:"C3 - Desenvolvimento mais aprofundado dos ambientes: Kids-interno, business center, sala social, terraço, circulações, hall social/clube, foyer-circ. Vertical-clube, quadra poliesportiva, quadra tênis, salão jogos", status:"nao", obs:"" },
-    { item:"C3 - Desenvolvimento mais aprofundado dos ambientes: Halls das torres, bicicletário condôminos, estar social, conceito geral de banheiros e vestiários", status:"nao", obs:"" },
-    { item:"C3 - Ajustes / Respostas Construflow - Relatório de Compatibilização", status:"nao", obs:"" },
-    { item:"C3 - Pacote Entregue (PDF/ DWG): Materiais descritos acima", status:"nao", obs:"" },
-  ],
-  "INT-PE": [
-    { item:"Ajustes conforme solicitações da Compatibilização (Construflow)", status:"nao", obs:"" },
-    { item:"Plantas com mapeamento dos itens de marcenaria, cortina, mobiliários e tapetes", status:"nao", obs:"" },
-    { item:"Áreas comuns - ampliação de ambientes", status:"nao", obs:"" },
-    { item:"Backoffice - ampliação de ambientes", status:"nao", obs:"" },
-    { item:"Listagem itens interiores indicado no mapeamento", status:"nao", obs:"" },
-    { item:"Apoio para definição de LPO, Piso, Forro, Paineis, Portas (escopo arquitetura)", status:"nao", obs:"" },
-    { item:"Ajustes / Respostas Construflow - Relatório de Compatibilização", status:"nao", obs:"" },
-    { item:"Pacote Entregue (PDF/ DWG): Materiais descritos acima", status:"nao", obs:"" },
-  ],
-  "INT-EX": [
-    { item:"Ajustes conforme solicitações da Compatibilização (Construflow)", status:"nao", obs:"" },
-    { item:"Mesmo escopo de PE", status:"nao", obs:"" },
-    { item:"Detalhamentos", status:"nao", obs:"" },
-    { item:"Planilhas estimativa", status:"nao", obs:"" },
-    { item:"Pacote Entregue (PDF/ DWG): Materiais descritos acima", status:"nao", obs:"" },
-  ],
-  "GAR-EP": [
-    { item:"Avaliação dos pontos críticos da garagem", status:"parcial", obs:"Deverá ser feita revisão do EP considerando a Arq atualizada" },
-    { item:"Análise das circulações e rampas", status:"parcial", obs:"Deverá ser feita revisão do EP considerando a Arq atualizada" },
-    { item:"Avaliação dos fluxos e da dinâmica de estacionamento", status:"parcial", obs:"Deverá ser feita revisão do EP considerando a Arq atualizada" },
-    { item:"Análise dos acessos", status:"parcial", obs:"Deverá ser feita revisão do EP considerando a Arq atualizada" },
-    { item:"Pacote Entregue (PDF): Documentos", status:"parcial", obs:"Deverá ser feita revisão do EP considerando a Arq atualizada" },
-  ],
-  "GAR-AP": [
-    { item:"Proposta de Layout e Simulações - Elaboração de proposta de layout das vagas de garagem", status:"nao", obs:"" },
-    { item:"Proposta de Layout e Simulações - Realização de simulações de manobras e circulações de veículos", status:"nao", obs:"" },
-    { item:"Proposta de Layout e Simulações - Proposição de adequações nos layouts de vagas", status:"nao", obs:"" },
-    { item:"Proposta de Layout e Simulações - Desenvolvimento de plantas e cortes esquemáticos das rampas de veículos", status:"nao", obs:"" },
-    { item:"Proposta de Layout e Simulações - Simulações de chegada e saída de veículos nas rampas da garagem", status:"nao", obs:"" },
-    { item:"Proposta de Layout e Simulações - Desenvolvimento de plantas esquemáticas dos fluxos de veículos e pedestres", status:"nao", obs:"" },
-    { item:"Proposta de Layout e Simulações - Projeto técnico de implantação de controles de acessos, raias de cancelas e eclusas", status:"nao", obs:"" },
-    { item:"Proposta de Layout e Simulações - Definição de pontos de embarque/desembarque (Valet)", status:"nao", obs:"" },
-    { item:"Parking Design - Sinalização e Interiores (Conceito - Relatórios e Imagens renderizadas)", status:"nao", obs:"" },
-    { item:"Pacote Entregue (PDF/DWG): Plantas Baixas / Cortes / Relatórios / Imagens", status:"nao", obs:"" },
-  ],
-  "GAR-PE": [
-    { item:"Caderno de Vagas - Desenvolvimento de caderno de avalização de conforto das vagas", status:"nao", obs:"" },
-    { item:"Caderno de Vagas - Análise de dimensões e interferências entre vagas e elementos construídos", status:"nao", obs:"" },
-    { item:"Caderno de Vagas - Simulação de todas as vagas livres projetadas", status:"nao", obs:"" },
-    { item:"Caderno de Vagas - Avaliação das vagas conforme parâmetros definidos com a Contratante", status:"nao", obs:"" },
-    { item:"Caderno de Vagas - Desenvolvimento de plantas ilustrativas", status:"nao", obs:"" },
-    { item:"Parking Design - Iluminação cênica ou orientativa (indicação dos pontos e modelo de luminária, se embutir, balizador, led, etc)", status:"nao", obs:"" },
-    { item:"Pacote Entregue (PDF/DWG): Plantas Baixas / Cortes", status:"nao", obs:"" },
-  ],
-  "GAR-EX": [
-    { item:"Sinalização e Comunicação Visual - Análise e desenvolvimento de plantas esquemáticas de fluxos", status:"nao", obs:"" },
-    { item:"Sinalização e Comunicação Visual - Projeto de sinalização horizontal", status:"nao", obs:"" },
-    { item:"Sinalização e Comunicação Visual - Projeto de sinalização vertical e comunicação visual de trânsito da gargaem", status:"nao", obs:"" },
-    { item:"Sinalização e Comunicação Visual - Detalhamento da sinalização horizontal e vertical e pintura de piso", status:"nao", obs:"" },
-    { item:"Detalhamento de demarcação do bicicletário", status:"nao", obs:"" },
-    { item:"Parking Design - Projeto de pintura personalizada", status:"nao", obs:"" },
-    { item:"Parking Design - Comunicação visual e sinalização personalizada", status:"nao", obs:"" },
-    { item:"Parking Design - Setorização e ambientação das áreas de elevadores e escadas", status:"nao", obs:"" },
-    { item:"Sinalização com design personalizado (hall elevadores, escadas, áreas de serviços)", status:"nao", obs:"" },
-    { item:"Pacote Entregue (PDF/DWG): Plantas Baixas / Cortes / Detalhes / Documentos", status:"nao", obs:"" },
+  "SEG-LO": [
+    { item:"Pacote Entregue (PDF/ DWG): Pranchas de todo o projeto compatibilizados e carimbados", status:"nao", obs:"" },
+    { item:"Pacote Entregue (PDF): Documentação final", status:"nao", obs:"" },
   ],
 };
+// ENTITENS_END
 
 var entOpenKey = null; // currently expanded disc-fase key
 
@@ -3275,7 +3283,7 @@ function renderEntregaveis() {
       + '<div style="font-size:10px;color:var(--muted);min-width:110px;text-align:right;">' + totalEnt + ' entregues · ' + totalParc + ' parciais</div>'
       + '</div>'
       // fase blocks row
-      + '<div style="display:grid;grid-template-columns:repeat(4,1fr);">';
+      + '<div style="display:grid;grid-template-columns:repeat(5,1fr);">';
 
     rows.forEach(function(r, ri) {
       var p   = r.itens ? Math.round(((r.entregues*100 + r.parciais*50)/(r.itens*100))*100) : 0;
@@ -3322,6 +3330,29 @@ function renderEntregaveis() {
   document.getElementById('ent-list').innerHTML = html || '<div style="padding:32px;text-align:center;color:var(--muted);">Nenhum item encontrado.</div>';
   animateBars();
 }
+
+// ── Geração dinâmica dos botões ent-disc ────────────────────────────────────
+// Lê as disciplinas distintas de `entregaveis` e cria um botão por disciplina,
+// em ordem alfabética pelo campo `nome`. Mantém o botão "Todas" (hardcoded no HTML).
+(function() {
+  var container = document.getElementById('ent-disc-filters');
+  if (!container || typeof entregaveis === 'undefined') return;
+  var seen = {};
+  var discList = [];
+  entregaveis.forEach(function(e) {
+    if (!seen[e.disc]) { seen[e.disc] = true; discList.push({ disc: e.disc, nome: e.nome }); }
+  });
+  discList.sort(function(a, b) { return a.nome.localeCompare(b.nome, 'pt-BR'); });
+  discList.forEach(function(d) {
+    var b = document.createElement('button');
+    b.className = 'filter-btn';
+    b.setAttribute('data-ms-group', 'ent-disc');
+    b.setAttribute('data-ms-val', d.disc);
+    b.textContent = d.nome;
+    container.appendChild(b);
+  });
+})();
+
 document.getElementById('ent-list') && renderEntregaveis();
 
 
@@ -3561,15 +3592,7 @@ function renderAcoesUnified() {
   });
 
   // Update chip count
-  var abertos = acoes.filter(function(a) {
-    var d = parsePrazoAcao(a.prazo);
-    var inRange = !d || (d >= dataReferencia && d <= new Date(dataReferencia.getTime() + 90*86400000));
-    if (!inRange) return false;
-    var cs = computeAcaoStatus(a);
-    return cs === 'Em andamento' || cs === 'Futuro' || cs === 'Pendente';
-  }).length;
-  var chip = document.getElementById('cnt-pend');
-  if (chip) chip.textContent = abertos;
+  // (removido — o badge da aba Ações por Disciplina foi retirado)
 
   if (!list.length) {
     var listEl = document.getElementById('acoes-unified-list');
@@ -3623,7 +3646,7 @@ function renderAcoesUnified() {
           "ARQUITETURA":"ARQ","ESTRUTURAL":"EST","HIDRÁULICO E SANITÁRIO":"HID",
           "HIDRÁULICO E SANITÁRIO":"HID","PREVENTIVO":"PCI","ELÉTRICO E TELECOMUNICAÇÕES":"ELE",
           "CLIMATIZAÇÃO E EXAUSTÃO":"CLI","SEGURANÇA PATRIMONIAL":"SEG","PERSONALIZAÇÃO GARAGEM":"GAR",
-          "CONSULTORIA COZINHA INDUSTRIAL":"CZI","PAISAGISMO":"PAI","INTERIORES":"INT",
+          "COZINHA INDUSTRIAL":"CZI","PAISAGISMO":"PAI","INTERIORES":"INT",
           "FUNDAÇÕES E CONTENÇÕES":"FUN","AQUECIMENTO CENTRAL":"AQC","PISCINA":"PIS",
         };
         var discCode = a.disc ? discFullToCode[a.disc] : respToDisc[a.resp];
@@ -4628,6 +4651,84 @@ renderProximasEntregas();
   document.addEventListener('click', function() {
     [200, 500, 1000, 2000, 3000].forEach(function(ms) { sendHeightDelayed(ms); });
   });
+})();
+
+/* ═══════════════════════════════════════════════════════════════════════
+   RELATÓRIO DE CONFERÊNCIA — EPB2 Dashboard
+   Calculado em runtime a partir das vars do próprio HTML.
+   Invisível ao usuário. Abra o console (F12) para conferência ou
+   inspecione window._epb2Report diretamente.
+   ═══════════════════════════════════════════════════════════════════════ */
+(function() {
+  try {
+    var _acSem = (typeof acoesSemanal !== 'undefined' && acoesSemanal) ? acoesSemanal : [];
+    var _acCR  = (typeof acoesCROR   !== 'undefined' && acoesCROR)   ? acoesCROR   : [];
+    var _reu   = (typeof reunioes    !== 'undefined' && reunioes)    ? reunioes    : [];
+    var _etap  = (typeof etapas      !== 'undefined' && etapas)      ? etapas      : [];
+    var _dMap  = (typeof discRespMap !== 'undefined' && discRespMap) ? discRespMap : {};
+
+    // Disciplinas presentes nas ações (CROR + semanal)
+    var _discSet = {};
+    _acSem.concat(_acCR).forEach(function(a) { if (a && a.disc) _discSet[a.disc] = true; });
+    var _discAcoes = Object.keys(_discSet).sort();
+
+    // Disciplinas cadastradas no DISCIPLINASxRESPONSAVEL
+    var _discCadastradas = Object.keys(_dMap).sort();
+
+    // Reuniões por situação
+    var _reuRealizadas = _reu.filter(function(r) { return r.situacao === 'realizada'; }).length;
+    var _reuPrevistas  = _reu.filter(function(r) { return r.situacao === 'prevista';  }).length;
+
+    window._epb2Report = {
+      gerado_em: new Date().toISOString(),
+      data_ref_cror: (typeof _CROR_DATA_REF !== 'undefined') ? _CROR_DATA_REF : null,
+      data_execucao: (typeof _EXEC_DATA     !== 'undefined') ? _EXEC_DATA     : null,
+      acoes: {
+        controle_acoes: _acSem.length,
+        cror:           _acCR.length,
+        total:          _acSem.length + _acCR.length
+      },
+      reunioes: {
+        realizadas: _reuRealizadas,
+        previstas:  _reuPrevistas,
+        total:      _reu.length
+      },
+      etapas: _etap.length,
+      disciplinas: {
+        cadastradas: _discCadastradas.length,
+        em_acoes:    _discAcoes.length,
+        lista:       _discCadastradas
+      }
+    };
+
+    var r = window._epb2Report;
+    var sep = "─────────────────────────────────────────────";
+    if (typeof console !== "undefined" && console.log) {
+      console.log("[EPB2] " + sep);
+      console.log("[EPB2] RELATÓRIO DE CONFERÊNCIA — Dashboard EPB2");
+      console.log("[EPB2] " + sep);
+      console.log("[EPB2] Data ref. CROR    : " + (r.data_ref_cror || '—'));
+      console.log("[EPB2] Data execução GAS : " + (r.data_execucao  || '—'));
+      console.log("[EPB2] Ações:");
+      console.log("[EPB2]   Controle de Ações : " + r.acoes.controle_acoes);
+      console.log("[EPB2]   CROR              : " + r.acoes.cror);
+      console.log("[EPB2]   TOTAL             : " + r.acoes.total);
+      console.log("[EPB2] Reuniões:");
+      console.log("[EPB2]   Realizadas        : " + r.reunioes.realizadas);
+      console.log("[EPB2]   Previstas         : " + r.reunioes.previstas);
+      console.log("[EPB2]   TOTAL             : " + r.reunioes.total);
+      console.log("[EPB2] Etapas             : " + r.etapas);
+      console.log("[EPB2] Disciplinas:");
+      console.log("[EPB2]   Cadastradas (DISCxRESP): " + r.disciplinas.cadastradas);
+      console.log("[EPB2]   Com ações no dashboard : " + r.disciplinas.em_acoes);
+      console.log("[EPB2]   Lista: " + r.disciplinas.lista.join(" | "));
+      console.log("[EPB2] " + sep);
+    }
+  } catch(e) {
+    if (typeof console !== "undefined" && console.warn) {
+      console.warn("[EPB2] Falha ao gerar relatório:", e);
+    }
+  }
 })();
 </script>
 </body>
