@@ -685,7 +685,6 @@ var discRespMap = {
   "EIV": "VIVA",
   "PERSONALIZAÇÃO GARAGEM": "GARAGEPLAN",
   "ESQUADRIAS": "EM CONTRATAÇÃO",
-  "ACESSIBILIDADE": "EM CONTRATAÇÃO",
   "CERTIFICAÇÃO": "EM CONTRATAÇÃO",
   "CONFORTO TÉRMICO-LUMÍNICO": "EM CONTRATAÇÃO",
   "PISCINA": "EM CONTRATAÇÃO",
@@ -699,6 +698,7 @@ var discRespMap = {
   "ATP ESTRUTURA": "EM CONTRATAÇÃO",
   "ILUMINAÇÃO FACHADA": "EM CONTRATAÇÃO",
   "ACÚSTICA": "EM CONTRATAÇÃO",
+  "TERRAPLENAGEM": "LAPA",
 };
 
 // RESPTODISCFILTER_START
@@ -717,6 +717,7 @@ var respToDiscFilter = {
   "Eytan Magal": ["SEGURANÇA PATRIMONIAL"],
   "GaragePlan": ["PERSONALIZAÇÃO GARAGEM"],
   "Hanazaki": ["PAISAGISMO"],
+  "Lapa": ["TERRAPLENAGEM"],
   "Mannz": ["COORDENAÇÃO E COMPATIBILIZAÇÃO"],
   "NWO": ["PROJETO LEGAL"],
   "Tecset": ["AQUECIMENTO CENTRAL"],
@@ -743,6 +744,7 @@ var respDisplayName = {
   "EM CONTRATAÇÃO": "EM CONTRATAÇÃO",
   "TECSET": "TECSET",
   "ERLISE": "ERLISE",
+  "LAPA": "LAPA",
 };
 
 // ── DATA ──────────────────────────────────────────────────────────────────────
@@ -806,7 +808,7 @@ const disciplinas = [
 // ─────────────────────────────────────────────────────────────────────────────
 
 var acoesSemanal = [
-  // ── Controle de Ações (EPB2CONTROLE_ACOES — 15/05/2026) ──────────────────────
+  // ── Controle de Ações (EPB2CONTROLE_ACOES — 22/05/2026) ──────────────────────
   // Não mesclar com acoesCROR aqui — a junção é feita em var acoes abaixo.
   { prazo:"31/03/26", item:"Definição do cronograma geral e demais organizações", desc:"Incluir disciplinas faltantes no cronograma, e finalizar demais organizações conforme alinhado com construtora.", resp:"Mannz", criticidade:"Crítica", status:"Concluído", conclusao:"31/03/26", diasRest:"--", obs:"Informado em reunião do dia 27/03/26 que o cronograma está em finalização, com previsão o início da próxima semana. Foi alinhado sobre esse asunto com a Axia na reunião de alinhamento de 02/04/2026, e serão feitas as adequações. Mannz enviou e-mail no dia 10/04/2026 informando a todos que a apresentação do cronograma ocorrerá no dia 16/04/2026. Cronograma enviado por e-mail aos projetistas em 17/04/2026.", inicio:"12/03/26", disc:"COORDENAÇÃO E COMPATIBILIZAÇÃO" },
   { prazo:"20/03/26", item:"Definição de volume do reservatório (carregamento elétrico) + acesso bombeiros", desc:"Repassar informações para arquitetura avaliar necessidade de alteração na arquitetura.", resp:"Thórus", criticidade:"Alta", status:"Concluído", conclusao:"20/03/26", diasRest:"--", obs:"", inicio:"17/03/26", disc:"PREVENTIVO" },
@@ -815,8 +817,8 @@ var acoesSemanal = [
   { prazo:"30/03/26", item:"Consolidação EP Arquitetura Embasamento", desc:"Sinalizar Coordenação referente a uma data para apresentação em caráter de manchas das alterações solicitadas pelo Mario", resp:"Bernardes", criticidade:"Crítica", status:"Concluído", conclusao:"30/03/26", diasRest:"--", obs:"Apresentação conceitual das alterações realizada em reunião com Mario no dia 30/03/26.", inicio:"18/03/26", disc:"ARQUITETURA" },
   { prazo:"06/04/26", item:"Base arquitetura para repasse à NWO reingressar na prefeitura", desc:"Incorporar Subestação e dimensionamento das lixeiras. O projeto a ser protocolado na prefeitura não está vinculado às alterações de produto solicitadas pelo Mario.", resp:"Bernardes", criticidade:"Crítica", status:"Concluído", conclusao:"06/04/26", diasRest:"--", obs:"Thórus analisou propostas da arquitetura par a subestação e informou suas considerações. Foi definido na reunião de 31/02/26 que a proposta ‘A’ será seguida para o projeto da subestação, com pequenas adequações a serem realizadas para a arquitetura. Essa posição já deve ser indicada no projeto a ser liberado dia 06/04/26 para o projeto aprovativo. Axia confirmou que o dimensionamento da lixeira do restaurante deve atender a referência ambiental apontada no EIV (INIS 13).", inicio:"18/03/26", disc:"ARQUITETURA" },
   { prazo:"20/04/26", item:"Projeto Arquitetônico Legal", desc:"Atualizar material para reingresso na prefeitura, com base na arquitetura atualizada (será enviada em 06/04/2026)", resp:"NWO", criticidade:"Crítica", status:"Concluído", conclusao:"20/04/26", diasRest:"--", obs:"Protocolado em 23/04/2026", inicio:"07/04/26", disc:"PROJETO LEGAL" },
-  { prazo:"23/02/26", item:"Base arquitetura para repasse à NWO reingressar na prefeitura", desc:"Confirmar elementos permitidos no recuo frontal (subestação) e na lateral", resp:"Axia", criticidade:"Alta", status:"Concluído", conclusao:"23/02/26", diasRest:"--", obs:"Repassado por e-mail em 23/03/26", inicio:"18/03/26", disc:"CONSTRUTORA" },
-  { prazo:"31/03/26", item:"Alinhamento com contenção/estrutura sobre viabilidade técnica - informado a necessidade da realização da sondagem para andamento das soluções de contenção", desc:"Axia contratar sondagem alternativa para rua dos fundos para liberar documento técnico para BornSales dimensionar com maior precisão a solução da contenção da parede dos fundos", resp:"Axia", criticidade:"Alta", status:"Com atraso", conclusao:"-", diasRest:"-45", obs:"Informado pela Axia em 27/03/26 que ainda não conseguem liberar a sondagem na malha, tal como precisa, por conta da supressão e por ser uma área bem densa de vegetação. No dia 26/03/26 as engenheiras Monica e Anni foram até o terreno para verificação local. Atualmente há duas possibilidades: 1: Sair a supressão do terreno vizinho para permitir a sondagem (isso está para sair nos próximos dias). 2: Realização da sondagem pela rua dos fundos para minimizar as incertezas. Mannz aguarda sinalização da construtora referente a esse assunto.", inicio:"19/03/26", disc:"CONSTRUTORA" },
+  { prazo:"23/03/26", item:"Base arquitetura para repasse à NWO reingressar na prefeitura", desc:"Confirmar elementos permitidos no recuo frontal (subestação) e na lateral", resp:"Axia", criticidade:"Alta", status:"Concluído", conclusao:"23/03/26", diasRest:"--", obs:"Repassado por e-mail em 23/03/26", inicio:"18/03/26", disc:"CONSTRUTORA" },
+  { prazo:"31/03/26", item:"Alinhamento com contenção/estrutura sobre viabilidade técnica - informado a necessidade da realização da sondagem para andamento das soluções de contenção", desc:"Axia contratar sondagem alternativa para rua dos fundos para liberar documento técnico para BornSales dimensionar com maior precisão a solução da contenção da parede dos fundos", resp:"Axia", criticidade:"Alta", status:"Com atraso", conclusao:"-", diasRest:"-52", obs:"Informado pela Axia em 27/03/26 que ainda não conseguem liberar a sondagem na malha, tal como precisa, por conta da supressão e por ser uma área bem densa de vegetação. No dia 26/03/26 as engenheiras Monica e Anni foram até o terreno para verificação local. Atualmente há duas possibilidades: 1: Sair a supressão do terreno vizinho para permitir a sondagem (isso está para sair nos próximos dias). 2: Realização da sondagem pela rua dos fundos para minimizar as incertezas. Mannz aguarda sinalização da construtora referente a esse assunto.", inicio:"19/03/26", disc:"CONSTRUTORA" },
   { prazo:"25/03/26", item:"BEP", desc:"Postagem do BEP no Autodoc", resp:"Mannz", criticidade:"Media", status:"Concluído", conclusao:"25/03/26", diasRest:"--", obs:"", inicio:"25/03/26", disc:"COORDENAÇÃO E COMPATIBILIZAÇÃO" },
   { prazo:"02/04/26", item:"Reingresso disciplinas Climatização/Exaustão e Aquecimento Central", desc:"Mannz entrou em contato para situar disciplinas no processo. Alinhar agenda para reunião de apresentação do EP entregue em 2025, para alinhamento dos próximos passos no projeto.", resp:"Mannz", criticidade:"Media", status:"Concluído", conclusao:"02/04/26", diasRest:"--", obs:"Reunião de start com Value ocorreu em 09/04/2026. Alinhamento com Aquecimento Central feito. Próximos passos serão alinhados após apresentação do cronograma.", inicio:"27/03/26", disc:"COORDENAÇÃO E COMPATIBILIZAÇÃO" },
   { prazo:"02/04/26", item:"Start disciplinas Paisagismo e Cozinha Industrial", desc:"Contratos em fase de finalização. Entrar em contato para situar processo, e aguardar desdobramentos da reunião de 30/02/26 para alinhar próximos passos.", resp:"Mannz", criticidade:"Media", status:"Concluído", conclusao:"02/04/26", diasRest:"--", obs:"Mannz situou projetista em relação ao projeto. Após desdobramentos da definição do clube será alinhado com o projetista próximos passos.", inicio:"27/03/26", disc:"COORDENAÇÃO E COMPATIBILIZAÇÃO" },
@@ -835,8 +837,8 @@ var acoesSemanal = [
   { prazo:"01/04/26", item:"Consolidação EP Arquitetura Embasamento", desc:"Retornar com definição dos itens discutidos na reunião de 30/03/2026.", resp:"Axia", criticidade:"Crítica", status:"Concluído", conclusao:"01/04/26", diasRest:"--", obs:"Repassado em reunião no dia 04/05/2026", inicio:"30/03/26", disc:"CONSTRUTORA" },
   { prazo:"17/04/26", item:"Acesso viatura de Bombeiros", desc:"Retornar com resposta da consulta junto ao Corpo de Bombeiros sobre o acesso da viatura de bombeiros no empreendimento.", resp:"Thórus", criticidade:"Alta", status:"Concluído", conclusao:"17/04/26", diasRest:"--", obs:"Enviado por e-mail em 27/04/2026.", inicio:"31/03/26", disc:"PREVENTIVO" },
   { prazo:"17/04/26", item:"Abastecimento Gás", desc:"Retornar com resposta da SCGÁS com croqui para Arquitetura absorver em projeto", resp:"Thórus", criticidade:"Alta", status:"Concluído", conclusao:"17/04/26", diasRest:"--", obs:"Enviado por e-mail em 23/04/2026 a viabilidade para atendimento.", inicio:"31/03/26", disc:"PREVENTIVO" },
-  { prazo:"30/06/26", item:"Lançamento pontos elétricos / Produto Construtora", desc:"Analisar lançamento de pontos elétricos feito pela Thórus e retornar com validação/considerações referentes ao produto.", resp:"Axia", criticidade:"Alta", status:"Em andamento", conclusao:"-", diasRest:"46", obs:"O projetista elétrico indicou que o lançamento dos pontos foi baseado no projeto Brava 1, vizinho ao empreendimento Brava 2. Ele ressaltou que é adequado que a Axia valide se esse lançamento atende as expectativas do produto Brava 2, visto que ele pode ter diferenciais em relação ao primeiro empreendimento. Atualizado o prazo considerando a definição do cronograma, e que esse retorno deve vir antes da próxima entrega da Thórus (apartamentos)", inicio:"31/03/26", disc:"CONSTRUTORA" },
-  { prazo:"30/06/26", item:"Definição quantidade de quadros em apartamentos Garden/Duplex", desc:"Avaliar questões de custo e de produto para decidir se padroniza o lançamento de um quadro por pavimento ou mantém da forma atual.", resp:"Axia", criticidade:"Alta", status:"Em andamento", conclusao:"-", diasRest:"46", obs:"Atualizado o prazo considerando a definição do cronograma, e que esse retorno deve vir antes da próxima entrega da Thórus (apartamentos)", inicio:"31/03/26", disc:"CONSTRUTORA" },
+  { prazo:"30/06/26", item:"Lançamento pontos elétricos / Produto Construtora", desc:"Analisar lançamento de pontos elétricos feito pela Thórus e retornar com validação/considerações referentes ao produto.", resp:"Axia", criticidade:"Alta", status:"Em andamento", conclusao:"-", diasRest:"39", obs:"O projetista elétrico indicou que o lançamento dos pontos foi baseado no projeto Brava 1, vizinho ao empreendimento Brava 2. Ele ressaltou que é adequado que a Axia valide se esse lançamento atende as expectativas do produto Brava 2, visto que ele pode ter diferenciais em relação ao primeiro empreendimento. Atualizado o prazo considerando a definição do cronograma, e que esse retorno deve vir antes da próxima entrega da Thórus (apartamentos)", inicio:"31/03/26", disc:"CONSTRUTORA" },
+  { prazo:"30/06/26", item:"Definição quantidade de quadros em apartamentos Garden/Duplex", desc:"Avaliar questões de custo e de produto para decidir se padroniza o lançamento de um quadro por pavimento ou mantém da forma atual.", resp:"Axia", criticidade:"Alta", status:"Em andamento", conclusao:"-", diasRest:"39", obs:"Atualizado o prazo considerando a definição do cronograma, e que esse retorno deve vir antes da próxima entrega da Thórus (apartamentos)", inicio:"31/03/26", disc:"CONSTRUTORA" },
   { prazo:"13/04/26", item:"Premissas Climatização", desc:"Enviar premissas de Climatização para Value. Solicitar análise técnica sobre as duas soluções apresentadas em relação área técnica das condensadoras.", resp:"Mannz", criticidade:"Alta", status:"Concluído", conclusao:"13/04/26", diasRest:"--", obs:"Premisas preenchidas pela construtora no briefing enviado pela Thórus.", inicio:"09/04/26", disc:"COORDENAÇÃO E COMPATIBILIZAÇÃO" },
   { prazo:"17/04/26", item:"Análise premissas Climatização", desc:"Avaliar premissas de Climatização preenchidas pela construtora", resp:"Value", criticidade:"Media", status:"Concluído", conclusao:"17/04/26", diasRest:"--", obs:"Caso haja necessidade de mais alguma informação para o andamento do projeto, deve ser informado para a coordenação cobrar da construtora.", inicio:"09/04/26", disc:"CLIMATIZAÇÃO E EXAUSTÃO" },
   { prazo:"17/04/26", item:"Envio Cronograma", desc:"Enviar cronograma apresentado na reunião de 16/04/2026", resp:"Mannz", criticidade:"Crítica", status:"Concluído", conclusao:"17/04/26", diasRest:"--", obs:"", inicio:"16/04/26", disc:"COORDENAÇÃO E COMPATIBILIZAÇÃO" },
@@ -857,12 +859,20 @@ var acoesSemanal = [
   { prazo:"29/04/26", item:"Validação Entregáveis", desc:"Validar documento dos entregáveis enviado por e-mail em 22/04/2026", resp:"Erlise", criticidade:"Media", status:"Concluído", conclusao:"29/04/26", diasRest:"--", obs:"Erlise retornou com considerações em 04/05/2026", inicio:"22/04/26", disc:"COZINHA INDUSTRIAL" },
   { prazo:"27/04/26", item:"Comparativo sistemas aquecimento central", desc:"Enviar documentos comparativo entre sistemas a gás e bombas de calor para Axia definir qual sistema será adotado.", resp:"Tecset", criticidade:"Crítica", status:"Concluído", conclusao:"27/04/26", diasRest:"--", obs:"Enviado por e-mail em 04/05/2026.", inicio:"22/04/26", disc:"AQUECIMENTO CENTRAL" },
   { prazo:"30/04/26", item:"Definição sistema Aquecimento Central", desc:"Definir tipo de sistema a ser adotado para a disciplina de Aqucimento Central", resp:"Axia", criticidade:"Alta", status:"Concluído", conclusao:"30/04/26", diasRest:"--", obs:"Enviado por e-mail em 07/05/2026.", inicio:"27/04/26", disc:"CONSTRUTORA" },
-  { prazo:"15/05/26", item:"Estudo Implantação", desc:"Desenvolver um estudo preliminar de implantação para estudo de alternativas, considerando as contenções, afastamentos, estabilização, limites da cota 20 e relação com os terrenos vizinhos.", resp:"BornSales", criticidade:"Alta", status:"Em andamento", conclusao:"-", diasRest:"0", obs:"", inicio:"06/05/26", disc:"FUNDAÇÕES E CONTENÇÕES" },
+  { prazo:"15/05/26", item:"Estudo Implantação", desc:"Desenvolver um estudo preliminar de implantação para estudo de alternativas, considerando as contenções, afastamentos, estabilização, limites da cota 20 e relação com os terrenos vizinhos.", resp:"BornSales", criticidade:"Crítica", status:"Com atraso", conclusao:"-", diasRest:"-7", obs:"", inicio:"06/05/26", disc:"FUNDAÇÕES E CONTENÇÕES" },
+  { prazo:"12/06/26", item:"Exigência EIV: Viabilidade Celesc", desc:"Viabilidade de atendimento da rede elétrica (CELESC), com a descrição da demanda energética", resp:"Thórus", criticidade:"Alta", status:"Em andamento", conclusao:"-", diasRest:"21", obs:"", inicio:"19/05/26", disc:"ELÉTRICO E TELECOMUNICAÇÕES" },
+  { prazo:"12/06/26", item:"Exigência EIV: Projeto Drenagem", desc:"Projeto executivo do sistema de drenagem pluvial, com memorial descritivo e de cálculo, com ART assinada", resp:"Thórus", criticidade:"Alta", status:"Em andamento", conclusao:"-", diasRest:"21", obs:"", inicio:"19/05/26", disc:"HIDRÁULICO E SANITÁRIO" },
+  { prazo:"12/06/26", item:"Exigência EIV: Projeto Hidrossanitário", desc:"Projeto hidrossanitário, com ART e memorial descritivo", resp:"Thórus", criticidade:"Alta", status:"Em andamento", conclusao:"-", diasRest:"21", obs:"", inicio:"19/05/26", disc:"HIDRÁULICO E SANITÁRIO" },
+  { prazo:"12/06/26", item:"Exigência EIV: Projeto Terraplenagem", desc:"Projeto de terraplenagem, com ART assinada", resp:"Lapa", criticidade:"Alta", status:"Pendente", conclusao:"-", diasRest:"21", obs:"Lapa precisa da definição da geometria e cotas de terraplenagem", inicio:"19/05/26", disc:"TERRAPLENAGEM" },
+  { prazo:"05/06/26", item:"Análise shafts torres", desc:"Avaliar se dimensionamento dos shafts principais atende disciplinas de HID/SAN + subida frigorígenas (e-mail enviado em 22/05/26 - itens cflow 2036, 7115, 3230, 6189, 7995, 4491, 5675)", resp:"Thórus", criticidade:"Alta", status:"Em andamento", conclusao:"-", diasRest:"14", obs:"", inicio:"21/05/26", disc:"HIDRÁULICO E SANITÁRIO" },
+  { prazo:"05/06/26", item:"Análise shafts torres", desc:"Avaliar se dimensionamento dos shafts principais atende disciplinas de ELE/COM + subida frigorígenas (e-mail enviado em 22/05/26 - itens cflow 2036, 7115, 3230, 6189, 7995, 4491, 5675)", resp:"Thórus", criticidade:"Alta", status:"Em andamento", conclusao:"-", diasRest:"14", obs:"", inicio:"21/05/26", disc:"ELÉTRICO E TELECOMUNICAÇÕES" },
+  { prazo:"05/06/26", item:"Análise shafts torres", desc:"Avaliar se dimensionamento dos shafts principais atende disciplinas de PCI + subida frigorígenas (e-mail enviado em 22/05/26 - itens cflow 2036, 7115, 3230, 6189, 7995, 4491, 5675)", resp:"Thórus", criticidade:"Alta", status:"Em andamento", conclusao:"-", diasRest:"14", obs:"", inicio:"21/05/26", disc:"PREVENTIVO" },
+  { prazo:"05/06/26", item:"Opções equipamentos para atendimento entreforro h=20cm", desc:"Indicar opções de equipamentos cassete que atendam o entreforro de 20cm devido situação dos Gardens (e-mail 22/05/26, item cflow 3346)", resp:"Value", criticidade:"Media", status:"Em andamento", conclusao:"-", diasRest:"14", obs:"", inicio:"21/05/26", disc:"CLIMATIZAÇÃO E EXAUSTÃO" },
 ];
 
 var acoesCROR = [
   // ── Tarefas do Project (CRO) ─────────────────────────────────────────────────────────
-  // Gerado em 15/05/2026. Atualizado pela automação CROR.
+  // Gerado em 22/05/2026. Atualizado pela automação CROR.
   // Não mesclar com acoesSemanal aqui — a junção é feita em var acoes abaixo.
   { prazo:"19/01/26", item:"ARQ: POSTAGEM BASE ARQUITETURA ATUALIZADA (IFC, DWG, PDF)", desc:"", resp:"BERNARDES", criticidade:"Crítica", status:"Concluido", conclusao:"19/01/26", diasRest:"--", obs:"", inicio:"06/01/26", disc:"ARQUITETURA", entregavel:false },
   { prazo:"20/03/26", item:"AXIA: CONTRATAÇÃO VALUE", desc:"", resp:"AXIA", criticidade:"Alta", status:"Concluido", conclusao:"20/03/26", diasRest:"--", obs:"", inicio:"25/02/26", disc:"CONSTRUTORA", entregavel:false },
@@ -1376,6 +1386,8 @@ const reunioes = [
   { data:"31/03/26", dataISO:"2026-03-31", tipo:"Apresentação", situacao:"realizada", assunto:"REUNIÃO APRESENTAÇÃO - LANÇAMENTO TORRES THÓRUS (AXIA, MANNZ, THÓRUS, BERNARDES)", decisoes:"" },
   { data:"13/04/26", dataISO:"2026-04-13", tipo:"Kick-off", situacao:"realizada", assunto:"REUNIÃO START CLIMATIZAÇÃO/EXAUSTÃO (AXIA, MANNZ, VALUE)", decisoes:"" },
   { data:"22/04/26", dataISO:"2026-04-22", tipo:"Kick-off", situacao:"realizada", assunto:"REUNIÃO START AQUECIMENTO CENTRAL (AXIA, MANNZ, TECSET)", decisoes:"" },
+  { data:"20/05/26", dataISO:"2026-05-20", tipo:"Apresentação", situacao:"realizada", assunto:"REUNIÃO APRESENTAÇÃO - LANÇAMENTO TORRES CLI/EXA (AXIA, MANNZ, BERNARDES, VALUE)", decisoes:"" },
+  { data:"20/05/26", dataISO:"2026-05-20", tipo:"Apresentação", situacao:"realizada", assunto:"REUNIÃO APRESENTAÇÃO - LANÇAMENTO AQC (AXIA, MANNZ, BERNARDES, TECSET)", decisoes:"" },
   // ── Previstas ───────────────────────────────────────────────────────────────────
   { data:"20/03/26", dataISO:"2026-03-20", tipo:"Kick-off", situacao:"prevista",  assunto:"REUNIÃO START PISCINA (AXIA, MANNZ, BERNARDES, PISCINA)", decisoes:"" },
   { data:"31/03/26", dataISO:"2026-03-31", tipo:"Kick-off", situacao:"prevista",  assunto:"REUNIÃO START IMPERMEABILIZAÇÃO (AXIA, MANNZ, IMPERMEABILIZAÇÃO)", decisoes:"" },
@@ -1386,8 +1398,6 @@ const reunioes = [
   { data:"31/03/26", dataISO:"2026-03-31", tipo:"Kick-off", situacao:"prevista",  assunto:"REUNIÃO START AUTOMAÇÃO (AXIA, MANNZ, BERNARDES, AUTOMAÇÃO)", decisoes:"" },
   { data:"31/03/26", dataISO:"2026-03-31", tipo:"Kick-off", situacao:"prevista",  assunto:"REUNIÃO START LUMINOTÉCNICO FACHADA (AXIA, MANNZ, BERNARDES, FACHADA)", decisoes:"" },
   { data:"31/03/26", dataISO:"2026-03-31", tipo:"Kick-off", situacao:"prevista",  assunto:"REUNIÃO START ANCORAGENS (AXIA, MANNZ, BERNARDES, ANCORAGENS)", decisoes:"" },
-  { data:"20/05/26", dataISO:"2026-05-20", tipo:"Apresentação", situacao:"prevista",  assunto:"REUNIÃO APRESENTAÇÃO - LANÇAMENTO TORRES CLI/EXA (AXIA, MANNZ, BERNARDES, VALUE)", decisoes:"" },
-  { data:"20/05/26", dataISO:"2026-05-20", tipo:"Apresentação", situacao:"prevista",  assunto:"REUNIÃO APRESENTAÇÃO - LANÇAMENTO AQC (AXIA, MANNZ, BERNARDES, TECSET)", decisoes:"" },
   { data:"26/05/26", dataISO:"2026-05-26", tipo:"Kick-off", situacao:"prevista",  assunto:"REUNIÃO START PAISAGISMO (AXIA, MANNZ, BERNARDES, HANAZAKI)", decisoes:"" },
   { data:"18/06/26", dataISO:"2026-06-18", tipo:"Kick-off", situacao:"prevista",  assunto:"REUNIÃO START COZINHA INDUSTRIAL (AXIA, MANNZ, BERNARDES, ERLISE)", decisoes:"" },
   { data:"17/08/26", dataISO:"2026-08-17", tipo:"Compatibilização", situacao:"prevista",  assunto:"REUNIÃO MULTIDISCIPLINAR COMPATIBILIZAÇÃO TORRES (AXIA, MANNZ, EDUARDO PENTEADO, BERNARDES, THÓRUS, VALUE, TECSET, PIS)", decisoes:"" },
@@ -1420,7 +1430,7 @@ const projEnd   = new Date(Math.max.apply(null,_etDates));
 // com a data de atualização dos dados do CROR (campo max "Criado" do xlsx).
 // NÃO usar new Date() sem argumento — isso pega a data de hoje, não do CROR.
 const _CROR_DATA_REF = "2026-05-06"; // ← GAS: max campo Criado do CROR
-const _EXEC_DATA = "2026-05-15"; // ← GAS: data da última execução do script
+const _EXEC_DATA = "2026-05-22"; // ← GAS: data da última execução do script
 // Deriva o objeto Date a partir da string — sem timezone issues:
 const dataReferencia = (function(s) {
   var p = s.split("-");
@@ -3581,6 +3591,7 @@ var respToDisc = {
   "Eytan Magal": "SEG",
   "GaragePlan": "GAR",
   "Hanazaki": "PAI",
+  "Lapa": null,
   "Mannz": null,
   "NWO": null,
   "Tecset": "AQC",
