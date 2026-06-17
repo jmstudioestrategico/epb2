@@ -533,6 +533,7 @@ body {
           <button class="filter-btn" data-ms-group="acao-std" data-ms-val="Nao iniciado" title="Pendente: data prevista já passou, mas a ação ainda não foi iniciada">Pendente</button>
           <button class="filter-btn" data-ms-group="acao-std" data-ms-val="atraso" title="Com atraso: o prazo de entrega já venceu e a ação não foi concluída">Com atraso</button>
           <button class="filter-btn" data-ms-group="acao-std" data-ms-val="Concluido" title="Concluído: ação finalizada com sucesso">Concluído</button>
+          <button class="filter-btn" data-ms-group="acao-std" data-ms-val="Sem status" title="Sem status: a coluna STATUS na base ainda não foi preenchida para esta ação">Sem status</button>
         </div>
       </div>
     </div>
@@ -1640,11 +1641,8 @@ function goToEntregaveis(disc) {
   });
 
   var emAndamento = acoes90.filter(function(p) { return computeAcaoStatus(p) === 'Em andamento'; }).length;
-  var futuros     = acoes90.filter(function(p) {
-    if (p.status !== 'Nao iniciado') return false;
-    var d = parsePrazoAcao(p.prazo);
-    return d && d > hoje_kpi;
-  }).length;
+  // "Futuro" agora vem do status da base (não mais inferido por prazo).
+  var futuros     = acoes90.filter(function(p) { return computeAcaoStatus(p) === 'Futuro'; }).length;
   var abertos     = emAndamento + futuros +
     acoes90.filter(function(p) { return computeAcaoStatus(p) === 'Pendente'; }).length;
   var discOk      = disciplinas.filter(function(d) { return d.status === 'ok'; }).length;
@@ -1906,7 +1904,7 @@ function renderDiscStatus() {
 
   // Count individual actions by computed status — same 90-day window as aba Ações
   // Usa helper compartilhado isInJanela90 para garantir consistência com renderAcoesUnified
-  var bkts = { andamento:0, futuro:0, pendente:0, atraso:0, concluido:0 };
+  var bkts = { andamento:0, futuro:0, pendente:0, atraso:0, concluido:0, semstatus:0 };
   acoes.forEach(function(a) {
     if (!isInJanela90(a)) return;
     var cs = computeAcaoStatus(a);
@@ -1915,6 +1913,7 @@ function renderDiscStatus() {
     else if (cs === 'Pendente')             bkts.pendente++;
     else if (cs === 'Concluido com atraso' || cs === 'Com atraso') bkts.atraso++;
     else if (cs === 'Concluido')            bkts.concluido++;
+    else if (cs === 'Sem status')           bkts.semstatus++;
   });
 
   var total = Object.keys(bkts).reduce(function(s, k) { return s + bkts[k]; }, 0);
@@ -1926,6 +1925,7 @@ function renderDiscStatus() {
     { key:'pendente',  label:'Pendente',     cor:'#F59E0B', tip:'Pendente: data prevista já passou, mas a ação ainda não foi iniciada' },
     { key:'atraso',    label:'Com atraso',   cor:'#E24B4A', tip:'Com atraso: o prazo de entrega já venceu e a ação não foi concluída' },
     { key:'concluido', label:'Concluído',    cor:'#3BD23D', tip:'Concluído: ação finalizada com sucesso' },
+    { key:'semstatus', label:'Sem status',   cor:'#A8A8A0', tip:'Sem status: a coluna STATUS na base ainda não foi preenchida' },
   ].filter(function(r) { return bkts[r.key] > 0; });
 
   function pct(n) { return Math.round(n / total * 1000) / 10; }
@@ -2035,18 +2035,16 @@ function computeAcaoStatus(a) {
     status: normalizeStatus(a.status),
     criticidade: normalizeCriticidade(a.criticidade)
   });
+  // Status agora é ditado pela base (coluna STATUS do CROR / Controle de Ações).
+  // Sem status preenchido → "Sem status" (badge cinza). NÃO inferimos mais por
+  // prazo/avanço — a regra antiga que transformava "Nao iniciado" em
+  // "Futuro"/"Com atraso" conforme o prazo foi removida a pedido do cliente.
+  if (!a.status) return 'Sem status';
   if (a.status === 'Concluido' || a.status === 'Concluido com atraso' || a.status === 'Com atraso') return a.status;
   if (a.status === 'Pendente') return 'Pendente'; // status editorial explícito da planilha
-  var prazoDate = parsePrazoAcao(a.prazo);
-  if (!prazoDate) return a.status;
-  if (a.status === 'Nao iniciado') {
-    if (prazoDate < HOJE_ACOES) return 'Com atraso';
-    return 'Futuro';
-  }
-  if (a.status === 'Em andamento') {
-    if (prazoDate < HOJE_ACOES) return 'Com atraso';
-    return 'Em andamento';
-  }
+  if (a.status === 'Futuro') return 'Futuro';
+  if (a.status === 'Em andamento') return 'Em andamento';
+  if (a.status === 'Nao iniciado') return 'Pendente'; // "Nao iniciado" exibido como Pendente (mesma regra de antes)
   return a.status;
 }
 
@@ -2132,13 +2130,13 @@ renderDiscStatus();
 
     // Paleta por status computado
   var stBg  = { 'Com atraso':'#FDECEA', 'Concluido com atraso':'#FDECEA', 'Em andamento':'#FDECEA',
-                'Pendente':'#FFF8EC', 'Futuro':'#F3EEFF' };
+                'Pendente':'#FFF8EC', 'Futuro':'#F3EEFF', 'Sem status':'#F1F1EE' };
   var stTxt = { 'Com atraso':'#7B1D1D', 'Concluido com atraso':'#7B1D1D', 'Em andamento':'#7B1D1D',
-                'Pendente':'#7A4500',  'Futuro':'#6B3FA0' };
+                'Pendente':'#7A4500',  'Futuro':'#6B3FA0', 'Sem status':'#6B6B66' };
   var stBdr = { 'Com atraso':'#E24B4A', 'Concluido com atraso':'#E24B4A', 'Em andamento':'#E24B4A',
-                'Pendente':'#F59E0B',  'Futuro':'#9B6FD4' };
+                'Pendente':'#F59E0B',  'Futuro':'#9B6FD4', 'Sem status':'#A8A8A0' };
   var stLbl = { 'Com atraso':'Com atraso', 'Concluido com atraso':'Com atraso', 'Em andamento':'Em andamento',
-                'Pendente':'Pendente', 'Futuro':'Futuro' };
+                'Pendente':'Pendente', 'Futuro':'Futuro', 'Sem status':'Sem status' };
   var crioBg  = { 'Crítica':'#FDECEA', 'Alta':'#FFF5E6', 'Media':'#EBF4FF' };
   var crioTxt = { 'Crítica':'#7B1D1D', 'Alta':'#7A4500', 'Media':'#1A4F8A' };
 
@@ -2251,7 +2249,7 @@ function goToAcoesUrgentes() {
     });
 
   // Usar o mesmo pipeline de renderização de renderAcoesUnified
-  var order = { "Com atraso":0, "Em andamento":1, "Nao iniciado":2, "Futuro":3, "Concluido com atraso":4, "Concluido":5, "Pendente":2 };
+  var order = { "Com atraso":0, "Em andamento":1, "Nao iniciado":2, "Futuro":3, "Concluido com atraso":4, "Concluido":5, "Pendente":2, "Sem status":6 };
   list.sort(function(a,b) {
     // Ordenação primária: prazo de entrega (mais próximo primeiro)
     var pa = parsePrazoAcao(a.prazo), pb = parsePrazoAcao(b.prazo);
@@ -3557,6 +3555,7 @@ var statusCor = {
   "Com atraso":          { bg:"#FFF1F0", txt:"#8A1A1A", dot:"#E24B4A" },
   "Futuro":              { bg:"#F3EEFF", txt:"#6B3FA0", dot:"#9B6FD4" },
   "Pendente":            { bg:"#FFF1F0", txt:"#8A1A1A", dot:"#E24B4A" },
+  "Sem status":          { bg:"#F1F1EE", txt:"#6B6B66", dot:"#A8A8A0" },
 };
 var statusLabel = {
   "Em andamento":"Em andamento",
@@ -3566,6 +3565,7 @@ var statusLabel = {
   "Com atraso":"Com atraso",
   "Futuro":"Futuro",
   "Pendente":"Pendente",
+  "Sem status":"Sem status",
 };
 var prioCorBorder = { "Alta":"#F59E0B", "Media":"#5B80D6", "Crítica":"#E24B4A", "critica":"#E24B4A" };
 var prioCorBadge  = {
@@ -3652,6 +3652,7 @@ function renderAcoesKPI(filteredList) {
   var pend    = lista.filter(function(a) { return computeAcaoStatus(a) === 'Pendente'; }).length;
   var atraso  = lista.filter(function(a) { var _s=computeAcaoStatus(a); return _s==='Concluido com atraso'||_s==='Com atraso'; }).length;
   var futuro  = lista.filter(function(a) { return computeAcaoStatus(a) === 'Futuro'; }).length;
+  var semSt   = lista.filter(function(a) { return computeAcaoStatus(a) === 'Sem status'; }).length;
   var kpis = [
     { label:"Total",        val:total,  cor:"var(--black)" },
     { label:"Futuro",       val:futuro, cor:"#9B6FD4" },
@@ -3660,12 +3661,17 @@ function renderAcoesKPI(filteredList) {
     { label:"Com atraso",   val:atraso, cor:"#E24B4A" },
     { label:"Concluído",    val:concl,  cor:"#3BD23D" },
   ];
+  if (semSt > 0) kpis.push({ label:"Sem status", val:semSt, cor:"#A8A8A0" });
+  // Grade adapta ao nº de KPIs (6 normalmente, 7 quando há "Sem status").
+  el.style.gridTemplateColumns = 'repeat(' + kpis.length + ',1fr)';
   el.innerHTML = kpis.map(function(k, i) {
-    var isLast = i === kpis.length - 1;
+    // O botão de "concluídos 90 dias" fica fixo no card "Concluído",
+    // não no último — assim continua no lugar certo mesmo com 7 KPIs.
+    var isConcl = k.label === 'Concluído';
     return '<div style="background:var(--white);padding:14px 18px;position:relative;">'
       + '<div style="font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:5px;">' + k.label + '</div>'
       + '<div style="font-size:26px;font-weight:700;color:' + k.cor + ';line-height:1;">' + k.val + '</div>'
-      + (isLast ? '<button id="btn-concl90" onclick="filtrarConcluidos90()" title="Ver concluídos nos últimos 90 dias" style="position:absolute;top:10px;right:10px;display:flex;align-items:center;justify-content:center;width:22px;height:22px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;border-radius:2px;padding:0;transition:border-color .15s,color .15s;" onmouseover="this.style.borderColor=\'#3BD23D\';this.style.color=\'#3BD23D\'" onmouseout="if(!this.classList.contains(\'active\')){this.style.borderColor=\'var(--border)\';this.style.color=\'var(--muted)\'}"><svg width="11" height="11" viewBox="0 0 11 11" fill="none"><rect x="1" y="2" width="9" height="8.5" rx="1" stroke="currentColor" stroke-width="1.2"/><path d="M3.5 1v2M7.5 1v2M1 5h9" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></button>' : '')
+      + (isConcl ? '<button id="btn-concl90" onclick="filtrarConcluidos90()" title="Ver concluídos nos últimos 90 dias" style="position:absolute;top:10px;right:10px;display:flex;align-items:center;justify-content:center;width:22px;height:22px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;border-radius:2px;padding:0;transition:border-color .15s,color .15s;" onmouseover="this.style.borderColor=\'#3BD23D\';this.style.color=\'#3BD23D\'" onmouseout="if(!this.classList.contains(\'active\')){this.style.borderColor=\'var(--border)\';this.style.color=\'var(--muted)\'}"><svg width="11" height="11" viewBox="0 0 11 11" fill="none"><rect x="1" y="2" width="9" height="8.5" rx="1" stroke="currentColor" stroke-width="1.2"/><path d="M3.5 1v2M7.5 1v2M1 5h9" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></button>' : '')
       + '</div>';
   }).join('');
 }
@@ -3688,6 +3694,7 @@ function renderAcoesUnified() {
       || (stdVals.indexOf('Futuro')       >= 0 && computedStatus === 'Futuro')
       || (stdVals.indexOf('Nao iniciado') >= 0 && computedStatus === 'Pendente')
       || (stdVals.indexOf('Em andamento') >= 0 && computedStatus === 'Em andamento')
+      || (stdVals.indexOf('Sem status')   >= 0 && computedStatus === 'Sem status')
       || stdVals.indexOf(computedStatus) >= 0;
     var okResp = (discValsF[0] === 'todos') ? true : (function() {
       // Use explicit disc field if present (Project tasks), else fall back to respToDiscFilter
@@ -3704,7 +3711,7 @@ function renderAcoesUnified() {
   renderAcoesKPI(list);
 
   // Sort: andamento first, then nao iniciado, then concluido
-  var order = { "Com atraso":0, "Em andamento":1, "Nao iniciado":2, "Futuro":3, "Concluido com atraso":4, "Concluido":5, "Pendente":2 };
+  var order = { "Com atraso":0, "Em andamento":1, "Nao iniciado":2, "Futuro":3, "Concluido com atraso":4, "Concluido":5, "Pendente":2, "Sem status":6 };
   list.sort(function(a,b) {
     // Ordenação primária: prazo de entrega (mais próximo primeiro)
     var pa = parsePrazoAcao(a.prazo), pb = parsePrazoAcao(b.prazo);
@@ -4574,7 +4581,8 @@ function updateDiscHighlight() {
       || (stdVals.indexOf('Concluido')    >= 0 && cs === 'Concluido')
       || (stdVals.indexOf('Futuro')       >= 0 && cs === 'Futuro')
       || (stdVals.indexOf('Nao iniciado') >= 0 && cs === 'Pendente')
-      || (stdVals.indexOf('Em andamento') >= 0 && cs === 'Em andamento');
+      || (stdVals.indexOf('Em andamento') >= 0 && cs === 'Em andamento')
+      || (stdVals.indexOf('Sem status')   >= 0 && cs === 'Sem status');
     if (!okPrio || !okStd) return;
     var discs = a.disc ? [a.disc] : ((typeof respToDiscFilter !== 'undefined' && respToDiscFilter[a.resp]) || []);
     discs.forEach(function(d) { discEnv[d] = true; });
