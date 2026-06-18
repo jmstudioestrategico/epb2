@@ -552,6 +552,7 @@ body {
         <span style="font-size:11px;color:var(--muted);">→</span>
         <input type="date" id="acoes-date-to" style="font-family:'Roboto',sans-serif;font-size:10px;padding:5px 8px;border:1px solid var(--border);background:var(--white);color:var(--black);outline:none;border-radius:3px;height:32px;">
         <button id="acoes-date-clear" style="font-family:'Roboto',sans-serif;font-size:10px;padding:5px 10px;border:1px solid var(--border);background:var(--white);color:var(--muted);cursor:pointer;border-radius:3px;height:32px;">Limpar</button>
+        <button onclick="abrirRelatorioCronograma()" title="Abrir relatório de ações ordenado por data de início (nova aba)" style="font-family:'Roboto',sans-serif;font-size:10px;padding:5px 10px;border:1px solid var(--border);background:var(--white);color:var(--muted);cursor:pointer;border-radius:3px;height:32px;margin-left:auto;display:inline-flex;align-items:center;gap:5px;white-space:nowrap;letter-spacing:.04em;" onmouseover="this.style.borderColor='var(--green)';this.style.color='var(--black)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--muted)'">POR DATA DE INÍCIO ↗</button>
       </div>
     </div>
     <!-- Info responsáveis por disciplina selecionada -->
@@ -4247,6 +4248,141 @@ document.getElementById('raci-export-pdf') && document.getElementById('raci-expo
   win.document.write('<script>window.onload=function(){window.print();}<\/script></body></html>');
   win.document.close();
 });
+
+// ── RELATÓRIO DE CRONOGRAMA DE AÇÕES (por data de início) ────────────────────
+// Abre em nova aba um relatório da MESMA base `acoes`, ordenado por data de
+// início, com interruptores Escopo (Todas / Em aberto) x Visão (Lista /
+// Agrupado por disciplina). "Em aberto" = tudo que não está concluído.
+// Exportação via window.print() (PDF). Não toca a aba Ações por Disciplina.
+function abrirRelatorioCronograma() {
+  var dados = acoes.map(function(a) {
+    var ini = a.inicio || '';
+    var ord = 99999999;
+    if (ini) {
+      var p = ini.split('/');
+      if (p.length === 3) {
+        var y = p[2].length === 2 ? 2000 + parseInt(p[2], 10) : parseInt(p[2], 10);
+        ord = y * 10000 + parseInt(p[1], 10) * 100 + parseInt(p[0], 10);
+      }
+    }
+    return {
+      inicio: ini || '—',
+      ord: ord,
+      prazo: (a.prazo && a.prazo !== '-' && a.prazo !== '--') ? a.prazo : '—',
+      disc: a.disc || 'SEM DISCIPLINA',
+      item: a.item || '',
+      resp: a.resp || '—',
+      status: computeAcaoStatus(a),
+      criticidade: normalizeCriticidade(a.criticidade) || '—'
+    };
+  });
+
+  var now = new Date().toLocaleDateString('pt-BR');
+  var jsonDados = JSON.stringify(dados).replace(/<\//g, '<\\/');
+
+  var html = '<!DOCTYPE html><html lang="pt-BR"><head><meta charset="utf-8">'
+    + '<title>Relatório de Cronograma de Ações — EPB2 Praia Brava 02</title><style>'
+    + '@page { size: A4 landscape; margin: 12mm; }'
+    + '* { box-sizing: border-box; }'
+    + 'body { font-family: Roboto, Arial, sans-serif; color:#0A0A0A; margin:0; padding:24px; background:#fff; }'
+    + 'h1 { font-size:15px; font-weight:700; letter-spacing:.05em; margin:0 0 4px; }'
+    + '.sub { font-size:11px; color:#8C8C86; margin-bottom:18px; }'
+    + '.sub b { color:#0A0A0A; }'
+    + '.controls { display:flex; gap:24px; flex-wrap:wrap; align-items:flex-end; margin-bottom:18px; padding-bottom:16px; border-bottom:1px solid #EBEBEB; }'
+    + '.cg-label { font-size:9px; letter-spacing:.16em; text-transform:uppercase; color:#8C8C86; font-weight:600; margin-bottom:6px; }'
+    + '.btnrow { display:flex; gap:6px; }'
+    + '.tg { font-family:Roboto,Arial,sans-serif; font-size:11px; padding:7px 14px; border:1px solid #D8D8D4; background:#fff; color:#5A5A55; cursor:pointer; border-radius:3px; }'
+    + '.tg.on { background:#0A0A0A; color:#fff; border-color:#0A0A0A; }'
+    + '.print-btn { margin-left:auto; font-family:Roboto,Arial,sans-serif; font-size:11px; font-weight:600; padding:8px 18px; border:1px solid #0A0A0A; background:#0A0A0A; color:#fff; cursor:pointer; border-radius:3px; letter-spacing:.04em; }'
+    + '.count { font-size:11px; color:#8C8C86; margin-bottom:10px; }'
+    + 'table { border-collapse:collapse; width:100%; margin-bottom:14px; }'
+    + 'th { background:#0A0A0A; color:#fff; font-size:8.5px; letter-spacing:.04em; padding:7px 6px; text-align:left; white-space:nowrap; }'
+    + 'td { padding:6px; border-bottom:1px solid #EBEBEB; font-size:9px; vertical-align:top; }'
+    + 'td.c { text-align:center; white-space:nowrap; }'
+    + '.disc-h { font-size:10px; font-weight:700; letter-spacing:.10em; text-transform:uppercase; color:#0A0A0A; background:#F4F4F2; padding:7px 10px; margin:16px 0 0; border-left:3px solid #3BD23D; }'
+    + '.disc-c { color:#8C8C86; font-weight:500; }'
+    + '.chip { display:inline-block; padding:2px 7px; border-radius:10px; font-size:8px; font-weight:700; white-space:nowrap; }'
+    + '.st-conc { background:#EDFAED; color:#1D6B1E; }'
+    + '.st-and  { background:#EBF4FF; color:#1A4F8A; }'
+    + '.st-pend { background:#FFF5E6; color:#7A4500; }'
+    + '.st-atr  { background:#FDECEA; color:#7B1D1D; }'
+    + '.st-fut  { background:#EEF0F2; color:#54606B; }'
+    + '.cr-crit { color:#C62828; font-weight:700; }'
+    + '.cr-alta { color:#B45309; font-weight:600; }'
+    + '.cr-media{ color:#1A4F8A; }'
+    + '.cr-baixa{ color:#8C8C86; }'
+    + '@media print { body { padding:0; } .controls { display:none; } .count { display:none; } thead { display:table-header-group; } tr { page-break-inside:avoid; } .disc-h { page-break-after:avoid; } }'
+    + '</style></head><body>'
+    + '<h1>Relatório de Cronograma de Ações — EPB2 Praia Brava 02</h1>'
+    + '<div class="sub">Gerado em ' + now + ' · <span id="rel-combo"></span> · ordenado por data de início · MANNZ Arquitetos Associados · Construtora Axia Vectra</div>'
+    + '<div class="controls">'
+    + '<div><div class="cg-label">Escopo</div><div class="btnrow">'
+    + '<button class="tg on" data-g="escopo" data-v="todas">Todas</button>'
+    + '<button class="tg" data-g="escopo" data-v="aberto">Em aberto</button>'
+    + '</div></div>'
+    + '<div><div class="cg-label">Visão</div><div class="btnrow">'
+    + '<button class="tg on" data-g="visao" data-v="lista">Lista por início</button>'
+    + '<button class="tg" data-g="visao" data-v="disc">Agrupado por disciplina</button>'
+    + '</div></div>'
+    + '<button class="print-btn" onclick="window.print()">Imprimir / Salvar PDF</button>'
+    + '</div>'
+    + '<div class="count" id="rel-count"></div>'
+    + '<div id="rel-body"></div>'
+    + '<script>'
+    + 'var DADOS = ' + jsonDados + ';'
+    + 'var state = { escopo:"todas", visao:"lista" };'
+    + 'function esc(s){ return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }'
+    + 'function stChip(s){ var cls="st-fut", t=s;'
+    + ' if(s==="Concluido"){cls="st-conc";t="Concluído";}'
+    + ' else if(s==="Concluido com atraso"){cls="st-conc";t="Concluído c/ atraso";}'
+    + ' else if(s==="Em andamento"){cls="st-and";}'
+    + ' else if(s==="Pendente"){cls="st-pend";}'
+    + ' else if(s==="Com atraso"){cls="st-atr";}'
+    + ' else if(s==="Futuro"){cls="st-fut";}'
+    + ' return "<span class=\\"chip "+cls+"\\">"+esc(t)+"</span>"; }'
+    + 'function crCell(c){ var cls="cr-baixa";'
+    + ' if(c==="Crítica")cls="cr-crit"; else if(c==="Alta")cls="cr-alta"; else if(c==="Media")cls="cr-media";'
+    + ' return "<span class=\\""+cls+"\\">"+esc(c)+"</span>"; }'
+    + 'function tabela(rows, grouped){'
+    + ' var head = "<tr><th>Início</th><th>Prazo</th>"+(grouped?"":"<th>Disciplina</th>")+"<th>Ação</th><th>Responsável</th><th>Status</th><th>Criticidade</th></tr>";'
+    + ' var body="";'
+    + ' rows.forEach(function(r){'
+    + '   body += "<tr><td class=\\"c\\">"+esc(r.inicio)+"</td><td class=\\"c\\">"+esc(r.prazo)+"</td>"'
+    + '     + (grouped?"":"<td>"+esc(r.disc)+"</td>")'
+    + '     + "<td>"+esc(r.item)+"</td><td>"+esc(r.resp)+"</td>"'
+    + '     + "<td class=\\"c\\">"+stChip(r.status)+"</td><td class=\\"c\\">"+crCell(r.criticidade)+"</td></tr>";'
+    + ' });'
+    + ' return "<table><thead>"+head+"</thead><tbody>"+body+"</tbody></table>"; }'
+    + 'function render(){'
+    + ' var rows = DADOS.slice();'
+    + ' if(state.escopo==="aberto"){ rows = rows.filter(function(r){ return r.status!=="Concluido" && r.status!=="Concluido com atraso"; }); }'
+    + ' rows.sort(function(a,b){ return a.ord-b.ord; });'
+    + ' var out="";'
+    + ' if(state.visao==="lista"){ out = tabela(rows, false); }'
+    + ' else {'
+    + '   var groups={};'
+    + '   rows.forEach(function(r){ if(!groups[r.disc])groups[r.disc]=[]; groups[r.disc].push(r); });'
+    + '   var discs = Object.keys(groups).sort(function(a,b){ return a.localeCompare(b,"pt"); });'
+    + '   discs.forEach(function(d){ var g=groups[d];'
+    + '     out += "<h3 class=\\"disc-h\\">"+esc(d)+" <span class=\\"disc-c\\">("+g.length+")</span></h3>"+tabela(g, true); });'
+    + ' }'
+    + ' document.getElementById("rel-count").textContent = rows.length+" ações";'
+    + ' document.getElementById("rel-combo").innerHTML = "<b>"+(state.escopo==="aberto"?"Em aberto":"Todas as ações")+"</b> · "+(state.visao==="disc"?"agrupado por disciplina":"lista por data de início");'
+    + ' document.getElementById("rel-body").innerHTML = out || "<div style=\\"padding:40px;text-align:center;color:#8C8C86;font-size:12px;\\">Nenhuma ação para os filtros selecionados.</div>";'
+    + '}'
+    + 'document.querySelectorAll(".tg").forEach(function(b){ b.addEventListener("click", function(){'
+    + '   var g=b.getAttribute("data-g");'
+    + '   document.querySelectorAll(".tg[data-g=\\""+g+"\\"]").forEach(function(x){ x.classList.remove("on"); });'
+    + '   b.classList.add("on"); state[g]=b.getAttribute("data-v"); render();'
+    + ' }); });'
+    + 'render();'
+    + '<\/script></body></html>';
+
+  var win = window.open('', '_blank');
+  if (!win) { alert('Permita pop-ups para abrir o relatório.'); return; }
+  win.document.write(html);
+  win.document.close();
+}
 
 // ── GRÁFICO DE TENDÊNCIA (Jan/2026 → Jun/2029) ──────────────────────────────
 function drawTrendChart() {
