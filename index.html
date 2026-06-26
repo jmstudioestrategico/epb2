@@ -5359,15 +5359,18 @@ var _unresolvedResps = [
 })();
 </script>
 <script>
-// Voltar ao topo — botão FIXO a 750px do topo, sempre visível na aba Ações.
-// Criado no <body> para não herdar transform de ancestral.
+// Voltar ao topo — acompanha a ROLAGEM EXTERNA (barra da página Wix). O iframe
+// não enxerga o scroll do pai, mas consegue medir sua própria posição na janela
+// visível via getBoundingClientRect do documento: quando a página externa rola,
+// o topo do iframe sai por cima (valor negativo). Com isso posicionamos o botão
+// na base da faixa visível, no canto inferior direito.
 (function() {
   var btn = document.createElement('button');
   btn.id = 'back-to-top';
   btn.setAttribute('aria-label', 'Voltar ao topo');
   btn.setAttribute('title', 'Voltar ao topo');
   btn.innerHTML = '\u2191';
-  btn.style.cssText = 'position:fixed;top:750px;right:24px;width:40px;height:40px;border-radius:50%;'
+  btn.style.cssText = 'position:absolute;right:24px;width:40px;height:40px;border-radius:50%;'
     + 'border:1px solid var(--border);background:rgba(255,255,255,0.97);color:var(--muted);cursor:pointer;'
     + 'display:none;align-items:center;justify-content:center;box-shadow:0 2px 12px rgba(0,0,0,0.18);'
     + 'font-family:inherit;font-size:18px;line-height:1;z-index:9999;transition:background .15s,color .15s;';
@@ -5377,8 +5380,31 @@ var _unresolvedResps = [
     var p = document.getElementById('panel-3');
     return p && p.classList.contains('active');
   }
+
+  // Altura da faixa do iframe efetivamente visível na janela do pai.
+  function viewportInfo() {
+    var docTop = document.documentElement.getBoundingClientRect().top; // <=0 quando rolou
+    var ownH = window.innerHeight || document.documentElement.clientHeight || 0;
+    var vv = window.visualViewport;
+    var parentH = (vv && vv.height) ? vv.height : ownH;
+    // quanto do topo do iframe já saiu acima da viewport do pai
+    var hiddenTop = docTop < 0 ? -docTop : 0;
+    // base visível, em coordenadas do documento do iframe
+    var visibleBottomDoc = hiddenTop + Math.min(parentH, ownH);
+    return { hiddenTop: hiddenTop, visibleBottomDoc: visibleBottomDoc };
+  }
+
+  function reposition() {
+    var vi = viewportInfo();
+    // 24px acima da base visível; nunca acima do topo do conteúdo
+    var topPx = Math.max(vi.hiddenTop + 24, vi.visibleBottomDoc - 64);
+    btn.style.top = topPx + 'px';
+  }
+
   function update() {
-    btn.style.display = panel3Active() ? 'flex' : 'none';
+    var show = panel3Active();
+    if (show) reposition();
+    btn.style.display = show ? 'flex' : 'none';
   }
   window._bttUpdate = update;
 
@@ -5390,7 +5416,34 @@ var _unresolvedResps = [
     if (sc) { try { sc.scrollTo({ top: 0, behavior: 'smooth' }); } catch (e2) { sc.scrollTop = 0; } }
     var top = document.querySelector('.main') || document.getElementById('panel-3');
     if (top && top.scrollIntoView) { try { top.scrollIntoView({ behavior: 'smooth', block: 'start' }); } catch (e4) {} }
+    // pede à página externa (Wix) para subir também
     try { if (window.parent && window.parent !== window) { window.parent.postMessage({ epb2: 'scrollTop' }, '*'); } } catch (e3) {}
+  });
+
+  // Acompanha qualquer rolagem/redimensionamento. rAF mantém colado mesmo quando
+  // a rolagem é da página externa (que não dispara scroll dentro do iframe).
+  window.addEventListener('scroll', update, { passive: true });
+  document.addEventListener('scroll', update, { passive: true, capture: true });
+  window.addEventListener('resize', update);
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener('scroll', update);
+    window.visualViewport.addEventListener('resize', update);
+  }
+  function loop() { if (panel3Active()) update(); requestAnimationFrame(loop); }
+
+  // Reforço: se a página Wix enviar a posição visível, usamos diretamente.
+  // No Wix (Velo), no onScroll da página: iframeEl.postMessage({epb2:'pos', topVisivelDoc:Y, alturaVisivel:H}, '*')
+  var _parentPos = null;
+  window.addEventListener('message', function(ev) {
+    var d = ev && ev.data;
+    if (d && d.epb2 === 'pos' && typeof d.topVisivelDoc === 'number') {
+      _parentPos = d;
+      if (panel3Active()) {
+        var topPx = Math.max(d.topVisivelDoc + 24, d.topVisivelDoc + (d.alturaVisivel || 0) - 64);
+        btn.style.top = topPx + 'px';
+        btn.style.display = 'flex';
+      }
+    }
   });
 
   var _origGoTab = window.goTab;
@@ -5398,6 +5451,7 @@ var _unresolvedResps = [
     window.goTab = function() { var r = _origGoTab.apply(this, arguments); setTimeout(update, 60); return r; };
   }
   update();
+  loop();
 })();
 </script>
 </body>
