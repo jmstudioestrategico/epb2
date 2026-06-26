@@ -156,6 +156,35 @@ body {
   color: var(--muted); margin-bottom: 18px;
 }
 
+/* ── AGENDA DA SEMANA ── */
+.ag-row { display: grid; grid-template-columns: repeat(5, 1fr); }
+.ag-cell { border-left: 1px solid #E4E4E0; }
+.ag-cell:first-child { border-left: 0; }
+.ag-hcell { padding: 7px 4px; text-align: center; background: #F7F7F5; border-bottom: 1px solid #E4E4E0; display: flex; flex-direction: column; gap: 1px; }
+.ag-hcell.is-today { background: #EDFAED; }
+.ag-wd { font-size: 8px; letter-spacing: .14em; font-weight: 500; color: var(--muted); }
+.ag-dn { font-size: 15px; font-weight: 500; color: var(--black); line-height: 1.1; }
+.ag-hcell.is-today .ag-dn { color: #1D6B1E; }
+.ag-lanes { position: relative; background: var(--white); }
+.ag-bgcols { position: absolute; inset: 0; display: grid; grid-template-columns: repeat(5, 1fr); pointer-events: none; }
+.ag-bgcol { border-left: 1px solid #F0F0EC; }
+.ag-bgcol:first-child { border-left: 0; }
+.ag-bgcol.is-today { background: #F6FBF6; }
+.ag-bar { position: absolute; display: flex; align-items: center; gap: 5px; font-size: 10px; font-weight: 400; padding: 0 7px; overflow: hidden; cursor: pointer; box-sizing: border-box; margin-left: 2px; transition: filter .12s; }
+.ag-bar:hover { filter: brightness(0.96); }
+.ag-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+.ag-bt { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.ag-arrow { margin-left: auto; font-weight: 700; opacity: .6; flex-shrink: 0; }
+.ag-mcell { padding: 8px 6px; text-align: center; font-size: 10px; font-weight: 500; letter-spacing: .04em; color: #378ADD; cursor: pointer; background: #FAFAF8; border-top: 1px solid #E4E4E0; }
+.ag-mcell:hover { background: #EBF3FD; }
+.ag-mcell.ag-empty { color: #D8D8D4; cursor: default; background: #FAFAF8; font-weight: 300; }
+.ag-pop-item { display: flex; align-items: center; gap: 10px; padding: 9px 18px; cursor: pointer; border-bottom: 1px solid #F2F2EE; }
+.ag-pop-item:hover { background: #F7F7F5; }
+.ag-pi-txt { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+.ag-pi-item { font-size: 11px; font-weight: 400; color: var(--black); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ag-pi-meta { font-size: 9px; letter-spacing: .03em; color: var(--muted); text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ag-pi-badge { font-size: 8px; letter-spacing: .1em; text-transform: uppercase; font-weight: 500; padding: 3px 7px; border-radius: 2px; flex-shrink: 0; }
+
 .g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
 .g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
 .mb16 { margin-bottom: 16px; }
@@ -459,6 +488,35 @@ body {
     <!-- BLOCO ALERTAS -->
     <div id="alertas-bloco" class="mb28"></div>
 
+    <!-- ══ AGENDA DA SEMANA (calendário de ações) ══ -->
+    <div class="slabel mb16">Agenda da Semana</div>
+    <div class="card mb28" style="padding:18px 20px;position:relative;" id="agenda-card">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px;flex-wrap:wrap;">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <button id="ag-prev" aria-label="Semana anterior" style="font-family:inherit;width:30px;height:30px;border:1px solid var(--border);background:var(--white);color:var(--black);cursor:pointer;border-radius:3px;font-size:15px;line-height:1;">&#8249;</button>
+          <button id="ag-next" aria-label="Próxima semana" style="font-family:inherit;width:30px;height:30px;border:1px solid var(--border);background:var(--white);color:var(--black);cursor:pointer;border-radius:3px;font-size:15px;line-height:1;">&#8250;</button>
+          <div id="ag-title" style="font-size:13px;font-weight:500;letter-spacing:.04em;color:var(--black);margin-left:6px;min-width:170px;"></div>
+        </div>
+        <button id="ag-today" style="font-family:inherit;font-size:9px;letter-spacing:.14em;text-transform:uppercase;font-weight:500;padding:7px 12px;border:1px solid var(--border);background:var(--white);color:var(--muted);cursor:pointer;border-radius:3px;">Semana atual</button>
+      </div>
+      <div style="display:flex;gap:16px;flex-wrap:wrap;font-size:10px;letter-spacing:.04em;color:#5F5E5A;margin-bottom:14px;" id="ag-legend"></div>
+      <div id="ag-body" style="border:1px solid #E4E4E0;"></div>
+      <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;font-size:10px;color:var(--muted);margin-top:12px;letter-spacing:.04em;">
+        <span id="ag-weekcount"></span>
+        <span id="ag-foot"></span>
+      </div>
+      <!-- popup do dia -->
+      <div id="ag-pop" style="display:none;position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(10,10,10,0.45);align-items:flex-start;justify-content:center;z-index:50;padding:30px 0;">
+        <div style="background:var(--white);border:1px solid var(--border);width:640px;max-width:92%;max-height:760px;display:flex;flex-direction:column;box-shadow:0 8px 40px rgba(0,0,0,0.2);">
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid #E4E4E0;">
+            <span id="ag-pop-title" style="font-size:12px;font-weight:500;letter-spacing:.04em;color:var(--black);"></span>
+            <button id="ag-pop-close" style="font-family:inherit;border:none;background:none;font-size:18px;color:var(--muted);cursor:pointer;line-height:1;">&times;</button>
+          </div>
+          <div id="ag-pop-list" style="overflow-y:auto;padding:6px 0;"></div>
+        </div>
+      </div>
+    </div>
+
     <div class="g2 mb28">
       <div class="card" style="display:flex;flex-direction:column;">
         <div class="card-title" title="Média ponderada pelo trabalho (horas) de todas as tarefas da etapa" style="cursor:help;">Etapas do Projeto</div>
@@ -474,9 +532,9 @@ body {
           <div id="ciclos-list"></div>
           <div class="card-link-hint">→ Ver linha do tempo macro</div>
         </div>
-        <div class="card card-anchor" style="cursor:default;">
+        <div class="card card-anchor" style="cursor:default;flex:1;display:flex;flex-direction:column;">
           <div class="card-title">Status Ações</div>
-          <div id="disc-status-card"></div>
+          <div id="disc-status-card" style="flex:1;display:flex;flex-direction:column;"></div>
         </div>
       </div>
     </div>
@@ -809,7 +867,7 @@ const disciplinas = [
 // ─────────────────────────────────────────────────────────────────────────────
 
 var acoesSemanal = [
-  // ── Controle de Ações (EPB2CONTROLE_ACOES — 19/06/2026) ──────────────────────
+  // ── Controle de Ações (EPB2CONTROLE_ACOES — 26/06/2026) ──────────────────────
   // Não mesclar com acoesCROR aqui — a junção é feita em var acoes abaixo.
   { prazo:"31/03/26", item:"Definição do cronograma geral e demais organizações", desc:"Incluir disciplinas faltantes no cronograma, e finalizar demais organizações conforme alinhado com construtora.", resp:"Mannz", criticidade:"Crítica", status:"Concluído", conclusao:"31/03/26", diasRest:"--", obs:"Informado em reunião do dia 27/03/26 que o cronograma está em finalização, com previsão o início da próxima semana. Foi alinhado sobre esse asunto com a Axia na reunião de alinhamento de 02/04/2026, e serão feitas as adequações. Mannz enviou e-mail no dia 10/04/2026 informando a todos que a apresentação do cronograma ocorrerá no dia 16/04/2026. Cronograma enviado por e-mail aos projetistas em 17/04/2026.", inicio:"12/03/26", disc:"COORDENAÇÃO E COMPATIBILIZAÇÃO" },
   { prazo:"20/03/26", item:"Definição de volume do reservatório (carregamento elétrico) + acesso bombeiros", desc:"Repassar informações para arquitetura avaliar necessidade de alteração na arquitetura.", resp:"Thórus", criticidade:"Alta", status:"Concluído", conclusao:"20/03/26", diasRest:"--", obs:"", inicio:"17/03/26", disc:"PREVENTIVO" },
@@ -819,7 +877,7 @@ var acoesSemanal = [
   { prazo:"06/04/26", item:"Base arquitetura para repasse à NWO reingressar na prefeitura", desc:"Incorporar Subestação e dimensionamento das lixeiras. O projeto a ser protocolado na prefeitura não está vinculado às alterações de produto solicitadas pelo Mario.", resp:"Bernardes", criticidade:"Crítica", status:"Concluído", conclusao:"06/04/26", diasRest:"--", obs:"Thórus analisou propostas da arquitetura par a subestação e informou suas considerações. Foi definido na reunião de 31/02/26 que a proposta ‘A’ será seguida para o projeto da subestação, com pequenas adequações a serem realizadas para a arquitetura. Essa posição já deve ser indicada no projeto a ser liberado dia 06/04/26 para o projeto aprovativo. Axia confirmou que o dimensionamento da lixeira do restaurante deve atender a referência ambiental apontada no EIV (INIS 13).", inicio:"18/03/26", disc:"ARQUITETURA" },
   { prazo:"20/04/26", item:"Projeto Arquitetônico Legal", desc:"Atualizar material para reingresso na prefeitura, com base na arquitetura atualizada (será enviada em 06/04/2026)", resp:"NWO", criticidade:"Crítica", status:"Concluído", conclusao:"20/04/26", diasRest:"--", obs:"Protocolado em 23/04/2026", inicio:"07/04/26", disc:"PROJETO LEGAL" },
   { prazo:"23/03/26", item:"Base arquitetura para repasse à NWO reingressar na prefeitura", desc:"Confirmar elementos permitidos no recuo frontal (subestação) e na lateral", resp:"Axia", criticidade:"Alta", status:"Concluído", conclusao:"23/03/26", diasRest:"--", obs:"Repassado por e-mail em 23/03/26", inicio:"18/03/26", disc:"CONSTRUTORA" },
-  { prazo:"31/03/26", item:"Alinhamento com contenção/estrutura sobre viabilidade técnica - informado a necessidade da realização da sondagem para andamento das soluções de contenção", desc:"Axia contratar sondagem alternativa para rua dos fundos para liberar documento técnico para BornSales dimensionar com maior precisão a solução da contenção da parede dos fundos", resp:"Axia", criticidade:"Alta", status:"Com atraso", conclusao:"-", diasRest:"-80", obs:"Informado pela Axia em 27/03/26 que ainda não conseguem liberar a sondagem na malha, tal como precisa, por conta da supressão e por ser uma área bem densa de vegetação. No dia 26/03/26 as engenheiras Monica e Anni foram até o terreno para verificação local. Atualmente há duas possibilidades: 1: Sair a supressão do terreno vizinho para permitir a sondagem (isso está para sair nos próximos dias). 2: Realização da sondagem pela rua dos fundos para minimizar as incertezas. Mannz aguarda sinalização da construtora referente a esse assunto.", inicio:"19/03/26", disc:"CONSTRUTORA" },
+  { prazo:"31/03/26", item:"Alinhamento com contenção/estrutura sobre viabilidade técnica - informado a necessidade da realização da sondagem para andamento das soluções de contenção", desc:"Axia contratar sondagem alternativa para rua dos fundos para liberar documento técnico para BornSales dimensionar com maior precisão a solução da contenção da parede dos fundos", resp:"Axia", criticidade:"Alta", status:"Com atraso", conclusao:"-", diasRest:"-87", obs:"Informado pela Axia em 27/03/26 que ainda não conseguem liberar a sondagem na malha, tal como precisa, por conta da supressão e por ser uma área bem densa de vegetação. No dia 26/03/26 as engenheiras Monica e Anni foram até o terreno para verificação local. Atualmente há duas possibilidades: 1: Sair a supressão do terreno vizinho para permitir a sondagem (isso está para sair nos próximos dias). 2: Realização da sondagem pela rua dos fundos para minimizar as incertezas. Mannz aguarda sinalização da construtora referente a esse assunto.", inicio:"19/03/26", disc:"CONSTRUTORA" },
   { prazo:"25/03/26", item:"BEP", desc:"Postagem do BEP no Autodoc", resp:"Mannz", criticidade:"Media", status:"Concluído", conclusao:"25/03/26", diasRest:"--", obs:"", inicio:"25/03/26", disc:"COORDENAÇÃO E COMPATIBILIZAÇÃO" },
   { prazo:"02/04/26", item:"Reingresso disciplinas Climatização/Exaustão e Aquecimento Central", desc:"Mannz entrou em contato para situar disciplinas no processo. Alinhar agenda para reunião de apresentação do EP entregue em 2025, para alinhamento dos próximos passos no projeto.", resp:"Mannz", criticidade:"Media", status:"Concluído", conclusao:"02/04/26", diasRest:"--", obs:"Reunião de start com Value ocorreu em 09/04/2026. Alinhamento com Aquecimento Central feito. Próximos passos serão alinhados após apresentação do cronograma.", inicio:"27/03/26", disc:"COORDENAÇÃO E COMPATIBILIZAÇÃO" },
   { prazo:"02/04/26", item:"Start disciplinas Paisagismo e Cozinha Industrial", desc:"Contratos em fase de finalização. Entrar em contato para situar processo, e aguardar desdobramentos da reunião de 30/02/26 para alinhar próximos passos.", resp:"Mannz", criticidade:"Media", status:"Concluído", conclusao:"02/04/26", diasRest:"--", obs:"Mannz situou projetista em relação ao projeto. Após desdobramentos da definição do clube será alinhado com o projetista próximos passos.", inicio:"27/03/26", disc:"COORDENAÇÃO E COMPATIBILIZAÇÃO" },
@@ -838,8 +896,8 @@ var acoesSemanal = [
   { prazo:"01/04/26", item:"Consolidação EP Arquitetura Embasamento", desc:"Retornar com definição dos itens discutidos na reunião de 30/03/2026.", resp:"Axia", criticidade:"Crítica", status:"Concluído", conclusao:"01/04/26", diasRest:"--", obs:"Repassado em reunião no dia 04/05/2026", inicio:"30/03/26", disc:"CONSTRUTORA" },
   { prazo:"17/04/26", item:"Acesso viatura de Bombeiros", desc:"Retornar com resposta da consulta junto ao Corpo de Bombeiros sobre o acesso da viatura de bombeiros no empreendimento.", resp:"Thórus", criticidade:"Alta", status:"Concluído", conclusao:"17/04/26", diasRest:"--", obs:"Enviado por e-mail em 27/04/2026.", inicio:"31/03/26", disc:"PREVENTIVO" },
   { prazo:"17/04/26", item:"Abastecimento Gás", desc:"Retornar com resposta da SCGÁS com croqui para Arquitetura absorver em projeto", resp:"Thórus", criticidade:"Alta", status:"Concluído", conclusao:"17/04/26", diasRest:"--", obs:"Enviado por e-mail em 23/04/2026 a viabilidade para atendimento.", inicio:"31/03/26", disc:"PREVENTIVO" },
-  { prazo:"30/06/26", item:"Lançamento pontos elétricos / Produto Construtora", desc:"Analisar lançamento de pontos elétricos feito pela Thórus e retornar com validação/considerações referentes ao produto.", resp:"Axia", criticidade:"Alta", status:"Em andamento", conclusao:"-", diasRest:"11", obs:"O projetista elétrico indicou que o lançamento dos pontos foi baseado no projeto Brava 1, vizinho ao empreendimento Brava 2. Ele ressaltou que é adequado que a Axia valide se esse lançamento atende as expectativas do produto Brava 2, visto que ele pode ter diferenciais em relação ao primeiro empreendimento. Atualizado o prazo considerando a definição do cronograma, e que esse retorno deve vir antes da próxima entrega da Thórus (apartamentos)", inicio:"31/03/26", disc:"CONSTRUTORA" },
-  { prazo:"30/06/26", item:"Definição quantidade de quadros em apartamentos Garden/Duplex", desc:"Avaliar questões de custo e de produto para decidir se padroniza o lançamento de um quadro por pavimento ou mantém da forma atual.", resp:"Axia", criticidade:"Alta", status:"Em andamento", conclusao:"-", diasRest:"11", obs:"Atualizado o prazo considerando a definição do cronograma, e que esse retorno deve vir antes da próxima entrega da Thórus (apartamentos)", inicio:"31/03/26", disc:"CONSTRUTORA" },
+  { prazo:"30/06/26", item:"Lançamento pontos elétricos / Produto Construtora", desc:"Analisar lançamento de pontos elétricos feito pela Thórus e retornar com validação/considerações referentes ao produto.", resp:"Axia", criticidade:"Alta", status:"Em andamento", conclusao:"-", diasRest:"4", obs:"O projetista elétrico indicou que o lançamento dos pontos foi baseado no projeto Brava 1, vizinho ao empreendimento Brava 2. Ele ressaltou que é adequado que a Axia valide se esse lançamento atende as expectativas do produto Brava 2, visto que ele pode ter diferenciais em relação ao primeiro empreendimento. Atualizado o prazo considerando a definição do cronograma, e que esse retorno deve vir antes da próxima entrega da Thórus (apartamentos)", inicio:"31/03/26", disc:"CONSTRUTORA" },
+  { prazo:"30/06/26", item:"Definição quantidade de quadros em apartamentos Garden/Duplex", desc:"Avaliar questões de custo e de produto para decidir se padroniza o lançamento de um quadro por pavimento ou mantém da forma atual.", resp:"Axia", criticidade:"Alta", status:"Em andamento", conclusao:"-", diasRest:"4", obs:"Atualizado o prazo considerando a definição do cronograma, e que esse retorno deve vir antes da próxima entrega da Thórus (apartamentos)", inicio:"31/03/26", disc:"CONSTRUTORA" },
   { prazo:"13/04/26", item:"Premissas Climatização", desc:"Enviar premissas de Climatização para Value. Solicitar análise técnica sobre as duas soluções apresentadas em relação área técnica das condensadoras.", resp:"Mannz", criticidade:"Alta", status:"Concluído", conclusao:"13/04/26", diasRest:"--", obs:"Premisas preenchidas pela construtora no briefing enviado pela Thórus.", inicio:"09/04/26", disc:"COORDENAÇÃO E COMPATIBILIZAÇÃO" },
   { prazo:"17/04/26", item:"Análise premissas Climatização", desc:"Avaliar premissas de Climatização preenchidas pela construtora", resp:"Value", criticidade:"Media", status:"Concluído", conclusao:"17/04/26", diasRest:"--", obs:"Caso haja necessidade de mais alguma informação para o andamento do projeto, deve ser informado para a coordenação cobrar da construtora.", inicio:"09/04/26", disc:"CLIMATIZAÇÃO E EXAUSTÃO" },
   { prazo:"17/04/26", item:"Envio Cronograma", desc:"Enviar cronograma apresentado na reunião de 16/04/2026", resp:"Mannz", criticidade:"Crítica", status:"Concluído", conclusao:"17/04/26", diasRest:"--", obs:"", inicio:"16/04/26", disc:"COORDENAÇÃO E COMPATIBILIZAÇÃO" },
@@ -861,7 +919,7 @@ var acoesSemanal = [
   { prazo:"27/04/26", item:"Comparativo sistemas aquecimento central", desc:"Enviar documentos comparativo entre sistemas a gás e bombas de calor para Axia definir qual sistema será adotado.", resp:"Tecset", criticidade:"Crítica", status:"Concluído", conclusao:"27/04/26", diasRest:"--", obs:"Enviado por e-mail em 04/05/2026.", inicio:"22/04/26", disc:"AQUECIMENTO CENTRAL" },
   { prazo:"30/04/26", item:"Definição sistema Aquecimento Central", desc:"Definir tipo de sistema a ser adotado para a disciplina de Aqucimento Central", resp:"Axia", criticidade:"Alta", status:"Concluído", conclusao:"30/04/26", diasRest:"--", obs:"Enviado por e-mail em 07/05/2026.", inicio:"27/04/26", disc:"CONSTRUTORA" },
   { prazo:"15/05/26", item:"Estudo Implantação", desc:"Desenvolver um estudo preliminar de implantação para estudo de alternativas, considerando as contenções, afastamentos, estabilização, limites da cota 20 e relação com os terrenos vizinhos.", resp:"BornSales", criticidade:"Crítica", status:"Concluído", conclusao:"15/05/26", diasRest:"--", obs:"Enviado por e-mail 22/05/2026", inicio:"06/05/26", disc:"FUNDAÇÕES E CONTENÇÕES" },
-  { prazo:"12/06/26", item:"Exigência EIV: Viabilidade Celesc", desc:"Viabilidade de atendimento da rede elétrica (CELESC), com a descrição da demanda energética", resp:"Thórus", criticidade:"Alta", status:"Com atraso", conclusao:"-", diasRest:"-7", obs:"Axia está em contato com Thórus sobre retorno do protocolo.", inicio:"19/05/26", disc:"ELÉTRICO E TELECOMUNICAÇÕES" },
+  { prazo:"12/06/26", item:"Exigência EIV: Viabilidade Celesc", desc:"Viabilidade de atendimento da rede elétrica (CELESC), com a descrição da demanda energética", resp:"Thórus", criticidade:"Alta", status:"Com atraso", conclusao:"-", diasRest:"-14", obs:"Axia está em contato com Thórus sobre retorno do protocolo.", inicio:"19/05/26", disc:"ELÉTRICO E TELECOMUNICAÇÕES" },
   { prazo:"12/06/26", item:"Exigência EIV: Projeto Drenagem", desc:"Projeto executivo do sistema de drenagem pluvial, com memorial descritivo e de cálculo, com ART assinada", resp:"Thórus", criticidade:"Alta", status:"Concluído", conclusao:"12/06/26", diasRest:"--", obs:"Postado no autodoc em 12/06/26", inicio:"19/05/26", disc:"HIDRÁULICO E SANITÁRIO" },
   { prazo:"12/06/26", item:"Exigência EIV: Projeto Hidrossanitário", desc:"Projeto hidrossanitário, com ART e memorial descritivo", resp:"Thórus", criticidade:"Alta", status:"Concluído", conclusao:"12/06/26", diasRest:"--", obs:"Postado no autodoc em 12/06/26", inicio:"19/05/26", disc:"HIDRÁULICO E SANITÁRIO" },
   { prazo:"12/06/26", item:"Exigência EIV: Projeto Terraplenagem", desc:"Projeto de terraplenagem, com ART assinada", resp:"Lapa", criticidade:"Alta", status:"Concluído", conclusao:"12/06/26", diasRest:"--", obs:"Enviado por e-mail em 11/06/26", inicio:"22/05/26", disc:"TERRAPLENAGEM" },
@@ -873,7 +931,7 @@ var acoesSemanal = [
 
 var acoesCROR = [
   // ── Tarefas do Project (CRO) ─────────────────────────────────────────────────────────
-  // Gerado em 19/06/2026. Atualizado pela automação CROR.
+  // Gerado em 26/06/2026. Atualizado pela automação CROR.
   // Status vem da coluna manual STATUS do CROR (vazio = 'Sem status').
   // Não mesclar com acoesSemanal aqui — a junção é feita em var acoes abaixo.
   { prazo:"19/01/26", item:"ARQ: POSTAGEM BASE ARQUITETURA ATUALIZADA (IFC, DWG, PDF)", desc:"", resp:"BERNARDES", criticidade:"Crítica", status:"Concluido", conclusao:"19/01/26", diasRest:"--", obs:"", inicio:"06/01/26", disc:"ARQUITETURA", entregavel:false },
@@ -1436,7 +1494,7 @@ const projEnd   = new Date(Math.max.apply(null,_etDates));
 // com a data de atualização dos dados do CROR (campo max "Criado" do xlsx).
 // NÃO usar new Date() sem argumento — isso pega a data de hoje, não do CROR.
 const _CROR_DATA_REF = "2026-06-15"; // ← GAS: max campo Criado do CROR
-const _EXEC_DATA = "2026-06-19"; // ← GAS: data da última execução do script
+const _EXEC_DATA = "2026-06-26"; // ← GAS: data da última execução do script
 // Deriva o objeto Date a partir da string — sem timezone issues:
 const dataReferencia = (function(s) {
   var p = s.split("-");
@@ -1522,7 +1580,25 @@ function animateBars() {
 }
 
 // ── NAV ───────────────────────────────────────────────────────────────────────
+function resetAcoesFiltros() {
+  // Volta os filtros da aba Ações por Disciplina ao estado neutro
+  ['acao-prio', 'acao-std', 'acao-disc'].forEach(function(group) {
+    document.querySelectorAll('[data-ms-group="' + group + '"]').forEach(function(b) { b.classList.remove('active'); });
+    var todos = document.querySelector('[data-ms-group="' + group + '"][data-ms-val="todos"]');
+    if (todos) todos.classList.add('active');
+  });
+  var fromEl = document.getElementById('acoes-date-from');
+  var toEl   = document.getElementById('acoes-date-to');
+  if (fromEl) fromEl.value = '';
+  if (toEl)   toEl.value   = '';
+}
+
 function goTab(i) {
+  // Aba que estamos deixando — se for a 3 (Ações), limpa os filtros ao sair
+  var _leaving = document.querySelector('.tab.active');
+  var _leavingTab = _leaving ? _leaving.getAttribute('data-tab') : null;
+  if (_leavingTab === '3' && String(i) !== '3') { resetAcoesFiltros(); }
+
   document.querySelectorAll('.tab').forEach(function(x) { x.classList.remove('active'); });
   document.querySelectorAll('.panel').forEach(function(x) { x.classList.remove('active'); });
   document.querySelector('.tab[data-tab="' + i + '"]').classList.add('active');
@@ -1533,6 +1609,7 @@ function goTab(i) {
   var kpiBar = document.getElementById('kpi-bar');
   if (kpiBar) kpiBar.style.display = (String(i) === '0') ? '' : 'none';
   // renderizar aba de ações quando activada (elementos precisam estar visíveis)
+  if (String(i) === '0') { setTimeout(function(){ if (typeof AG !== 'undefined') AG.render(); }, 30); }
   if (String(i) === '2') { setTimeout(function(){ renderGantt('gantt-main'); }, 30); }
   if (String(i) === '3') { setTimeout(function(){
     populateDiscFilter();
@@ -1875,18 +1952,16 @@ function msMatch(val, group) {
 var _discStatusMap = {};
 
 function goDiscStatusFilter(key) {
-  var stdValMap = { andamento:'Em andamento', futuro:'Futuro', pendente:'Nao iniciado', atraso:'atraso', concluido:'Concluido', todos:'todos' };
+  var stdValMap = { andamento:'Em andamento', futuro:'Futuro', pendente:'Nao iniciado', atraso:'atraso', concluido:'Concluido', semstatus:'Sem status', todos:'todos' };
   window._fromStatusCard = true;
   goTab(3);
   setTimeout(function() {
-    // ── CONTRATO COM renderDiscStatus (card STATUS AÇÕES) ────────────────────
-    // Para que a contagem da aba bata exatamente com a do card, a janela aqui
-    // deve ser idêntica à de isInJanela90: from=null (sem limite inferior),
-    // to=_fim90 (limite superior). Se alterar a janela do card, alterar aqui.
+    // Card Status Ações conta TODAS as ações (sem janela). Para a aba bater com
+    // o card, não aplicamos limite de data: from e to vazios.
     var fromEl = document.getElementById('acoes-date-from');
     var toEl   = document.getElementById('acoes-date-to');
     if (fromEl) fromEl.value = '';
-    if (toEl)   toEl.value   = _fim90ISO;
+    if (toEl)   toEl.value   = '';
 
     document.querySelectorAll('[data-ms-group="acao-disc"]').forEach(function(b) { b.classList.remove('active'); });
     var discTodas = document.querySelector('[data-ms-group="acao-disc"][data-ms-val="todos"]');
@@ -1904,11 +1979,9 @@ function renderDiscStatus() {
   var el = document.getElementById('disc-status-card');
   if (!el) return;
 
-  // Count individual actions by computed status — same 90-day window as aba Ações
-  // Usa helper compartilhado isInJanela90 para garantir consistência com renderAcoesUnified
+  // Conta todas as ações por status calculado (sem filtro de janela)
   var bkts = { andamento:0, futuro:0, pendente:0, atraso:0, concluido:0, semstatus:0 };
   acoes.forEach(function(a) {
-    if (!isInJanela90(a)) return;
     var cs = computeAcaoStatus(a);
     if      (cs === 'Em andamento')         bkts.andamento++;
     else if (cs === 'Futuro')               bkts.futuro++;
@@ -1959,7 +2032,7 @@ function renderDiscStatus() {
     + '<span data-disc-key="todos" style="font-size:20px;font-weight:700;min-width:28px;text-align:right;cursor:pointer;" title="Ver todas as ações">' + total + '</span>'
     + '</div>'
     + '<div style="display:flex;flex-direction:column;gap:10px;">' + legend + '</div>'
-    + '<div data-disc-key="todos" style="cursor:pointer;margin-top:14px;color:var(--muted);font-size:9px;letter-spacing:.06em;">→ Ver ações por disciplina</div>';
+    + '<div data-disc-key="todos" style="cursor:pointer;margin-top:auto;padding-top:14px;color:var(--muted);font-size:9px;letter-spacing:.06em;">→ Ver ações por disciplina</div>';
 
   var newEl = el.cloneNode(true);
   el.parentNode.replaceChild(newEl, el);
@@ -2347,23 +2420,64 @@ function goToAcoesUrgentes() {
 }
 
 // Navega para aba 3 e destaca item específico
-function goToAcaoItem(encodedItem) {
+function goToAcaoItem(encodedItem, encodedDisc, taskIdx) {
   var item = decodeURIComponent(encodedItem);
+  var disc = (typeof encodedDisc !== 'undefined' && encodedDisc) ? decodeURIComponent(encodedDisc) : '';
+  var idx  = (typeof taskIdx !== 'undefined' && taskIdx !== null && taskIdx !== '') ? parseInt(taskIdx, 10) : -1;
+
+  // Garante que os botões de disciplina já existam (no 1º acesso à aba 3 ainda não foram criados)
+  if (typeof populateDiscFilter === 'function') populateDiscFilter();
+
+  // Status: "todos" — garante que ações concluídas também apareçam
   document.querySelectorAll('[data-ms-group="acao-std"]').forEach(function(b) { b.classList.remove('active'); });
   var todosBtn = document.querySelector('[data-ms-group="acao-std"][data-ms-val="todos"]');
   if (todosBtn) todosBtn.classList.add('active');
+
+  // Criticidade: "todos"
+  document.querySelectorAll('[data-ms-group="acao-prio"]').forEach(function(b) { b.classList.remove('active'); });
+  var prioTodos = document.querySelector('[data-ms-group="acao-prio"][data-ms-val="todos"]');
+  if (prioTodos) prioTodos.classList.add('active');
+
+  // Disciplina: ativa a da ação clicada (se houver botão correspondente); senão "todas"
+  document.querySelectorAll('[data-ms-group="acao-disc"]').forEach(function(b) { b.classList.remove('active'); });
+  var discBtn = disc ? document.querySelector('[data-ms-group="acao-disc"][data-ms-val="' + (window.CSS && CSS.escape ? CSS.escape(disc) : disc) + '"]') : null;
+  if (!discBtn && disc) {
+    discBtn = Array.prototype.slice.call(document.querySelectorAll('[data-ms-group="acao-disc"]'))
+      .filter(function(b) { return b.getAttribute('data-ms-val') === disc; })[0] || null;
+  }
+  if (discBtn) discBtn.classList.add('active');
+  else {
+    var discTodas = document.querySelector('[data-ms-group="acao-disc"][data-ms-val="todos"]');
+    if (discTodas) discTodas.classList.add('active');
+  }
+
+  // Datas: limpa para a ação não cair fora da janela de prazo
+  var fromEl = document.getElementById('acoes-date-from');
+  var toEl   = document.getElementById('acoes-date-to');
+  if (fromEl) fromEl.value = '';
+  if (toEl)   toEl.value   = '';
+
   renderAcoesUnified();
+  window._alertaRendered = true;
   goTab(3);
   setTimeout(function() {
-    var items = document.querySelectorAll('#acoes-unified-list > div');
-    items.forEach(function(el) {
-      if (el.textContent.indexOf(item.slice(0, 40)) >= 0) {
-        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        el.style.transition = 'box-shadow .3s';
-        el.style.boxShadow = '0 0 0 2px #3BD23D';
-        setTimeout(function() { el.style.boxShadow = ''; }, 2000);
+    var target = null;
+    if (idx >= 0) {
+      target = document.querySelector('#acoes-unified-list > div[data-acao-idx="' + idx + '"]');
+    }
+    if (!target) {
+      // Fallback: primeiro card cujo texto começa com o item (evita destacar vários)
+      var items = document.querySelectorAll('#acoes-unified-list > div');
+      for (var k = 0; k < items.length; k++) {
+        if (items[k].textContent.indexOf(item.slice(0, 60)) >= 0) { target = items[k]; break; }
       }
-    });
+    }
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      target.style.transition = 'box-shadow .3s';
+      target.style.boxShadow = '0 0 0 2px #3BD23D';
+      setTimeout(function() { target.style.boxShadow = ''; }, 2000);
+    }
   }, 120);
 }
 
@@ -3759,7 +3873,7 @@ function renderAcoesUnified() {
       ? '<span style="color:#3BD23D;font-size:13px;margin-right:6px;flex-shrink:0;">✓</span>'
       : '';
 
-    html += '<div style="' + opac + 'background:var(--white);border:1px solid var(--border);border-left:3px solid ' + bdr + ';padding:14px 18px;margin-bottom:8px;' + (concluido ? 'background:#F2FCF2;border-color:#C8EEC8;border-left-color:#3BD23D;' : '') + '">'
+    html += '<div data-acao-idx="' + acoes.indexOf(a) + '" style="' + opac + 'background:var(--white);border:1px solid var(--border);border-left:3px solid ' + bdr + ';padding:14px 18px;margin-bottom:8px;' + (concluido ? 'background:#F2FCF2;border-color:#C8EEC8;border-left-color:#3BD23D;' : '') + '">'
       + '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;margin-bottom:' + (a.obs ? '8px' : '0') + ';">'
       + '<div style="flex:1;min-width:0;">'
       + '<div style="display:flex;align-items:baseline;gap:0;font-size:13px;font-weight:' + (concluido ? '400' : '400') + ';margin-bottom:' + (a.desc ? '2px' : '3px') + '">' + checkIcon + '<span>' + a.item + '</span>' + (concluido ? '&nbsp;' + conclusaoTag : '') + '</div>'
@@ -4181,6 +4295,233 @@ document.getElementById('acoes-disc-filters') && document.getElementById('acoes-
   } else {
     infoBox.style.display = 'none';
   }
+});
+
+// ══════════════════════════════════════════════════════════════════════════
+// AGENDA DA SEMANA — calendário de ações (Visão Geral)
+// Lê de `acoes` (acoesSemanal + acoesCROR). Usa computeAcaoStatus/parsePrazoAcao
+// (mesma lógica da aba Ações por Disciplina). "Hoje" = _EXEC_DATA.
+// Barras contínuas estilo cronograma, seg-sex, máx 5 faixas, "+N" abre popup.
+// Clique numa barra/item navega para a aba 3 e destaca a ação (goToAcaoItem).
+// ══════════════════════════════════════════════════════════════════════════
+var AG = (function() {
+  var WD = ['SEG','TER','QUA','QUI','SEX'];
+  var MAX_LANES = 5;
+  // Ordem de prioridade visual (gravidade primeiro)
+  var STORDER = { 'Com atraso':0, 'Concluido com atraso':0, 'Em andamento':1, 'Pendente':2, 'Futuro':3, 'Sem status':4, 'Concluido':5 };
+  // Paleta oficial — alinhada ao card "Status Ações" (renderDiscStatus)
+  var COL = {
+    'Em andamento':         { bg:'#EBF3FD', br:'#378ADD', tx:'#185FA5', lb:'Em andamento' },
+    'Futuro':               { bg:'#F0EBFA', br:'#9B6FD4', tx:'#4A2F7A', lb:'Futuro' },
+    'Pendente':             { bg:'#FFF5E6', br:'#F59E0B', tx:'#7A4500', lb:'Pendente' },
+    'Com atraso':           { bg:'#FDECEA', br:'#E24B4A', tx:'#7B1D1D', lb:'Com atraso' },
+    'Concluido com atraso': { bg:'#FDECEA', br:'#E24B4A', tx:'#7B1D1D', lb:'Concluído (c/ atraso)' },
+    'Concluido':            { bg:'#EDFAED', br:'#3BD23D', tx:'#1D6B1E', lb:'Concluído' },
+    'Sem status':           { bg:'#F1EFEC', br:'#A8A8A0', tx:'#5F5E5A', lb:'Sem status' }
+  };
+  // Legenda exibida (ordem de exibição)
+  var LEGEND = ['Em andamento','Futuro','Pendente','Com atraso','Concluido','Sem status'];
+
+  function dayOnly(d) { return new Date(d.getFullYear(), d.getMonth(), d.getDate()); }
+  function fmt(d) { return ('0'+d.getDate()).slice(-2) + '/' + ('0'+(d.getMonth()+1)).slice(-2); }
+  function esc(s) { return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+  function hoje() {
+    // "Hoje" real do navegador — a "Semana atual" acompanha a data corrente,
+    // independente da data de atualização do relatório (_EXEC_DATA).
+    var n = new Date();
+    return new Date(n.getFullYear(), n.getMonth(), n.getDate());
+  }
+  function startOfWeekMon(d) {
+    var x = new Date(d), dow = x.getDay(), diff = (dow === 0 ? -6 : 1 - dow);
+    x.setDate(x.getDate() + diff); x.setHours(0,0,0,0); return x;
+  }
+
+  var weekStart = startOfWeekMon(hoje());
+
+  // Constrói a lista de tarefas (uma vez por render — barata o suficiente)
+  function buildTasks() {
+    return acoes.map(function(a, idx) {
+      var pz = parsePrazoAcao(a.prazo);
+      if (!pz) return null;
+      var ini = parsePrazoAcao(a.inicio) || pz;
+      ini = dayOnly(ini); pz = dayOnly(pz);
+      if (ini > pz) ini = pz; // proteção: início inválido depois do prazo
+      return { id:idx, ini:ini, pz:pz, item:a.item, disc:a.disc||'', resp:a.resp||'', st:computeAcaoStatus(a) };
+    }).filter(function(t) { return t; });
+  }
+
+  function buildWeek(ws) {
+    var TASKS = buildTasks();
+    var we = new Date(ws); we.setDate(we.getDate()+4); we = dayOnly(we); ws = dayOnly(ws);
+    var inWeek = TASKS.filter(function(t) { return t.ini <= we && t.pz >= ws; });
+    function colOf(d) { var diff = Math.round((dayOnly(d) - ws) / 86400000); return Math.max(0, Math.min(4, diff)); }
+    var segs = inWeek.map(function(t) {
+      return { t:t, c0:colOf(t.ini < ws ? ws : t.ini), c1:colOf(t.pz > we ? we : t.pz), contL:t.ini < ws, contR:t.pz > we };
+    });
+    segs.sort(function(a, b) {
+      var sa = STORDER[a.t.st] !== undefined ? STORDER[a.t.st] : 9;
+      var sb = STORDER[b.t.st] !== undefined ? STORDER[b.t.st] : 9;
+      if (sa !== sb) return sa - sb;
+      return a.c0 - b.c0;
+    });
+    var lanes = [], placed = [];
+    segs.forEach(function(s) {
+      var laneIdx = -1;
+      for (var L = 0; L < lanes.length; L++) {
+        var fits = true;
+        for (var k = 0; k < lanes[L].length; k++) {
+          var o = lanes[L][k];
+          if (!(s.c1 < o.c0 || s.c0 > o.c1)) { fits = false; break; }
+        }
+        if (fits) { laneIdx = L; break; }
+      }
+      if (laneIdx === -1 && lanes.length < MAX_LANES) { lanes.push([]); laneIdx = lanes.length - 1; }
+      if (laneIdx >= 0) { lanes[laneIdx].push(s); placed.push({ lane:laneIdx, seg:s }); }
+    });
+    var allByCol = [];
+    for (var c = 0; c < 5; c++) {
+      var d = new Date(ws); d.setDate(d.getDate()+c); d = dayOnly(d);
+      allByCol.push(inWeek.filter(function(t) { return t.ini <= d && t.pz >= d; }).length);
+    }
+    return { placed:placed, nLanes:Math.max(lanes.length,1), allByCol:allByCol, ws:ws, we:we, totalWeek:inWeek.length };
+  }
+
+  function renderLegend() {
+    var el = document.getElementById('ag-legend'); if (!el) return;
+    el.innerHTML = LEGEND.map(function(k) {
+      var c = COL[k];
+      return '<span style="display:inline-flex;align-items:center;gap:6px;"><i style="width:9px;height:9px;border-radius:2px;background:'
+        + c.br + ';display:inline-block;"></i>' + c.lb + '</span>';
+    }).join('');
+  }
+
+  function render() {
+    var wrap = document.getElementById('ag-body'); if (!wrap) return;
+    renderLegend();
+    var info = buildWeek(weekStart);
+    var ws = info.ws, we = info.we, H = hoje();
+    var titleEl = document.getElementById('ag-title');
+    if (titleEl) titleEl.textContent = fmt(ws) + ' — ' + fmt(we) + '/' + we.getFullYear();
+
+    var head = '<div class="ag-row ag-head">';
+    for (var i = 0; i < 5; i++) {
+      var d = new Date(ws); d.setDate(d.getDate()+i);
+      var isT = dayOnly(d).getTime() === dayOnly(H).getTime();
+      head += '<div class="ag-cell ag-hcell' + (isT ? ' is-today' : '') + '"><span class="ag-wd">' + WD[i]
+        + '</span><span class="ag-dn">' + d.getDate() + '</span></div>';
+    }
+    head += '</div>';
+
+    var laneH = 26, gap = 4;
+    var gridH = info.nLanes * (laneH + gap) + gap;
+    var body = '<div class="ag-lanes" style="height:' + gridH + 'px;">';
+    body += '<div class="ag-bgcols">';
+    for (var i2 = 0; i2 < 5; i2++) {
+      var d2 = new Date(ws); d2.setDate(d2.getDate()+i2);
+      var isT2 = dayOnly(d2).getTime() === dayOnly(H).getTime();
+      body += '<div class="ag-bgcol' + (isT2 ? ' is-today' : '') + '"></div>';
+    }
+    body += '</div>';
+    info.placed.forEach(function(p) {
+      var s = p.seg, t = s.t, c = COL[t.st] || COL['Sem status'];
+      var leftPct = (s.c0 / 5) * 100, widthPct = ((s.c1 - s.c0 + 1) / 5) * 100;
+      var top = gap + p.lane * (laneH + gap);
+      var radius = (s.contL ? '0' : '3px') + ' ' + (s.contR ? '0' : '3px') + ' ' + (s.contR ? '0' : '3px') + ' ' + (s.contL ? '0' : '3px');
+      var arrow = s.contR ? '<span class="ag-arrow">&#8250;</span>' : '';
+      var ttl = esc(t.item) + ' — ' + esc(t.disc) + (t.resp ? (' — ' + esc(t.resp)) : '') + ' — ' + c.lb;
+      body += '<div class="ag-bar" title="' + ttl + '" onclick="AG.go(' + t.id + ')" '
+        + 'style="left:' + leftPct + '%;width:calc(' + widthPct + '% - 4px);top:' + top + 'px;height:' + laneH + 'px;'
+        + 'background:' + c.bg + ';border-left:3px solid ' + c.br + ';color:' + c.tx + ';border-radius:' + radius + ';">'
+        + '<span class="ag-dot" style="background:' + c.br + '"></span><span class="ag-bt">' + esc(t.item) + '</span>' + arrow + '</div>';
+    });
+    body += '</div>';
+
+    var more = '<div class="ag-row ag-more">';
+    for (var i3 = 0; i3 < 5; i3++) {
+      var n = info.allByCol[i3];
+      if (n > 0) more += '<div class="ag-cell ag-mcell" onclick="AG.openDay(' + i3 + ')">' + n + ' ' + (n === 1 ? 'tarefa' : 'tarefas') + ' &#8250;</div>';
+      else       more += '<div class="ag-cell ag-mcell ag-empty">—</div>';
+    }
+    more += '</div>';
+
+    wrap.innerHTML = head + body + more;
+
+    var wc = document.getElementById('ag-weekcount');
+    if (wc) wc.innerHTML = '<b style="font-weight:500;color:#5F5E5A;">' + info.totalWeek + '</b> ações ativas nesta semana';
+    var ft = document.getElementById('ag-foot');
+    if (ft) {
+      var execFmt = (typeof _EXEC_DATA !== 'undefined' && _EXEC_DATA)
+        ? (function(s){ var p = s.split('-'); return p[2]+'/'+p[1]+'/'+p[0]; })(_EXEC_DATA) : '';
+      ft.innerHTML = '<b style="font-weight:500;color:#5F5E5A;">Atualizado em</b> ' + execFmt
+        + ' &nbsp;·&nbsp; <b style="font-weight:500;color:#5F5E5A;">Total no projeto</b> ' + acoes.length + ' ações';
+    }
+  }
+
+  function openDay(colIdx) {
+    var info = buildWeek(weekStart), ws = info.ws;
+    var d = new Date(ws); d.setDate(d.getDate()+colIdx); d = dayOnly(d);
+    var TASKS = buildTasks();
+    var list = TASKS.filter(function(t) { return t.ini <= d && t.pz >= d; });
+    list.sort(function(a, b) {
+      var sa = STORDER[a.st] !== undefined ? STORDER[a.st] : 9;
+      var sb = STORDER[b.st] !== undefined ? STORDER[b.st] : 9;
+      if (sa !== sb) return sa - sb;
+      return a.pz - b.pz;
+    });
+    var rows = list.map(function(t) {
+      var c = COL[t.st] || COL['Sem status'];
+      var fy = function(d){ return ('0'+d.getDate()).slice(-2)+'/'+('0'+(d.getMonth()+1)).slice(-2)+'/'+d.getFullYear(); };
+      return '<div class="ag-pop-item" onclick="AG.go(' + t.id + ')">'
+        + '<span class="ag-dot" style="background:' + c.br + '"></span>'
+        + '<span class="ag-pi-txt"><span class="ag-pi-item">' + esc(t.item) + '</span>'
+        + '<span class="ag-pi-meta">' + esc(t.disc) + (t.resp ? (' · ' + esc(t.resp)) : '') + ' · início ' + fy(t.ini) + ' · prazo ' + fy(t.pz) + '</span></span>'
+        + '<span class="ag-pi-badge" style="background:' + c.bg + ';color:' + c.tx + ';">' + c.lb + '</span></div>';
+    }).join('');
+    var pt = document.getElementById('ag-pop-title');
+    var dFull = ('0'+d.getDate()).slice(-2) + '/' + ('0'+(d.getMonth()+1)).slice(-2) + '/' + d.getFullYear();
+    if (pt) pt.textContent = WD[colIdx] + ' ' + dFull + ' — ' + list.length + ' tarefas';
+    var pl = document.getElementById('ag-pop-list');
+    if (pl) pl.innerHTML = rows;
+    var pop = document.getElementById('ag-pop');
+    if (pop) pop.style.display = 'flex';
+  }
+  function closeDay() { var pop = document.getElementById('ag-pop'); if (pop) pop.style.display = 'none'; }
+
+  // Navega para a aba Ações por Disciplina e destaca a ação clicada
+  function go(taskId) {
+    var a = acoes[taskId]; if (!a) return;
+    closeDay();
+    // setTimeout(...,0) desacopla do call stack para evitar bloqueio de navegação no iframe
+    setTimeout(function() {
+      goToAcaoItem(encodeURIComponent(a.item), a.disc ? encodeURIComponent(a.disc) : '', taskId);
+    }, 0);
+  }
+
+  return { render:render, openDay:openDay, closeDay:closeDay, go:go,
+    prev:function(){ weekStart.setDate(weekStart.getDate()-7); weekStart=new Date(weekStart); render(); },
+    next:function(){ weekStart.setDate(weekStart.getDate()+7); weekStart=new Date(weekStart); render(); },
+    today:function(){ weekStart=startOfWeekMon(hoje()); render(); }
+  };
+})();
+
+// Listeners da Agenda
+(function() {
+  function bind(id, fn) { var el = document.getElementById(id); if (el) el.addEventListener('click', fn); }
+  bind('ag-prev', AG.prev);
+  bind('ag-next', AG.next);
+  bind('ag-today', AG.today);
+  bind('ag-pop-close', AG.closeDay);
+})();
+
+// Render inicial + re-render em resize (mesmo padrão do Gantt/trend)
+setTimeout(function() { AG.render(); }, 120);
+if (document.readyState !== 'complete') {
+  window.addEventListener('load', function() { setTimeout(function() { AG.render(); }, 150); });
+}
+var _agResizeTimer = null;
+window.addEventListener('resize', function() {
+  if (_agResizeTimer) clearTimeout(_agResizeTimer);
+  _agResizeTimer = setTimeout(function() { AG.render(); }, 120);
 });
 
 setTimeout(animateBars, 300);
@@ -5014,6 +5355,42 @@ var _unresolvedResps = [
       console.warn("[EPB2] Falha ao gerar relatório:", e);
     }
   }
+})();
+</script>
+<!-- ══ BOTÃO VOLTAR AO TOPO (aba Ações por Disciplina) ══ -->
+<button id="back-to-top" aria-label="Voltar ao topo" title="Voltar ao topo" style="position:fixed;right:24px;bottom:24px;width:40px;height:40px;border-radius:50%;border:1px solid var(--border);background:rgba(255,255,255,0.92);color:var(--muted);cursor:pointer;display:none;align-items:center;justify-content:center;box-shadow:0 2px 10px rgba(0,0,0,0.12);z-index:60;font-family:inherit;font-size:17px;line-height:1;transition:opacity .2s,background .15s,color .15s;backdrop-filter:blur(2px);">&#8593;</button>
+<script>
+(function() {
+  var btn = document.getElementById('back-to-top');
+  if (!btn) return;
+  var THRESHOLD = 320;
+  function scroller() {
+    return document.scrollingElement || document.documentElement || document.body;
+  }
+  function panel3Active() {
+    var p = document.getElementById('panel-3');
+    return p && p.classList.contains('active');
+  }
+  function update() {
+    var y = (scroller() && scroller().scrollTop) || window.pageYOffset || 0;
+    btn.style.display = (panel3Active() && y > THRESHOLD) ? 'flex' : 'none';
+  }
+  btn.addEventListener('mouseenter', function() { btn.style.background = '#fff'; btn.style.color = 'var(--black)'; });
+  btn.addEventListener('mouseleave', function() { btn.style.background = 'rgba(255,255,255,0.92)'; btn.style.color = 'var(--muted)'; });
+  btn.addEventListener('click', function() {
+    try { window.scrollTo({ top: 0, behavior: 'smooth' }); } catch (e) { window.scrollTo(0, 0); }
+    var sc = scroller(); if (sc) { try { sc.scrollTo({ top: 0, behavior: 'smooth' }); } catch (e2) { sc.scrollTop = 0; } }
+    var p3 = document.getElementById('panel-3');
+    if (p3 && p3.scrollIntoView) { p3.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+  });
+  window.addEventListener('scroll', update, { passive: true });
+  document.addEventListener('scroll', update, { passive: true, capture: true });
+  window.addEventListener('resize', update);
+  var _origGoTab = window.goTab;
+  if (typeof _origGoTab === 'function') {
+    window.goTab = function() { var r = _origGoTab.apply(this, arguments); setTimeout(update, 60); return r; };
+  }
+  update();
 })();
 </script>
 </body>
