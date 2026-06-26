@@ -622,11 +622,6 @@ body {
 
     <!-- Lista -->
     <div id="acoes-unified-list"></div>
-
-    <!-- Voltar ao topo — sticky na base (funciona em iframe de altura dinâmica) -->
-    <div id="btt-wrap" style="position:sticky;bottom:16px;height:0;pointer-events:none;display:flex;justify-content:flex-end;z-index:40;margin-top:-8px;">
-      <button id="back-to-top" aria-label="Voltar ao topo" title="Voltar ao topo" style="pointer-events:auto;width:38px;height:38px;border-radius:50%;border:1px solid var(--border);background:rgba(255,255,255,0.94);color:var(--muted);cursor:pointer;display:none;align-items:center;justify-content:center;box-shadow:0 2px 12px rgba(0,0,0,0.16);font-family:inherit;font-size:17px;line-height:1;transition:background .15s,color .15s;backdrop-filter:blur(2px);transform:translateY(-2px);">&#8593;</button>
-    </div>
   </div>
 
   <!-- ══ TAB 4: REUNIÕES ══ -->
@@ -5364,42 +5359,57 @@ var _unresolvedResps = [
 })();
 </script>
 <script>
-// Voltar ao topo — botão sticky na base da caixa de Ações.
-// O iframe cresce com a página do Wix (sem scroll interno), então a visibilidade
-// é controlada pela aba ativa + tamanho da lista, e o clique usa scrollIntoView
-// (que rola também os containers ancestrais, inclusive a página do Wix).
+// Voltar ao topo — botão FIXO no canto inferior direito da área visível do iframe.
+// Criado direto no <body> (fora de .panel, que tem animação com transform e
+// quebraria position:fixed). Visível só na aba Ações e após rolar um pouco.
 (function() {
-  var wrap = document.getElementById('btt-wrap');
-  var btn  = document.getElementById('back-to-top');
-  if (!wrap || !btn) return;
-  var MIN_ITENS = 8; // só faz sentido se houver lista longa o bastante para rolar
+  var btn = document.createElement('button');
+  btn.id = 'back-to-top';
+  btn.setAttribute('aria-label', 'Voltar ao topo');
+  btn.setAttribute('title', 'Voltar ao topo');
+  btn.innerHTML = '\u2191';
+  btn.style.cssText = 'position:fixed;right:20px;bottom:20px;width:40px;height:40px;border-radius:50%;'
+    + 'border:1px solid var(--border);background:rgba(255,255,255,0.94);color:var(--muted);cursor:pointer;'
+    + 'display:none;align-items:center;justify-content:center;box-shadow:0 2px 12px rgba(0,0,0,0.18);'
+    + 'font-family:inherit;font-size:18px;line-height:1;z-index:9999;transition:background .15s,color .15s;'
+    + 'backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);';
+  document.body.appendChild(btn);
+
+  var THRESHOLD = 240; // px de rolagem antes de aparecer
+  var MIN_ITENS = 8;   // só faz sentido com lista longa o bastante
+
   function panel3Active() {
     var p = document.getElementById('panel-3');
     return p && p.classList.contains('active');
   }
   function listaLonga() {
     var l = document.getElementById('acoes-unified-list');
-    if (!l) return false;
-    return l.querySelectorAll('[data-acao-idx]').length >= MIN_ITENS;
+    return l && l.querySelectorAll('[data-acao-idx]').length >= MIN_ITENS;
+  }
+  function scrollY() {
+    var sc = document.scrollingElement || document.documentElement || document.body;
+    return (sc && sc.scrollTop) || window.pageYOffset || 0;
   }
   function update() {
-    var show = panel3Active() && listaLonga();
+    var show = panel3Active() && listaLonga() && scrollY() > THRESHOLD;
     btn.style.display = show ? 'flex' : 'none';
   }
-  window._bttUpdate = update; // permite que renderAcoesUnified reavalie após render
+  window._bttUpdate = update; // renderAcoesUnified pode reavaliar após render
+
   btn.addEventListener('mouseenter', function() { btn.style.background = '#fff'; btn.style.color = 'var(--black)'; });
   btn.addEventListener('mouseleave', function() { btn.style.background = 'rgba(255,255,255,0.94)'; btn.style.color = 'var(--muted)'; });
   btn.addEventListener('click', function() {
-    var anchor = document.getElementById('panel-3');
-    if (anchor && anchor.scrollIntoView) {
-      anchor.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-    // fallbacks para diferentes formas de scroll
+    // 1) sobe o scroll interno do iframe
     try { window.scrollTo({ top: 0, behavior: 'smooth' }); } catch (e) { try { window.scrollTo(0, 0); } catch (e0) {} }
     var sc = document.scrollingElement || document.documentElement;
     if (sc) { try { sc.scrollTo({ top: 0, behavior: 'smooth' }); } catch (e2) { sc.scrollTop = 0; } }
+    // 2) pede à página externa (Wix) para subir também — listener opcional no pai
     try { if (window.parent && window.parent !== window) { window.parent.postMessage({ epb2: 'scrollTop' }, '*'); } } catch (e3) {}
   });
+
+  window.addEventListener('scroll', update, { passive: true });
+  document.addEventListener('scroll', update, { passive: true, capture: true });
+  window.addEventListener('resize', update);
   var _origGoTab = window.goTab;
   if (typeof _origGoTab === 'function') {
     window.goTab = function() { var r = _origGoTab.apply(this, arguments); setTimeout(update, 60); return r; };
