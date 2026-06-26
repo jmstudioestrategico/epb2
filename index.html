@@ -622,11 +622,6 @@ body {
 
     <!-- Lista -->
     <div id="acoes-unified-list"></div>
-
-    <!-- Voltar ao topo — sempre visível, grudado na base da área visível (sticky) -->
-    <div style="position:sticky;bottom:16px;height:0;pointer-events:none;display:flex;justify-content:flex-end;z-index:40;">
-      <button id="back-to-top" aria-label="Voltar ao topo" title="Voltar ao topo" style="pointer-events:auto;width:40px;height:40px;border-radius:50%;border:1px solid var(--border);background:rgba(255,255,255,0.97);color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 12px rgba(0,0,0,0.18);font-family:inherit;font-size:18px;line-height:1;transition:background .15s,color .15s;transform:translateY(-44px);">&#8593;</button>
-    </div>
   </div>
 
   <!-- ══ TAB 4: REUNIÕES ══ -->
@@ -3909,6 +3904,7 @@ function renderAcoesUnified() {
   });
   var unifiedList = document.getElementById('acoes-unified-list');
   if (unifiedList) unifiedList.innerHTML = html;
+  if (typeof window._bttUpdate === 'function') window._bttUpdate();
 }
 
 // Populate disciplina filter — called lazily when tab 3 activates
@@ -5363,11 +5359,30 @@ var _unresolvedResps = [
 })();
 </script>
 <script>
-// Voltar ao topo — botão sempre visível na aba Ações, ancorado por position:sticky
-// na base do painel (funciona dentro de iframe sem depender de detecção de scroll).
+// Voltar ao topo — botão FIXO na tela a 600px do topo da viewport, sempre visível
+// na aba Ações. Criado direto no <body> para que nenhum ancestral com transform
+// (a animação do painel) interfira no position:fixed.
 (function() {
-  var btn = document.getElementById('back-to-top');
-  if (!btn) return;
+  var btn = document.createElement('button');
+  btn.id = 'back-to-top';
+  btn.setAttribute('aria-label', 'Voltar ao topo');
+  btn.setAttribute('title', 'Voltar ao topo');
+  btn.innerHTML = '\u2191';
+  btn.style.cssText = 'position:fixed;bottom:24px;right:24px;width:40px;height:40px;border-radius:50%;'
+    + 'border:1px solid var(--border);background:rgba(255,255,255,0.97);color:var(--muted);cursor:pointer;'
+    + 'display:none;align-items:center;justify-content:center;box-shadow:0 2px 12px rgba(0,0,0,0.18);'
+    + 'font-family:inherit;font-size:18px;line-height:1;z-index:9999;transition:background .15s,color .15s;';
+  document.body.appendChild(btn);
+
+  function panel3Active() {
+    var p = document.getElementById('panel-3');
+    return p && p.classList.contains('active');
+  }
+  function update() {
+    btn.style.display = panel3Active() ? 'flex' : 'none';
+  }
+  window._bttUpdate = update;
+
   btn.addEventListener('mouseenter', function() { btn.style.background = '#fff'; btn.style.color = 'var(--black)'; });
   btn.addEventListener('mouseleave', function() { btn.style.background = 'rgba(255,255,255,0.97)'; btn.style.color = 'var(--muted)'; });
   btn.addEventListener('click', function() {
@@ -5378,6 +5393,12 @@ var _unresolvedResps = [
     if (top && top.scrollIntoView) { try { top.scrollIntoView({ behavior: 'smooth', block: 'start' }); } catch (e4) {} }
     try { if (window.parent && window.parent !== window) { window.parent.postMessage({ epb2: 'scrollTop' }, '*'); } } catch (e3) {}
   });
+
+  var _origGoTab = window.goTab;
+  if (typeof _origGoTab === 'function') {
+    window.goTab = function() { var r = _origGoTab.apply(this, arguments); setTimeout(update, 60); return r; };
+  }
+  update();
 })();
 </script>
 </body>
