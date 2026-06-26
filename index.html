@@ -622,6 +622,11 @@ body {
 
     <!-- Lista -->
     <div id="acoes-unified-list"></div>
+
+    <!-- Voltar ao topo — sticky na base (funciona em iframe de altura dinâmica) -->
+    <div id="btt-wrap" style="position:sticky;bottom:16px;height:0;pointer-events:none;display:flex;justify-content:flex-end;z-index:40;margin-top:-8px;">
+      <button id="back-to-top" aria-label="Voltar ao topo" title="Voltar ao topo" style="pointer-events:auto;width:38px;height:38px;border-radius:50%;border:1px solid var(--border);background:rgba(255,255,255,0.94);color:var(--muted);cursor:pointer;display:none;align-items:center;justify-content:center;box-shadow:0 2px 12px rgba(0,0,0,0.16);font-family:inherit;font-size:17px;line-height:1;transition:background .15s,color .15s;backdrop-filter:blur(2px);transform:translateY(-2px);">&#8593;</button>
+    </div>
   </div>
 
   <!-- ══ TAB 4: REUNIÕES ══ -->
@@ -3904,6 +3909,7 @@ function renderAcoesUnified() {
   });
   var unifiedList = document.getElementById('acoes-unified-list');
   if (unifiedList) unifiedList.innerHTML = html;
+  if (typeof window._bttUpdate === 'function') window._bttUpdate();
 }
 
 // Populate disciplina filter — called lazily when tab 3 activates
@@ -5357,35 +5363,43 @@ var _unresolvedResps = [
   }
 })();
 </script>
-<!-- ══ BOTÃO VOLTAR AO TOPO (aba Ações por Disciplina) ══ -->
-<button id="back-to-top" aria-label="Voltar ao topo" title="Voltar ao topo" style="position:fixed;right:24px;bottom:24px;width:40px;height:40px;border-radius:50%;border:1px solid var(--border);background:rgba(255,255,255,0.92);color:var(--muted);cursor:pointer;display:none;align-items:center;justify-content:center;box-shadow:0 2px 10px rgba(0,0,0,0.12);z-index:60;font-family:inherit;font-size:17px;line-height:1;transition:opacity .2s,background .15s,color .15s;backdrop-filter:blur(2px);">&#8593;</button>
 <script>
+// Voltar ao topo — botão sticky na base da caixa de Ações.
+// O iframe cresce com a página do Wix (sem scroll interno), então a visibilidade
+// é controlada pela aba ativa + tamanho da lista, e o clique usa scrollIntoView
+// (que rola também os containers ancestrais, inclusive a página do Wix).
 (function() {
-  var btn = document.getElementById('back-to-top');
-  if (!btn) return;
-  var THRESHOLD = 320;
-  function scroller() {
-    return document.scrollingElement || document.documentElement || document.body;
-  }
+  var wrap = document.getElementById('btt-wrap');
+  var btn  = document.getElementById('back-to-top');
+  if (!wrap || !btn) return;
+  var MIN_ITENS = 8; // só faz sentido se houver lista longa o bastante para rolar
   function panel3Active() {
     var p = document.getElementById('panel-3');
     return p && p.classList.contains('active');
   }
-  function update() {
-    var y = (scroller() && scroller().scrollTop) || window.pageYOffset || 0;
-    btn.style.display = (panel3Active() && y > THRESHOLD) ? 'flex' : 'none';
+  function listaLonga() {
+    var l = document.getElementById('acoes-unified-list');
+    if (!l) return false;
+    return l.querySelectorAll('[data-acao-idx]').length >= MIN_ITENS;
   }
+  function update() {
+    var show = panel3Active() && listaLonga();
+    btn.style.display = show ? 'flex' : 'none';
+  }
+  window._bttUpdate = update; // permite que renderAcoesUnified reavalie após render
   btn.addEventListener('mouseenter', function() { btn.style.background = '#fff'; btn.style.color = 'var(--black)'; });
-  btn.addEventListener('mouseleave', function() { btn.style.background = 'rgba(255,255,255,0.92)'; btn.style.color = 'var(--muted)'; });
+  btn.addEventListener('mouseleave', function() { btn.style.background = 'rgba(255,255,255,0.94)'; btn.style.color = 'var(--muted)'; });
   btn.addEventListener('click', function() {
-    try { window.scrollTo({ top: 0, behavior: 'smooth' }); } catch (e) { window.scrollTo(0, 0); }
-    var sc = scroller(); if (sc) { try { sc.scrollTo({ top: 0, behavior: 'smooth' }); } catch (e2) { sc.scrollTop = 0; } }
-    var p3 = document.getElementById('panel-3');
-    if (p3 && p3.scrollIntoView) { p3.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+    var anchor = document.getElementById('panel-3');
+    if (anchor && anchor.scrollIntoView) {
+      anchor.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    // fallbacks para diferentes formas de scroll
+    try { window.scrollTo({ top: 0, behavior: 'smooth' }); } catch (e) { try { window.scrollTo(0, 0); } catch (e0) {} }
+    var sc = document.scrollingElement || document.documentElement;
+    if (sc) { try { sc.scrollTo({ top: 0, behavior: 'smooth' }); } catch (e2) { sc.scrollTop = 0; } }
+    try { if (window.parent && window.parent !== window) { window.parent.postMessage({ epb2: 'scrollTop' }, '*'); } } catch (e3) {}
   });
-  window.addEventListener('scroll', update, { passive: true });
-  document.addEventListener('scroll', update, { passive: true, capture: true });
-  window.addEventListener('resize', update);
   var _origGoTab = window.goTab;
   if (typeof _origGoTab === 'function') {
     window.goTab = function() { var r = _origGoTab.apply(this, arguments); setTimeout(update, 60); return r; };
