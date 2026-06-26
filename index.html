@@ -621,8 +621,12 @@ body {
     <div id="acoes-kpi" style="display:grid;grid-template-columns:repeat(6,1fr);gap:1px;background:rgba(0,0,0,.06);margin-bottom:24px;"></div>
 
     <!-- Lista -->
-    <div id="btt-sentinel" style="height:1px;"></div>
     <div id="acoes-unified-list"></div>
+
+    <!-- Voltar ao topo — sempre visível, grudado na base da área visível (sticky) -->
+    <div style="position:sticky;bottom:16px;height:0;pointer-events:none;display:flex;justify-content:flex-end;z-index:40;">
+      <button id="back-to-top" aria-label="Voltar ao topo" title="Voltar ao topo" style="pointer-events:auto;width:40px;height:40px;border-radius:50%;border:1px solid var(--border);background:rgba(255,255,255,0.97);color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 12px rgba(0,0,0,0.18);font-family:inherit;font-size:18px;line-height:1;transition:background .15s,color .15s;transform:translateY(-44px);">&#8593;</button>
+    </div>
   </div>
 
   <!-- ══ TAB 4: REUNIÕES ══ -->
@@ -3905,7 +3909,6 @@ function renderAcoesUnified() {
   });
   var unifiedList = document.getElementById('acoes-unified-list');
   if (unifiedList) unifiedList.innerHTML = html;
-  if (typeof window._bttUpdate === 'function') window._bttUpdate();
 }
 
 // Populate disciplina filter — called lazily when tab 3 activates
@@ -5360,97 +5363,21 @@ var _unresolvedResps = [
 })();
 </script>
 <script>
-// Voltar ao topo — botão FIXO no canto inferior direito da área visível do iframe.
-// Criado direto no <body> (fora de .panel, que tem animação com transform e
-// quebraria position:fixed). Visível só na aba Ações e após rolar um pouco.
+// Voltar ao topo — botão sempre visível na aba Ações, ancorado por position:sticky
+// na base do painel (funciona dentro de iframe sem depender de detecção de scroll).
 (function() {
-  var btn = document.createElement('button');
-  btn.id = 'back-to-top';
-  btn.setAttribute('aria-label', 'Voltar ao topo');
-  btn.setAttribute('title', 'Voltar ao topo');
-  btn.innerHTML = '\u2191';
-  btn.style.cssText = 'position:fixed;right:20px;bottom:20px;width:40px;height:40px;border-radius:50%;'
-    + 'border:1px solid var(--border);background:rgba(255,255,255,0.94);color:var(--muted);cursor:pointer;'
-    + 'display:none;align-items:center;justify-content:center;box-shadow:0 2px 12px rgba(0,0,0,0.18);'
-    + 'font-family:inherit;font-size:18px;line-height:1;z-index:9999;transition:background .15s,color .15s;'
-    + 'backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);';
-  document.body.appendChild(btn);
-
-  var MIN_ITENS = 8;   // só faz sentido com lista longa o bastante
-
-  function panel3Active() {
-    var p = document.getElementById('panel-3');
-    return p && p.classList.contains('active');
-  }
-  function listaLonga() {
-    var l = document.getElementById('acoes-unified-list');
-    return l && l.querySelectorAll('[data-acao-idx]').length >= MIN_ITENS;
-  }
-
-  // _scrolledPast: true quando o topo da lista saiu de vista por cima
-  // (usuário rolou para baixo). Detectado por DUAS vias para cobrir as duas
-  // barras de rolagem (iframe + página Wix): IntersectionObserver E medição
-  // direta do getBoundingClientRect do sentinela a cada scroll/frame.
-  var _scrolledPast = false;
-  var _io = null;
-
-  function measureSentinel() {
-    var s = document.getElementById('btt-sentinel');
-    if (!s) return;
-    var r = s.getBoundingClientRect();
-    // sentinela acima da área visível → rolou para baixo
-    _scrolledPast = r.top < -40;
-  }
-  function initObserver() {
-    var sentinel = document.getElementById('btt-sentinel');
-    if (!sentinel || typeof IntersectionObserver === 'undefined') return;
-    if (_io) _io.disconnect();
-    _io = new IntersectionObserver(function(entries) {
-      entries.forEach(function(en) {
-        _scrolledPast = !en.isIntersecting && en.boundingClientRect.top < 0;
-        update();
-      });
-    }, { threshold: 0, rootMargin: '0px' });
-    _io.observe(sentinel);
-  }
-
-  function update() {
-    var show = panel3Active() && listaLonga() && _scrolledPast;
-    btn.style.display = show ? 'flex' : 'none';
-  }
-  function recheck() { measureSentinel(); update(); }
-  window._bttUpdate = function() { initObserver(); recheck(); };
-
-  // Polling leve via rAF — só roda quando a aba Ações está ativa, custo desprezível.
-  var _raf = null;
-  function loop() {
-    if (panel3Active()) { recheck(); }
-    _raf = requestAnimationFrame(loop);
-  }
-
+  var btn = document.getElementById('back-to-top');
+  if (!btn) return;
   btn.addEventListener('mouseenter', function() { btn.style.background = '#fff'; btn.style.color = 'var(--black)'; });
-  btn.addEventListener('mouseleave', function() { btn.style.background = 'rgba(255,255,255,0.94)'; btn.style.color = 'var(--muted)'; });
+  btn.addEventListener('mouseleave', function() { btn.style.background = 'rgba(255,255,255,0.97)'; btn.style.color = 'var(--muted)'; });
   btn.addEventListener('click', function() {
-    // sobe o scroll interno do iframe
     try { window.scrollTo({ top: 0, behavior: 'smooth' }); } catch (e) { try { window.scrollTo(0, 0); } catch (e0) {} }
     var sc = document.scrollingElement || document.documentElement;
     if (sc) { try { sc.scrollTo({ top: 0, behavior: 'smooth' }); } catch (e2) { sc.scrollTop = 0; } }
     var top = document.querySelector('.main') || document.getElementById('panel-3');
     if (top && top.scrollIntoView) { try { top.scrollIntoView({ behavior: 'smooth', block: 'start' }); } catch (e4) {} }
-    // pede à página externa (Wix) para subir também — listener opcional no pai
     try { if (window.parent && window.parent !== window) { window.parent.postMessage({ epb2: 'scrollTop' }, '*'); } } catch (e3) {}
   });
-
-  window.addEventListener('scroll', recheck, { passive: true });
-  document.addEventListener('scroll', recheck, { passive: true, capture: true });
-  window.addEventListener('resize', recheck);
-  var _origGoTab = window.goTab;
-  if (typeof _origGoTab === 'function') {
-    window.goTab = function() { var r = _origGoTab.apply(this, arguments); setTimeout(function(){ initObserver(); recheck(); }, 60); return r; };
-  }
-  initObserver();
-  recheck();
-  loop();
 })();
 </script>
 </body>
